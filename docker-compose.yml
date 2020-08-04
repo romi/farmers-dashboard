@@ -2,6 +2,8 @@ version: '3'
 
 services: 
     front:
-        build: .
+        build:
+            context: .
+            dockerfile: ./docker/prod.Dockerfile
         ports: 
             - 80:80
