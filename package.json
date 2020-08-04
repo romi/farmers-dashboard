@@ -1,22 +1,17 @@
 {
   "name": "farmers-dashboard",
   "version": "0.1.0",
+  "license": "GNU AFFERO",
   "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.1",
-    "styled-components": "^5.1.1"
-  },
   "scripts": {
     "start": "react-scripts start",
+    "dev": "cross-env BROWSER=none react-scripts start",
+    "firefox": "cross-env BROWSER=firefox react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "cypress:open": "cypress open",
+    "cypress": "cypress run",
+    "lint": "eslint src"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -32,5 +27,29 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "dependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "prop-types": "^15.7.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.1",
+    "styled-components": "^5.1.1"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.2",
+    "cypress": "^4.12.0",
+    "eslint": "^6.6.0",
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.20.5",
+    "eslint-plugin-react-hooks": "^4.0.8",
+    "prettier": "^2.0.5"
   }
 }

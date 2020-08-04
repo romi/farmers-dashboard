@@ -1,0 +1,23 @@
+env:
+  browser: true
+  es6: true
+  node: true
+
+extends:
+  - "airbnb"
+  - "airbnb/hooks"
+  - "prettier"
+  - "prettier/react"
+  - "plugin:prettier/recommended"
+
+plugins:
+  - "react"
+  - "prettier"
+
+rules:
+  no-plusplus: 0
+  react/jsx-filename-extension:
+    - 1
+    - extensions: 
+      - ".js"
+      - ".jsx"
