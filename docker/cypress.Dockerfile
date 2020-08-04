@@ -2,6 +2,11 @@ FROM cypress/base:latest
 
 WORKDIR /cyp
 
-COPY . . 
+COPY package.json .
+COPY yarn.lock .
 RUN yarn
-CMD yarn start & yarn cypress
+
+COPY . .
+RUN yarn build 
+
+CMD  yarn start &  yarn cypress
