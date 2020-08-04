@@ -6,8 +6,9 @@ const Board = ({ match }) => {
       style={{
         display: 'flex',
         justifyContent: 'center',
-        alignItem: 'center'
-      }}>
+        alignItem: 'center',
+      }}
+    >
       <p>Board id: {match.params.id}</p>
     </div>
   );

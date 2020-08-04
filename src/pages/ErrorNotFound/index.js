@@ -6,8 +6,9 @@ const ErrorNotFound = () => {
       style={{
         display: 'flex',
         justifyContent: 'center',
-        alignItem: 'center'
-      }}>
+        alignItem: 'center',
+      }}
+    >
       <p>404 Error Not Found </p>
     </div>
   );

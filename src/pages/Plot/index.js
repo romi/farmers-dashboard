@@ -6,8 +6,9 @@ const Plot = ({ match }) => {
       style={{
         display: 'flex',
         justifyContent: 'center',
-        alignItem: 'center'
-      }}>
+        alignItem: 'center',
+      }}
+    >
       <p>Plot id: {match.params.id}</p>
     </div>
   );

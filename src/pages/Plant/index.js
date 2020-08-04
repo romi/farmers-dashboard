@@ -6,8 +6,9 @@ const Plant = ({ match }) => {
       style={{
         display: 'flex',
         justifyContent: 'center',
-        alignItem: 'center'
-      }}>
+        alignItem: 'center',
+      }}
+    >
       <p>Plant id: {match.params.id}</p>
     </div>
   );
