@@ -9,9 +9,9 @@ jobs:
     build:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v1
-            - name: Run build
-            run: docker-compose down --volumes && docker-compose build
+        - uses: actions/checkout@v1
+        - name: Run build
+          run: docker-compose down --volumes && docker-compose build
     
     lint:
         runs-on: ubuntu-latest
@@ -19,19 +19,19 @@ jobs:
             matrix:
                 node-version: [14.x]
         steps:
-            - uses: actions/checkout@v1
-            - name: Use Node.js ${{ matrix.node-version }}
-              uses: actions/setup-node@v1
-              with:
-                node-version: ${{ matrix.node-version }}
-            - name: Install dependencies
-              run: yarn
-            - name: Check Linting
-              run: yarn lint
+        - uses: actions/checkout@v1
+        - name: Use Node.js ${{ matrix.node-version }}
+            uses: actions/setup-node@v1
+            with:
+              node-version: ${{ matrix.node-version }}
+        - name: Install dependencies
+            run: yarn
+        - name: Check Linting
+            run: yarn lint
 
     cypress:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v1
-            - name: Run test with cypress
-              run: docker-compose down --volumes && docker-compose -f docker-compose.yml -f docker-cypress.yml up --build --abort-on-container-exit
+        - uses: actions/checkout@v1
+        - name: Run test with cypress
+          run: docker-compose down --volumes && docker-compose -f docker-compose.yml -f docker-cypress.yml up --build --abort-on-container-exit
