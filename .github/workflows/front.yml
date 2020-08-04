@@ -1,9 +1,6 @@
 name: 'front'
 
-on: 
-  push:
-    paths:
-      - './'
+on: push
 
 jobs:
 
@@ -12,7 +9,6 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Run build
-      working-directory: ./
       run: docker-compose down --volumes && docker-compose build
 
   lint:
@@ -27,10 +23,8 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: Install dependencies
-        working-directory: ./
         run: yarn
       - name: Check linting
-        working-directory: ./
         run: yarn lint
 
   tests:
@@ -38,5 +32,4 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Run test on cypress
-      working-directory: ./
       run: docker-compose down --volumes && docker-compose -f docker-compose.yml -f docker-cypress.yml up --build --abort-on-container-exit
