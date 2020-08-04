@@ -1,8 +1,6 @@
 FROM cypress/base:latest
 
 WORKDIR /cyp
-
 COPY . . 
-RUN yarn && yarn build 
-
-CMD ["yarn", "start" ,"&" ,"yarn" ,"cypress"]
+RUN yarn
+CMD yarn start & yarn cypress
