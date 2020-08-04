@@ -1,6 +1,6 @@
 describe('My First Test', () => {
     it('example', () => {
-      cy.visit('/')
-      cy.contains('Farmers Dashboard')
+      cy.visit('/test')
+      cy.contains('404 Error Not Found')
     })
 })
