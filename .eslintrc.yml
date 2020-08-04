@@ -4,16 +4,16 @@ env:
   node: true
 
 extends:
-  - "react-app"
   - "airbnb"
   - "airbnb/hooks"
   - "prettier"
   - "prettier/react"
-  - "plugin:prettier/recommanded"
+  - "plugin:prettier/recommended"
 
 plugins:
   - "react"
- 
+  - "prettier"
+
 rules:
   no-plusplus: 0
   react/jsx-filename-extension:
