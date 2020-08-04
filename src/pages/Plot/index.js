@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const Plot = ({ match }) => {
   return (
@@ -12,6 +13,13 @@ const Plot = ({ match }) => {
       <p>Plot id: {match.params.id}</p>
     </div>
   );
+};
+Plot.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  }).isRequired,
 };
 
 export default Plot;

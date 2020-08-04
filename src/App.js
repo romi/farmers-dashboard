@@ -11,7 +11,7 @@ const App = () => (
       <Switch>
         <Route exact path="/plot/:id" component={Plot} />
         <Route exact path="/board/:id" component={Board} />
-        <Route exact path="/plante/:id" component={Plant} />
+        <Route exact path="/plant/:id" component={Plant} />
         <Route component={ErrorNotFound} />
       </Switch>
     </div>
