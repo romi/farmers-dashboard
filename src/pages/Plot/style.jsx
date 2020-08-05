@@ -2,20 +2,14 @@ import styled from 'styled-components';
 import { withTheme } from '../../utils/theme';
 
 export const Container = styled.div`
-  padding-left: 2rem;
-  padding-right: 2rem;
-  padding-top: 5rem;
-  padding-bottom: 5rem;
+  padding: 5rem 2rem;
 `;
 
 export const PlotItem = styled.div`
   height: 5rem;
   border: 1px solid transparent;
   border-radius: 0.5rem;
-  margin-left: 4rem;
-  margin-right: 4rem;
-  margin-top: 2rem;
-  margin-bottom: 2rem;
+  margin: 2rem 4rem;
   background: url('http://placekitten.com/1200/200');
 
   width: calc(50% - 4rem);
