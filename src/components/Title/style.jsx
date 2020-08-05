@@ -3,8 +3,7 @@ import styled from 'styled-components';
 import { withTheme } from '../../utils/theme';
 
 export const Container = styled.div`
-  margin-top: 1rem;
-  margin-left: 4rem;
+  margin-left: 15px;
 `;
 
 export const Title = styled.p`
@@ -17,6 +16,7 @@ export const Title = styled.p`
 
 export const Underline = withTheme(styled.div`
   background-color: ${({ theme: { primary } }) => primary};
-  height: 3px;
-  width: 2rem;
+  height: 4px;
+  width: 3rem;
+  border-radius: 0.5rem;
 `);

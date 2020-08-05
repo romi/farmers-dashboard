@@ -17,3 +17,9 @@ code {
   font-family: NunitoSans, source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.Layout {
+  display: flex;
+  align-items: stretch;
+  height: -webkit-fill-available;
+}
