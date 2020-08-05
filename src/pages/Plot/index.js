@@ -2,23 +2,23 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Title from '../../components/Title';
-import { Container, BoardContainer, BoardItem, ItemTitle } from './style';
+import { Container, PlotContainer, PlotItem, ItemTitle } from './style';
 
 const Plot = ({ match }) => {
   return (
     <Container>
-      <BoardContainer>
+      <PlotContainer>
         <Title title={match.params.id} />
-        <BoardItem>
+        <PlotItem>
           <ItemTitle>Planche n°1</ItemTitle>
-        </BoardItem>
-        <BoardItem>
+        </PlotItem>
+        <PlotItem>
           <ItemTitle>Planche n°2</ItemTitle>
-        </BoardItem>
-        <BoardItem>
+        </PlotItem>
+        <PlotItem>
           <ItemTitle>Planche n°3</ItemTitle>
-        </BoardItem>
-      </BoardContainer>
+        </PlotItem>
+      </PlotContainer>
     </Container>
   );
 };

@@ -8,7 +8,7 @@ export const Container = styled.div`
   padding-bottom: 5rem;
 `;
 
-export const BoardItem = styled.div`
+export const PlotItem = styled.div`
   height: 5rem;
   border: 1px solid transparent;
   border-radius: 0.5rem;
@@ -29,7 +29,7 @@ export const BoardItem = styled.div`
   }
 `;
 
-export const BoardContainer = styled.div`
+export const PlotContainer = styled.div`
   background-color: #ffffff;
   border-radius: 0.5rem;
   display: flex;
