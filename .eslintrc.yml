@@ -3,6 +3,8 @@ env:
   es6: true
   node: true
 
+parser: "babel-eslint"
+
 extends:
   - "airbnb"
   - "airbnb/hooks"
@@ -16,6 +18,13 @@ plugins:
 
 rules:
   no-plusplus: 0
+  react/jsx-props-no-spreading: "off"
+  import/prefer-default-export: "off"
+  no-console: 
+    - "error"
+    - allow: 
+      - "warn"
+      - "error"
   react/jsx-filename-extension:
     - 1
     - extensions: 

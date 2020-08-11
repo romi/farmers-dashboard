@@ -3,12 +3,14 @@ import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
 import Plot from './pages/Plot';
 import Board from './pages/Board';
 import Plant from './pages/Plant';
+import Farm from './pages/Farm';
 import ErrorNotFound from './pages/ErrorNotFound';
 
 const App = () => (
   <Router>
     <div>
       <Switch>
+        <Route exact path="/" component={Farm} />
         <Route exact path="/plot/:id" component={Plot} />
         <Route exact path="/board/:id" component={Board} />
         <Route exact path="/plant/:id" component={Plant} />
