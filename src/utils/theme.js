@@ -8,5 +8,4 @@ export const theme = {
   secondary: '#FF8400',
 };
 
-// eslint-disable-next-line react/jsx-props-no-spreading
-export const withTheme = (Component) => (props) => <Component theme={theme} {...props} />;
+export const withTheme = Component => props => <Component theme={theme} {...props} />;

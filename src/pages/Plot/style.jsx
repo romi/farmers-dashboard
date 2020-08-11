@@ -11,6 +11,7 @@ export const PlotItem = styled.div`
   border-radius: 0.5rem;
   margin: 2rem 4rem;
   background: url('http://placekitten.com/1200/200');
+  cursor: pointer;
 
   width: calc(50% - 4rem);
   @media (max-width: 800px) {
