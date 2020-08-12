@@ -5,11 +5,13 @@ import axios from 'axios';
 
 import { Container, Grid } from './style';
 import Card from '../../components/Card';
-import { ROMI_API } from '../../utils/constants';
+import { BREAKPOINT, ROMI_API } from '../../utils/constants';
 import Navbar from '../../components/Navbar';
+import useBreakpoint from '../../utils/hooks/breakpoint';
 
 const Board = ({ match }) => {
   const [scans, setScans] = useState([]);
+  const breakpoint = useBreakpoint(BREAKPOINT);
 
   useEffect(() => {
     (async () => {
@@ -36,16 +38,16 @@ const Board = ({ match }) => {
 
   return (
     <div className="Layout">
-      <Navbar board/>
+      <Navbar board />
       <Container>
         {scans?.short_name}
         <Grid>
-          <Card title="Picture View" style={{ gridRow: '1 / 5', gridColumn: '1 / 7' }} />
-          <Card title="Note" style={{ gridRow: '1 / 5', gridColumn: '7' }} />
-          <Card title="Timeline" style={{ gridRow: '5 / 8', gridColumn: '1 / 7' }} />
-          <Card title="" style={{ gridRow: '5 / 8', gridColumn: '7' }} />
-          <Card title="Analytics" style={{ gridRow: '8 / 12', gridColumn: '1 / 7' }} />
-          <Card title="Report" style={{ gridRow: '8 / 12', gridColumn: '7' }} />
+          <Card title="Picture View" />
+          <Card title="Note" />
+          <Card title="Timeline" />
+          {breakpoint !== 'sm' ? <Card title="" /> : null}
+          <Card title="Analytics" />
+          <Card title="Report" />
         </Grid>
       </Container>
     </div>

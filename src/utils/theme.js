@@ -1,4 +1,6 @@
 import React from 'react';
+import useBreakpoint from './hooks/breakpoint';
+import { BREAKPOINT } from './constants';
 
 export const theme = {
   light: '#FAFBED',
@@ -8,4 +10,8 @@ export const theme = {
   secondary: '#FF8400',
 };
 
-export const withTheme = Component => props => <Component theme={theme} {...props} />;
+export const withTheme = Component => props => {
+  const breakpoint = useBreakpoint(BREAKPOINT);
+
+  return <Component theme={theme} breakpoint={breakpoint} {...props} />;
+};

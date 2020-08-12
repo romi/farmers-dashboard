@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import Drawer from '@material-ui/core/Drawer';
+import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
+import MenuIcon from '@material-ui/icons/Menu';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { BREAKPOINT } from '../../utils/constants';
@@ -11,7 +12,7 @@ const Navbar = ({ plot, board, plant }) => {
   const breakpoint = useBreakpoint(BREAKPOINT);
 
   const getWidth = () => {
-    if (breakpoint === 'sm') return 60;
+    if (breakpoint === 'sm') return 50;
     if (breakpoint === 'md') return 150;
     return 200;
   };
@@ -64,10 +65,10 @@ const Navbar = ({ plot, board, plant }) => {
     <Container width={getWidth()}>
       {breakpoint === 'sm' ? (
         <>
-          <div onClick={() => setOpen(true)}>X</div>
-          <Drawer open={open} onClose={() => setOpen(false)}>
+          <MenuIcon style={{ marginTop: '10px' }} fontSize="large" onClick={() => setOpen(true)} />
+          <SwipeableDrawer open={open} onClose={() => setOpen(false)}>
             <BaseNavbar />
-          </Drawer>
+          </SwipeableDrawer>
         </>
       ) : (
         <BaseNavbar />

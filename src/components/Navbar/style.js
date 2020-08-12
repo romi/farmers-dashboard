@@ -2,6 +2,9 @@ import styled from 'styled-components';
 import { withTheme } from '../../utils/theme';
 
 export const Container = withTheme(styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: ${({ width }) => width ?? 100}px;
   background-color: ${({ theme }) => theme.primary};
 `);
@@ -70,7 +73,7 @@ export const BaseNavButton = withTheme(styled.div`
 `);
 
 export const Location = withTheme(styled.div`
-  color: ${({ theme }) => theme.light};;
+  color: ${({ theme }) => theme.light};
   margin: 10px;
   padding: 5px;
   border: solid 2px ${({ theme }) => theme.accent};
