@@ -36,7 +36,7 @@ const Board = ({ match }) => {
 
   return (
     <div className="Layout">
-      <div style={{ backgroundColor: 'blue', width: '200px' }}><Navbar/></div>
+      <Navbar board/>
       <Container>
         {scans?.short_name}
         <Grid>
