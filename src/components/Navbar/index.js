@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Drawer from '@material-ui/core/Drawer';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { BREAKPOINT } from '../../utils/constants';
 import useBreakpoint from '../../utils/hooks/breakpoint';
-import {Container, Location, Logo, NavbarLayout, BaseNavButton, NavigationContent} from './style';
+import { Container, Location, Logo, NavbarLayout, BaseNavButton, NavigationContent } from './style';
 
 const Navbar = ({ plot, board, plant }) => {
+  const [open, setOpen] = useState(false);
   const breakpoint = useBreakpoint(BREAKPOINT);
 
   const getWidth = () => {
@@ -58,7 +60,20 @@ const Navbar = ({ plot, board, plant }) => {
     </NavbarLayout>
   );
 
-  return <Container width={getWidth()}>{breakpoint === 'sm' ? <div>SM</div> : <BaseNavbar />}</Container>;
+  return (
+    <Container width={getWidth()}>
+      {breakpoint === 'sm' ? (
+        <>
+          < onClick={() => setOpen(true)}>X</>
+          <Drawer open={open} onClose={() => setOpen(false)}>
+            <BaseNavbar />
+          </Drawer>
+        </>
+      ) : (
+        <BaseNavbar />
+      )}
+    </Container>
+  );
 };
 Navbar.propTypes = {
   plot: PropTypes.bool,

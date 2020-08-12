@@ -6,13 +6,14 @@ export const Container = withTheme(styled.div`
   background-color: ${({ theme }) => theme.primary};
 `);
 
-export const NavbarLayout = styled.div`
+export const NavbarLayout = withTheme(styled.div`
   height: 100%;
   display: grid;
   grid-gap: 25px;
   grid-template-rows: auto 1fr auto;
   overflow: hidden;
-`;
+  background-color: ${({ theme }) => theme.primary};
+`);
 
 export const Logo = withTheme(styled.div`
   margin: 10px;
@@ -32,26 +33,33 @@ export const NavigationContent = styled.div`
   }
 `;
 
-export const BaseNavButton = styled.div`
+export const BaseNavButton = withTheme(styled.div`
   position: relative;
   width: 80%;
   margin: 10px 0;
-  padding: 8px 0px;
-  color: white;
+  padding: 8px 0;
+  color: ${({ theme }) => theme.light};
   text-decoration: none;
   font-weight: 500;
   font-size: 1.2rem;
   text-align: center;
-  opacity: ${({ disable }) => disable ? 0.75 : 1};
-  ${({ active }) =>
+  ${({ disable }) =>
+    disable
+      ? `
+    cursor: default;
+    opacity: 0.75;
+  `
+      : ''}
+  ${({ active, theme }) =>
     active
       ? `
-    border: solid 2px white;
+    cursor: default;
+    border: solid 2px ${theme.light};
     border-radius: 2em;
     & > span {
       height: 3px;
       width: 100%;
-      background-color: white;
+      background-color: ${theme.light};
       position: absolute;
       top: 50%;
       right: 0%;
@@ -59,13 +67,14 @@ export const BaseNavButton = styled.div`
     }
   `
       : ''}
-`;
+`);
 
 export const Location = withTheme(styled.div`
-  color: white;
+  color: ${({ theme }) => theme.light};;
   margin: 10px;
   padding: 5px;
   border: solid 2px ${({ theme }) => theme.accent};
+  border-radius: 0.5em;
   & > p {
     margin: 2px;
   }
