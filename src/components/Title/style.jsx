@@ -7,6 +7,7 @@ export const Container = styled.div`
 `;
 
 export const Title = styled.p`
+  user-select: none;
   text-transform: uppercase;
   font-weight: bold;
   color: #656565;

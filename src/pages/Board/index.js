@@ -3,11 +3,12 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-import { Container, Grid } from './style';
+import Timeline from '../../components/Timeline';
 import Card from '../../components/Card';
 import { BREAKPOINT, ROMI_API } from '../../utils/constants';
 import Navbar from '../../components/Navbar';
 import useBreakpoint from '../../utils/hooks/breakpoint';
+import { Container, Grid } from './style';
 
 const Board = ({ match }) => {
   const [scans, setScans] = useState([]);
@@ -44,7 +45,9 @@ const Board = ({ match }) => {
         <Grid>
           <Card title="Picture View" />
           <Card title="Note" />
-          <Card title="Timeline" />
+          <Card title="Timeline">
+            <Timeline />
+          </Card>
           {breakpoint !== 'sm' ? <Card title="" /> : null}
           <Card title="Analytics" />
           <Card title="Report" />

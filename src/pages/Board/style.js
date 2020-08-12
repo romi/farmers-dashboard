@@ -12,7 +12,8 @@ export const Grid = withTheme(styled.div`
   width: 100%;
   display: grid;
   grid-template-rows: 2fr 1fr 2fr;
-  grid-template-columns: 4fr 1fr;
+  grid-template-columns: 5fr 2fr;
+  overflow-y: scroll;
   grid-gap: 10px;
   ${({ breakpoint }) =>
     breakpoint === 'sm'
