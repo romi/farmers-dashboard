@@ -64,7 +64,7 @@ const Navbar = ({ plot, board, plant }) => {
     <Container width={getWidth()}>
       {breakpoint === 'sm' ? (
         <>
-          < onClick={() => setOpen(true)}>X</>
+          <div onClick={() => setOpen(true)}>X</div>
           <Drawer open={open} onClose={() => setOpen(false)}>
             <BaseNavbar />
           </Drawer>
