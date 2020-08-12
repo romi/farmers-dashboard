@@ -36,6 +36,7 @@
     "prop-types": "^15.7.2",
     "query-string": "^6.13.1",
     "react": "^16.13.1",
+    "react-break": "^1.3.2",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",

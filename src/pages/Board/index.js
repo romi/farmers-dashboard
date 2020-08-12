@@ -6,6 +6,7 @@ import axios from 'axios';
 import { Container, Grid } from './style';
 import Card from '../../components/Card';
 import { ROMI_API } from '../../utils/constants';
+import Navbar from '../../components/Navbar';
 
 const Board = ({ match }) => {
   const [scans, setScans] = useState([]);
@@ -35,6 +36,7 @@ const Board = ({ match }) => {
 
   return (
     <div className="Layout">
+      <div style={{ backgroundColor: 'blue', width: '200px' }}><Navbar/></div>
       <Container>
         {scans?.short_name}
         <Grid>
