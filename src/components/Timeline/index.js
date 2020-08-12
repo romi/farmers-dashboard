@@ -97,7 +97,7 @@ const Timeline = () => {
 
   return (
     <FullLine>
-      <canvas style={{ marginRight: '5rem' }} id="myChart" ref={chartRef} />
+      <canvas id="myChart" ref={chartRef} />
     </FullLine>
   );
 };
