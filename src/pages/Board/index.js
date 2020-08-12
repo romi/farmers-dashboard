@@ -3,8 +3,9 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-import { Container, Grid } from './style';
+import Timeline from '../../components/Timeline';
 import Card from '../../components/Card';
+import { Container, Grid } from './style';
 import { ROMI_API } from '../../utils/constants';
 
 const Board = ({ match }) => {
@@ -40,7 +41,9 @@ const Board = ({ match }) => {
         <Grid>
           <Card title="Picture View" style={{ gridRow: '1 / 5', gridColumn: '1 / 7' }} />
           <Card title="Note" style={{ gridRow: '1 / 5', gridColumn: '7' }} />
-          <Card title="Timeline" style={{ gridRow: '5 / 8', gridColumn: '1 / 7' }} />
+          <Card title="Timeline" style={{ gridRow: '5 / 8', gridColumn: '1 / 7' }}>
+            <Timeline />
+          </Card>
           <Card title="" style={{ gridRow: '5 / 8', gridColumn: '7' }} />
           <Card title="Analytics" style={{ gridRow: '8 / 12', gridColumn: '1 / 7' }} />
           <Card title="Report" style={{ gridRow: '8 / 12', gridColumn: '7' }} />
