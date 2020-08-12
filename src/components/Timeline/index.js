@@ -37,6 +37,7 @@ const options = {
 };
 
 const data = {
+  labels: [1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006],
   datasets: [
     {
       fill: false,
@@ -48,78 +49,20 @@ const data = {
       pointHoverBorderWidth: 3,
       pointBackgroundColor: ['#00A960', '#00A960', '#00A960', '#00A960', '#FF8400', '#FF8400', '#6FE8AE'],
       pointBorderColor: [],
-      data: [
-        {
-          x: new Date(1999),
-          y: 1,
-        },
-        {
-          x: new Date(2000),
-          y: 1,
-        },
-        {
-          x: new Date(2001),
-          y: 1,
-        },
-        {
-          x: new Date(2002),
-          y: 1,
-        },
-        {
-          x: new Date(2003),
-          y: 1,
-        },
-        {
-          x: new Date(2004),
-          y: 1,
-        },
-        {
-          x: new Date(2005),
-          y: 1,
-        },
-      ],
+      data: [1, 1, 1, 1, 1, 1, 1],
     },
     {
       fill: false,
       backgroundColor: 'transparent',
       borderColor: 'transparent',
-      pointRadius: 8,
-      pointHoverRadius: 8,
+      pointRadius: 7,
+      pointHoverRadius: 7,
       pointBorderWidth: 1,
       pointHoverBorderColor: 'transparent',
       pointHoverBorderWidth: 3,
       pointBackgroundColor: [],
       pointBorderColor: [],
-      data: [
-        {
-          x: new Date(1999),
-          y: 0,
-        },
-        {
-          x: new Date(2000),
-          y: 0,
-        },
-        {
-          x: new Date(2001),
-          y: 0,
-        },
-        {
-          x: new Date(2002),
-          y: 0,
-        },
-        {
-          x: new Date(2003),
-          y: 0,
-        },
-        {
-          x: new Date(2004),
-          y: 0,
-        },
-        {
-          x: new Date(2005),
-          y: 0,
-        },
-      ],
+      data: [0, 0, 0, 0, 0, 0, 0],
     },
   ],
 };
@@ -154,7 +97,7 @@ const Timeline = () => {
 
   return (
     <FullLine>
-      <canvas id="myChart" ref={chartRef} />
+      <canvas style={{ marginRight: '5rem' }} id="myChart" ref={chartRef} />
     </FullLine>
   );
 };
