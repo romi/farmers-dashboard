@@ -23,3 +23,9 @@ code {
   align-items: stretch;
   height: -webkit-fill-available;
 }
+
+.Grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(200px, 20%) auto;
+}
