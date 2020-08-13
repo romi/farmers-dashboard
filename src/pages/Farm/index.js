@@ -10,7 +10,22 @@ const Farm = () => {
   useEffect(() => {
     (async () => {
       const { data } = await axios.get(`${ROMI_API}/farms`);
-      setFarms(data);
+
+      setFarms(
+        await Promise.all(
+          data.map(async ({ id }) => {
+            const {
+              data: { zones, name },
+            } = await axios.get(`${ROMI_API}/farms/${id}`);
+
+            return {
+              name,
+              farmId: id,
+              zones,
+            };
+          }),
+        ),
+      );
     })();
   }, []);
 
@@ -18,9 +33,15 @@ const Farm = () => {
     <Container className="Layout">
       <Flex>
         {farms.length > 0 ? (
-          farms.map(({ id, name, short_name: shortName }) => (
-            <div key={id}>
-              {name} :&ensp;<a href={`/plot/${id}`}>{shortName}</a>
+          farms.map(({ name, farmId, zones }) => (
+            <div key={farmId}>
+              {name} [&ensp;
+              {zones.map(({ id, short_name: shortName }) => (
+                <a key={id} href={`/plot/${id}`}>
+                  {shortName}
+                </a>
+              ))}
+              &ensp;]
             </div>
           ))
         ) : (

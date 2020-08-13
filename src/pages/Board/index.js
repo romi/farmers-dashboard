@@ -14,19 +14,46 @@ const Board = ({ match }) => {
   useEffect(() => {
     (async () => {
       try {
+        const ids = {
+          farmId: '',
+          zoneId: '',
+        };
         const farmsIds = (await axios.get(`${ROMI_API}/farms`)).data.map(({ id }) => id);
         const plots = await Promise.all(
           farmsIds.map(async farmId => {
-            const { data } = await axios.get(`${ROMI_API}/farms/${farmId}`);
+            const {
+              data: { zones },
+            } = await axios.get(`${ROMI_API}/farms/${farmId}`);
 
             return {
               farmId,
-              zones: data.zones.map(({ id }) => id),
+              zones: await Promise.all(
+                zones.map(async ({ id }) => {
+                  const {
+                    data: { scans: sc },
+                  } = await axios.get(`${ROMI_API}/farms/${farmId}/zones/${id}`);
+
+                  return {
+                    zoneId: id,
+                    scans: sc.map(({ id: i }) => i),
+                  };
+                }),
+              ),
             };
           }),
         );
-        const matching = plots.find(({ zones }) => zones.includes(match.params.id));
-        const { data } = await axios.get(`${ROMI_API}/farms/${matching.farmId}/zones/${match.params.id}`);
+
+        plots.forEach(({ farmId, zones }) =>
+          zones.forEach(({ zoneId, scans: sc }) => {
+            if (sc.length > 0 && sc.includes(match.params.id)) {
+              ids.farmId = farmId;
+              ids.zoneId = zoneId;
+            }
+          }),
+        );
+        const { data } = await axios.get(
+          `${ROMI_API}/farms/${ids.farmId}/zones/${ids.zoneId}/scans/${match.params.id}`,
+        );
         setScans(data);
       } catch (err) {
         console.error(err);
