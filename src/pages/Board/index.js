@@ -17,10 +17,6 @@ const Board = ({ match }) => {
   useEffect(() => {
     (async () => {
       try {
-        const ids = {
-          farmId: '',
-          zoneId: '',
-        };
         const farmsIds = (await axios.get(`${ROMI_API}/farms`)).data.map(({ id }) => id);
         const plots = await Promise.all(
           farmsIds.map(async farmId => {
@@ -46,6 +42,10 @@ const Board = ({ match }) => {
           }),
         );
 
+        const ids = {
+          farmId: '',
+          zoneId: '',
+        };
         plots.forEach(({ farmId, zones }) =>
           zones.forEach(({ zoneId, scans: sc }) => {
             if (sc.length > 0 && sc.includes(match.params.id)) {
