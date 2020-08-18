@@ -8,28 +8,44 @@ import { Container, PlotContainer, PlotItem, ItemTitle } from './style';
 import { ROMI_API } from '../../utils/constants';
 
 const Plot = ({ match }) => {
-  const [farm, setFarm] = useState([]);
+  const [plots, setPlots] = useState([]);
   const router = useRouter();
 
   useEffect(() => {
     (async () => {
-      const { data } = await axios.get(`${ROMI_API}/farms/${match.params.id}`);
-      setFarm(data);
+      const { data } = await axios.get(`${ROMI_API}/farms`);
+      const allFarms = await Promise.all(
+        data.map(async ({ id }) => {
+          const {
+            data: { zones },
+          } = await axios.get(`${ROMI_API}/farms/${id}`);
+          return {
+            id,
+            zones,
+          };
+        }),
+      );
+      const { id: farmId } = allFarms.find(({ zones }) => zones.map(({ id: i }) => i).includes(match.params.id));
+      const { data: result } = await axios.get(`${ROMI_API}/farms/${farmId}/zones/${match.params.id}`);
+      setPlots(result);
     })();
   }, [match.params.id]);
+
+  if (!plots.id) return <div>Loading...</div>;
 
   return (
     <Container>
       <PlotContainer>
-        <Title title={farm.name || ''} />
-        {farm.zones && farm.zones.length > 0 ? (
-          farm.zones.map(({ id, short_name: shortName }) => (
+        <Title title={plots.short_name || ''} />
+
+        {plots.scans && plots.scans.length > 0 ? (
+          plots.scans.map(({ id, date }) => (
             <PlotItem key={id} onClick={() => router.push(`/board/${id}`)}>
-              <ItemTitle>{shortName}</ItemTitle>
+              <ItemTitle>{date}</ItemTitle>
             </PlotItem>
           ))
         ) : (
-          <div>Loading...</div>
+          <div>Empty</div>
         )}
       </PlotContainer>
     </Container>
