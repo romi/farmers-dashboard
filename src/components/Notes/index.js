@@ -8,7 +8,12 @@ const Notes = () => {
 
   return (
     <Placement>
-      <BubbleNote onClick={() => setActive(!isActive)} isActive={isActive}>
+      <BubbleNote
+        onClick={() => {
+          setActive(!isActive);
+        }}
+        isActive={isActive}
+      >
         + New note
       </BubbleNote>
     </Placement>

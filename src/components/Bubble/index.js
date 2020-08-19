@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { withTheme } from '../../utils/theme';
 
 export default withTheme(styled.button`
+  cursor: pointer;
   border-radius: 1rem;
   border: 1px solid transparent;
   color: white;

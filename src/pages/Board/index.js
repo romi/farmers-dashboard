@@ -74,12 +74,12 @@ const Board = ({ match }) => {
         <Grid>
           <Card title="Picture View" />
           <Card title="Note" />
-          <Card title="Timeline">
-            <NotesProvider>
+          <NotesProvider>
+            <Card title="Timeline">
               <Notes />
               <Timeline />
-            </NotesProvider>
-          </Card>
+            </Card>
+          </NotesProvider>
           {breakpoint !== 'sm' && <Card title="" />}
           <Card title="Analytics" />
           <Card title="Report" />

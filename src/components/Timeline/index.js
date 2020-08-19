@@ -1,6 +1,8 @@
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useContext, useCallback } from 'react';
 import Chart from 'chart.js';
+
 import { FullLine } from './style';
+import { NoteContext } from '../../utils/providers/notes';
 
 const options = {
   maintainAspectRatio: false,
@@ -68,24 +70,25 @@ const data = {
 };
 
 const Timeline = () => {
-  let chart = useRef();
   const chartRef = useRef();
+  let chart = useRef();
+  const { isActive } = useContext(NoteContext);
 
-  const clicked = useCallback((_, i) => {
-    const index = i[0]?._index;
-
-    if (typeof index !== 'number' || !chart) return;
-    chart.data.datasets[1].pointBackgroundColor[index] =
-      chart.data.datasets[1].pointBackgroundColor[index] === '#d3d3d3' ? 'transparent' : '#d3d3d3';
-    chart.update();
-  }, []);
+  const clicked = useCallback(
+    (_, i) => {
+      const index = i[0]?._index;
+      if (typeof index !== 'number' || !chart || !isActive) return;
+      chart.data.datasets[1].pointBackgroundColor[index] =
+        chart.data.datasets[1].pointBackgroundColor[index] === '#d3d3d3' ? 'transparent' : '#d3d3d3';
+      chart.update();
+    },
+    [isActive],
+  );
 
   useEffect(() => {
-    const myChartRef = chartRef.current.getContext('2d');
-
     // To prevent infinite re-render
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    chart = new Chart(myChartRef, {
+    chart = new Chart(chartRef.current.getContext('2d'), {
       type: 'line',
       data,
       options: {
@@ -93,11 +96,11 @@ const Timeline = () => {
         ...options,
       },
     });
-  }, [chartRef, clicked]);
+  }, [isActive]);
 
   return (
     <FullLine>
-      <canvas id="myChart" ref={chartRef} />
+      <canvas key={isActive} id="myChart" ref={chartRef} />
     </FullLine>
   );
 };
