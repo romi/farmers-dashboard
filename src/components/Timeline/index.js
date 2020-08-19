@@ -14,7 +14,7 @@ const options = {
     display: false,
   },
   tooltips: {
-    enabled: false,
+    enabled: true,
   },
   scales: {
     yAxes: [
@@ -47,7 +47,6 @@ const Timeline = ({ scans }) => {
   const router = useRouter();
 
   const data = {
-    labels: scans.map(({ date }) => date),
     datasets: [
       {
         fill: false,
@@ -58,9 +57,8 @@ const Timeline = ({ scans }) => {
         pointHoverBorderColor: 'rgba(220,220,220,1)',
         pointHoverBorderWidth: 3,
         pointBackgroundColor: scans.map(_ => '#00A960'),
-        // pointBackgroundColor: ['#00A960', '#00A960', '#00A960', '#00A960', '#FF8400', '#FF8400', '#6FE8AE'],
         pointBorderColor: [],
-        data: scans.map(({ id, date }) => ({ y: 1, x: date, id })),
+        data: scans.map(({ id, date }) => ({ y: 1, x: date.split('T')[0], id })),
       },
       {
         fill: false,
@@ -73,7 +71,7 @@ const Timeline = ({ scans }) => {
         pointHoverBorderWidth: 3,
         pointBackgroundColor: [],
         pointBorderColor: [],
-        data: [0, 0, 0, 0, 0, 0, 0],
+        data: scans.map(({ date }) => ({ y: 0, x: date.split('T')[0] })),
       },
     ],
   };
@@ -81,8 +79,8 @@ const Timeline = ({ scans }) => {
   const clicked = useCallback(
     (_, i) => {
       const index = i[0]?._index;
+      if (typeof index !== 'number' || !chart) return;
       if (isActive) {
-        if (typeof index !== 'number' || !chart) return;
         chart.data.datasets[1].pointBackgroundColor[index] =
           chart.data.datasets[1].pointBackgroundColor[index] === '#d3d3d3' ? 'transparent' : '#d3d3d3';
         chart.update();
@@ -94,6 +92,7 @@ const Timeline = ({ scans }) => {
   );
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     chart = new Chart(chartRef.current.getContext('2d'), {
       type: 'line',
       data,
