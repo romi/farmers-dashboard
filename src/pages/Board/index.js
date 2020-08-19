@@ -9,9 +9,11 @@ import { BREAKPOINT, ROMI_API } from '../../utils/constants';
 import Navbar from '../../components/Navbar';
 import useBreakpoint from '../../utils/hooks/breakpoint';
 import { Container, Grid } from './style';
+import { PictureView } from '../../components/PictureView';
 
 const Board = ({ match }) => {
   const [scans, setScans] = useState([]);
+  const [onRequest, setOnRequest] = useState(true);
   const breakpoint = useBreakpoint(BREAKPOINT);
 
   useEffect(() => {
@@ -58,11 +60,14 @@ const Board = ({ match }) => {
           `${ROMI_API}/farms/${ids.farmId}/zones/${ids.zoneId}/scans/${match.params.id}`,
         );
         setScans(data);
+        setOnRequest(false);
       } catch (err) {
         console.error(err);
       }
     })();
   }, [match.params.id]);
+
+  if (onRequest) return <div>Loading...</div>
 
   return (
     <div className="Layout">
@@ -70,7 +75,13 @@ const Board = ({ match }) => {
       <Container>
         {scans?.short_name}
         <Grid>
-          <Card title="Picture View" />
+          <Card title="Picture View">
+            <PictureView
+              farmId={scans.farm}
+              zoneId={scans.zone}
+              imgData={scans.analyses?.find(f => f.short_name === "stitching")}
+            />
+          </Card>
           <Card title="Note" />
           <Card title="Timeline">
             <Timeline />

@@ -13,7 +13,6 @@ export const Grid = withTheme(styled.div`
   display: grid;
   grid-template-rows: 2fr 1fr 2fr;
   grid-template-columns: 5fr 2fr;
-  overflow-y: scroll;
   grid-gap: 10px;
   ${({ breakpoint }) =>
     breakpoint === 'sm'
