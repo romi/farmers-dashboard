@@ -21,7 +21,7 @@ code {
 .Layout {
   display: flex;
   align-items: stretch;
-  height: -webkit-fill-available;
+  height: 100vh;
 }
 
 .Grid {
