@@ -4,11 +4,13 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 
 import Timeline from '../../components/Timeline';
+import Notes from '../../components/Notes';
 import Card from '../../components/Card';
 import { BREAKPOINT, ROMI_API } from '../../utils/constants';
 import Navbar from '../../components/Navbar';
 import useBreakpoint from '../../utils/hooks/breakpoint';
 import { Container, Grid } from './style';
+import NotesProvider from '../../utils/providers/notes';
 
 const Board = ({ match }) => {
   const [scans, setScans] = useState([]);
@@ -73,9 +75,12 @@ const Board = ({ match }) => {
           <Card title="Picture View" />
           <Card title="Note" />
           <Card title="Timeline">
-            <Timeline />
+            <NotesProvider>
+              <Notes />
+              <Timeline />
+            </NotesProvider>
           </Card>
-          {breakpoint !== 'sm' ? <Card title="" /> : null}
+          {breakpoint !== 'sm' && <Card title="" />}
           <Card title="Analytics" />
           <Card title="Report" />
         </Grid>
