@@ -13,21 +13,9 @@ const Plot = ({ match }) => {
 
   useEffect(() => {
     (async () => {
-      const { data } = await axios.get(`${ROMI_API}/farms`);
-      const allFarms = await Promise.all(
-        data.map(async ({ id }) => {
-          const {
-            data: { zones },
-          } = await axios.get(`${ROMI_API}/farms/${id}`);
-          return {
-            id,
-            zones,
-          };
-        }),
-      );
-      const { id: farmId } = allFarms.find(({ zones }) => zones.map(({ id: i }) => i).includes(match.params.id));
-      const { data: result } = await axios.get(`${ROMI_API}/farms/${farmId}/zones/${match.params.id}`);
-      setPlots(result);
+      const { data } = await axios.get(`${ROMI_API}/farms/${match.params.id}`);
+
+      setPlots(data);
     })();
   }, [match.params.id]);
 
@@ -38,10 +26,10 @@ const Plot = ({ match }) => {
       <PlotContainer>
         <Title title={plots.short_name || ''} />
 
-        {plots.scans && plots.scans.length > 0 ? (
-          plots.scans.map(({ id, date }) => (
+        {plots.zones && plots.zones.length > 0 ? (
+          plots.zones.map(({ id, short_name: shortName }) => (
             <PlotItem key={id} onClick={() => router.push(`/board/${id}`)}>
-              <ItemTitle>{date}</ItemTitle>
+              <ItemTitle>{shortName}</ItemTitle>
             </PlotItem>
           ))
         ) : (

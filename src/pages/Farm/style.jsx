@@ -34,6 +34,7 @@ export const Card = withTheme(styled.div`
   border-radius: 1rem;
   margin: 2rem;
   padding: 1rem;
+  cursor: pointer;
 `);
 
 export const PlotTitle = withTheme(styled.span`

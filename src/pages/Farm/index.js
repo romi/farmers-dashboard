@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-import { Container, Flex, Title, Logo, Card, Description, PlotTitle } from './style';
+import { Container, Flex, Title, Logo, Card, Description } from './style';
 import { ROMI_API } from '../../utils/constants';
-import Bubble from '../../components/Bubble';
 import useRouter from '../../utils/hooks/router';
 
 const Farm = () => {
@@ -18,14 +17,13 @@ const Farm = () => {
         await Promise.all(
           data.map(async ({ id }) => {
             const {
-              data: { zones, name, description },
+              data: { name, description },
             } = await axios.get(`${ROMI_API}/farms/${id}`);
 
             return {
               name,
               description,
               farmId: id,
-              zones,
             };
           }),
         ),
@@ -41,23 +39,15 @@ const Farm = () => {
       <Container className="Layout">
         <Flex>
           {farms.length > 0 ? (
-            farms.map(({ name, description, farmId, zones }) => (
-              <Card key={farmId}>
+            farms.map(({ name, description, farmId }) => (
+              <Card
+                key={farmId}
+                onClick={() => {
+                  router.push(`/plot/${farmId}`);
+                }}
+              >
                 <Title>{name}</Title>
                 <Description>{description}</Description>
-                <PlotTitle>Plots:&ensp;</PlotTitle>
-                {zones.map(({ id, short_name: shortName }, index) => (
-                  <span key={id}>
-                    <Bubble
-                      onClick={() => {
-                        router.push(`/plot/${id}`);
-                      }}
-                    >
-                      {shortName}
-                    </Bubble>
-                    {index !== zones.length - 1 && ','}
-                  </span>
-                ))}
               </Card>
             ))
           ) : (

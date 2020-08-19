@@ -13,7 +13,7 @@ import { Container, Grid } from './style';
 import NotesProvider from '../../utils/providers/notes';
 
 const Board = ({ match }) => {
-  const [scans, setScans] = useState([]);
+  const [board, setBoard] = useState(null);
   const breakpoint = useBreakpoint(BREAKPOINT);
 
   useEffect(() => {
@@ -21,63 +21,36 @@ const Board = ({ match }) => {
       try {
         const farmsIds = (await axios.get(`${ROMI_API}/farms`)).data.map(({ id }) => id);
         const plots = await Promise.all(
-          farmsIds.map(async farmId => {
-            const {
-              data: { zones },
-            } = await axios.get(`${ROMI_API}/farms/${farmId}`);
-
-            return {
-              farmId,
-              zones: await Promise.all(
-                zones.map(async ({ id }) => {
-                  const {
-                    data: { scans: sc },
-                  } = await axios.get(`${ROMI_API}/farms/${farmId}/zones/${id}`);
-
-                  return {
-                    zoneId: id,
-                    scans: sc.map(({ id: i }) => i),
-                  };
-                }),
-              ),
-            };
-          }),
+          farmsIds.map(async farmId => ({
+            farmId,
+            zones: (await axios.get(`${ROMI_API}/farms/${farmId}`))?.data?.zones,
+          })),
         );
+        const { farmId } = plots.find(({ zones }) => zones.map(({ id }) => id).includes(match.params.id));
+        const { data } = await axios.get(`${ROMI_API}/farms/${farmId}/zones/${match.params.id}`);
 
-        const ids = {
-          farmId: '',
-          zoneId: '',
-        };
-        plots.forEach(({ farmId, zones }) =>
-          zones.forEach(({ zoneId, scans: sc }) => {
-            if (sc.length > 0 && sc.includes(match.params.id)) {
-              ids.farmId = farmId;
-              ids.zoneId = zoneId;
-            }
-          }),
-        );
-        const { data } = await axios.get(
-          `${ROMI_API}/farms/${ids.farmId}/zones/${ids.zoneId}/scans/${match.params.id}`,
-        );
-        setScans(data);
+        setBoard(data);
       } catch (err) {
         console.error(err);
       }
     })();
   }, [match.params.id]);
 
+  if (!board) return <div>Loading</div>;
+  if (board.scans.length === 0) return <div>Empty</div>;
+
   return (
     <div className="Layout">
       <Navbar board />
       <Container>
-        {scans?.short_name}
+        {board.short_name}
         <Grid>
           <Card title="Picture View" />
           <Card title="Note" />
           <NotesProvider>
             <Card title="Timeline">
               <Notes />
-              <Timeline />
+              <Timeline scans={board.scans} />
             </Card>
           </NotesProvider>
           {breakpoint !== 'sm' && <Card title="" />}

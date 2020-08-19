@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useContext, useCallback } from 'react';
+import PropTypes from 'prop-types';
+
 import Chart from 'chart.js';
 
 import { FullLine } from './style';
@@ -69,7 +71,8 @@ const data = {
   ],
 };
 
-const Timeline = () => {
+// eslint-disable-next-line no-unused-vars
+const Timeline = ({ scans }) => {
   const chartRef = useRef();
   let chart = useRef();
   const { isActive } = useContext(NoteContext);
@@ -86,6 +89,7 @@ const Timeline = () => {
   );
 
   useEffect(() => {
+    console.log(scans);
     // To prevent infinite re-render
     // eslint-disable-next-line react-hooks/exhaustive-deps
     chart = new Chart(chartRef.current.getContext('2d'), {
@@ -103,6 +107,11 @@ const Timeline = () => {
       <canvas key={isActive} id="myChart" ref={chartRef} />
     </FullLine>
   );
+};
+
+Timeline.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  scans: PropTypes.array.isRequired,
 };
 
 export default Timeline;
