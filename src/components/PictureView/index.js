@@ -15,17 +15,20 @@ export const PictureView = ({ farmId, zoneId, imgData, plantData }) => {
       if (!imgData) return;
 
       try {
-        const dataImg = (await axios.get(`${ROMI_API}/farms/${farmId}/zones/${zoneId}/analyses/${imgData.id}`)).data;
-        const dataPlant = (await axios.get(`${ROMI_API}/farms/${farmId}/zones/${zoneId}/analyses/${plantData.id}`))
-          .data;
+        const {
+          data: { results: dataImg },
+        } = await axios.get(`${ROMI_API}/farms/${farmId}/zones/${zoneId}/analyses/${imgData.id}`);
+        const {
+          data: { results: dataPlant },
+        } = await axios.get(`${ROMI_API}/farms/${farmId}/zones/${zoneId}/analyses/${plantData.id}`);
         setViewOptions({
           options: {
-            picture: dataImg.results.map,
-            inspection: dataImg.results.mask,
+            picture: dataImg.map,
+            inspection: dataImg.mask,
           },
-          width: dataImg.results.width,
-          height: dataImg.results.height,
-          plants: dataPlant.results.plants.map(e => ({
+          width: dataImg.width,
+          height: dataImg.height,
+          plants: dataPlant.plants.map(e => ({
             image: e.image,
             x: e.location[0],
             y: e.location[1],
