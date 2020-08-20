@@ -17,10 +17,10 @@ export const PictureView = ({ farmId, zoneId, imgData, plantData }) => {
       try {
         const {
           data: { results: dataImg },
-        } = await axios.get(`${ROMI_API}/farms/${farmId}/zones/${zoneId}/analyses/${imgData.id}`);
+        } = await axios.get(`${ROMI_API}/analyses/${imgData.id}`);
         const {
           data: { results: dataPlant },
-        } = await axios.get(`${ROMI_API}/farms/${farmId}/zones/${zoneId}/analyses/${plantData.id}`);
+        } = await axios.get(`${ROMI_API}/analyses/${plantData.id}`);
         setViewOptions({
           options: {
             picture: dataImg.map,
@@ -64,7 +64,7 @@ export const PictureView = ({ farmId, zoneId, imgData, plantData }) => {
           alt="board picture"
           width="250px"
           height="1000px"
-          src={`${ROMI_API}/images/${farmId}/${zoneId}/${viewOptions.options[select]}?size=large`}
+          src={`${ROMI_API}/images/${viewOptions.options[select]}?size=large`}
         />
       </ImgContainer>
     </Layout>

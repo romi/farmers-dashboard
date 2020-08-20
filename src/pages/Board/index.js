@@ -16,22 +16,20 @@ import NotesProvider from '../../utils/providers/notes';
 const Board = ({ match }) => {
   const [onRequest, setOnRequest] = useState(true);
   const [board, setBoard] = useState(null);
+  const [pic, setPic] = useState(null);
+
   const breakpoint = useBreakpoint(BREAKPOINT);
 
   useEffect(() => {
     (async () => {
       try {
-        const farmsIds = (await axios.get(`${ROMI_API}/farms`)).data.map(({ id }) => id);
-        const plots = await Promise.all(
-          farmsIds.map(async farmId => ({
-            farmId,
-            zones: (await axios.get(`${ROMI_API}/farms/${farmId}`))?.data?.zones,
-          })),
+        const { data: boardData } = await axios.get(`${ROMI_API}/zones/${match.params.id}`);
+        const { data: lastScanData } = await axios.get(
+          `${ROMI_API}/scans/${boardData.scans[boardData.scans.length - 1]?.id}`,
         );
-        const { farmId } = plots.find(({ zones }) => zones.map(({ id }) => id).includes(match.params.id));
-        const { data } = await axios.get(`${ROMI_API}/farms/${farmId}/zones/${match.params.id}`);
 
-        setBoard(data);
+        setBoard(boardData);
+        setPic(lastScanData);
         setOnRequest(false);
       } catch (err) {
         setOnRequest(false);
@@ -53,9 +51,9 @@ const Board = ({ match }) => {
           <Card title="Picture View">
             <PictureView
               farmId={board.farm}
-              zoneId={board.zone}
-              imgData={board.analyses?.find(f => f.short_name === 'stitching')}
-              plantData={board.analyses?.find(f => f.short_name === 'plant_analysis')}
+              zoneId={board.id}
+              imgData={pic.analyses.find(f => f.short_name === 'stitching')}
+              plantData={pic.analyses.find(f => f.short_name === 'plant_analysis')}
             />
           </Card>
           <Card title="Note" />
