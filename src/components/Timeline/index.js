@@ -101,15 +101,11 @@ const Timeline = ({ scans }) => {
         ...options,
       },
     });
-
-    return () => {
-      chart.destroy();
-    };
   }, [isActive]);
 
   return (
     <FullLine>
-      <canvas id="myChart" ref={chartRef} />
+      <canvas key={isActive} id="myChart" ref={chartRef} />
     </FullLine>
   );
 };

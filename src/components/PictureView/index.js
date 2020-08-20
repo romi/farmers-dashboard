@@ -28,13 +28,10 @@ export const PictureView = ({ imgData, plantData }) => {
           },
           width: dataImg.width,
           height: dataImg.height,
-          plants: dataPlant.plants.map(e => ({
-            image: e.image,
-            x: e.location[0],
-            y: e.location[1],
-            id: e.id,
-            PLA: e.PLA,
-            mask: e.mask,
+          plants: dataPlant.plants.map(({ location: [x, y], ...res }) => ({
+            x,
+            y,
+            ...res,
           })),
         });
         setOnRequest(false);

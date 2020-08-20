@@ -44,7 +44,7 @@ const Board = ({ match }) => {
 
   return (
     <div className="Layout">
-      <Navbar board />
+      <Navbar board parentIds={{ plotId: board.farm }} />
       <Container>
         {board.short_name}
         <Grid>

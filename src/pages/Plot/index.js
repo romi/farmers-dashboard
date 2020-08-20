@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 
 import Title from '../../components/Title';
+import Navbar from '../../components/Navbar';
 import useRouter from '../../utils/hooks/router';
 import { Container, PlotContainer, PlotItem, ItemTitle } from './style';
 import { ROMI_API } from '../../utils/constants';
@@ -22,21 +23,24 @@ const Plot = ({ match }) => {
   if (!plots.id) return <div>Loading...</div>;
 
   return (
-    <Container>
-      <PlotContainer>
-        <Title title={plots.short_name || ''} />
+    <div className="Layout">
+      <Navbar plot />
+      <Container>
+        <PlotContainer>
+          <Title title={plots.short_name || ''} />
 
-        {plots.zones && plots.zones.length > 0 ? (
-          plots.zones.map(({ id, short_name: shortName }) => (
-            <PlotItem key={id} onClick={() => router.push(`/board/${id}`)}>
-              <ItemTitle>{shortName}</ItemTitle>
-            </PlotItem>
-          ))
-        ) : (
-          <div>Empty</div>
-        )}
-      </PlotContainer>
-    </Container>
+          {plots.zones && plots.zones.length > 0 ? (
+            plots.zones.map(({ id, short_name: shortName }) => (
+              <PlotItem key={id} onClick={() => router.push(`/board/${id}`)}>
+                <ItemTitle>{shortName}</ItemTitle>
+              </PlotItem>
+            ))
+          ) : (
+            <div>Empty</div>
+          )}
+        </PlotContainer>
+      </Container>
+    </div>
   );
 };
 
