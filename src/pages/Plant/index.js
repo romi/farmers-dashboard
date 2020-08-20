@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
@@ -36,8 +37,8 @@ const Plant = ({ match }) => {
         <Grid>
           <Card title="Picture View">
             <PictureView
-              imgData={scan.analyses.find(f => f.short_name === 'stitching')}
-              plantData={scan.analyses.find(f => f.short_name === 'plant_analysis')}
+              imgData={scan.analyses.find(({ short_name }) => short_name === 'stitching')}
+              plantData={scan.analyses.find(({ short_name }) => short_name === 'plant_analysis')}
             />
           </Card>
           <Card title="Note" />
