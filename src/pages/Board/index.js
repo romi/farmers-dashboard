@@ -10,9 +10,11 @@ import { BREAKPOINT, ROMI_API } from '../../utils/constants';
 import Navbar from '../../components/Navbar';
 import useBreakpoint from '../../utils/hooks/breakpoint';
 import { Container, Grid } from './style';
+import { PictureView } from '../../components/PictureView';
 import NotesProvider from '../../utils/providers/notes';
 
 const Board = ({ match }) => {
+  const [onRequest, setOnRequest] = useState(true);
   const [board, setBoard] = useState(null);
   const breakpoint = useBreakpoint(BREAKPOINT);
 
@@ -30,12 +32,15 @@ const Board = ({ match }) => {
         const { data } = await axios.get(`${ROMI_API}/farms/${farmId}/zones/${match.params.id}`);
 
         setBoard(data);
+        setOnRequest(false);
       } catch (err) {
+        setOnRequest(false);
         console.error(err);
       }
     })();
   }, [match.params.id]);
 
+  if (onRequest) return <div>Loading...</div>;
   if (!board) return <div>Loading</div>;
   if (board.scans.length === 0) return <div>Empty</div>;
 
@@ -45,7 +50,14 @@ const Board = ({ match }) => {
       <Container>
         {board.short_name}
         <Grid>
-          <Card title="Picture View" />
+          <Card title="Picture View">
+            <PictureView
+              farmId={board.farm}
+              zoneId={board.zone}
+              imgData={board.analyses?.find(f => f.short_name === 'stitching')}
+              plantData={board.analyses?.find(f => f.short_name === 'plant_analysis')}
+            />
+          </Card>
           <Card title="Note" />
           <NotesProvider>
             <Card title="Timeline">
