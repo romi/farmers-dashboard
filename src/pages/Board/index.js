@@ -50,8 +50,6 @@ const Board = ({ match }) => {
         <Grid>
           <Card title="Picture View">
             <PictureView
-              farmId={board.farm}
-              zoneId={board.id}
               imgData={pic.analyses.find(f => f.short_name === 'stitching')}
               plantData={pic.analyses.find(f => f.short_name === 'plant_analysis')}
             />

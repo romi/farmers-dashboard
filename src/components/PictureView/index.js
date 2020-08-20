@@ -5,7 +5,7 @@ import { ROMI_API } from '../../utils/constants';
 import { Center, Layout, ButtonList, Image, ImgContainer } from './style';
 import Button from '../Button';
 
-export const PictureView = ({ farmId, zoneId, imgData, plantData }) => {
+export const PictureView = ({ imgData, plantData }) => {
   const [viewOptions, setViewOptions] = useState(undefined);
   const [onRequest, setOnRequest] = useState(true);
   const [select, setSelect] = useState('picture');
@@ -43,7 +43,7 @@ export const PictureView = ({ farmId, zoneId, imgData, plantData }) => {
         console.error(e);
       }
     })();
-  }, [farmId, zoneId, plantData.id, imgData]);
+  }, [plantData.id, imgData]);
 
   if (onRequest) return <Center>Loading...</Center>;
 
@@ -71,8 +71,6 @@ export const PictureView = ({ farmId, zoneId, imgData, plantData }) => {
   );
 };
 PictureView.propTypes = {
-  farmId: PropTypes.string.isRequired,
-  zoneId: PropTypes.string.isRequired,
   imgData: PropTypes.shape({
     id: PropTypes.string,
   }),
