@@ -6,12 +6,10 @@ import { Link } from 'react-router-dom';
 import { BREAKPOINT } from '../../utils/constants';
 import { Container, Location, Logo, NavbarLayout, BaseNavButton, NavigationContent } from './style';
 import useBreakpoint from '../../utils/hooks/breakpoint';
-import useRouter from '../../utils/hooks/router';
 
-const Navbar = ({ plot, board, plant }) => {
+const Navbar = ({ plot, board, plant, parentIds }) => {
   const [open, setOpen] = useState(false);
   const breakpoint = useBreakpoint(BREAKPOINT);
-  const router = useRouter();
 
   const getWidth = () => {
     if (breakpoint === 'sm') return 50;
@@ -31,19 +29,21 @@ const Navbar = ({ plot, board, plant }) => {
 
   const BaseNavbar = () => (
     <NavbarLayout>
-      <Logo onClick={() => router.push('/')}>
-        <img alt="logo" src="/logo_romi.png" width="100%" />
-      </Logo>
+      <Link to="/">
+        <Logo>
+          <img alt="logo" src="/logo_romi.png" width="100%" />
+        </Logo>
+      </Link>
       <NavigationContent>
         {board || plant ? (
-          <Link to={`/plot/${'123456789'}`}>
+          <Link to={parentIds.plotId ? `/plot/${parentIds.plotId}` : '/404'}>
             <NavButton>PLOT</NavButton>
           </Link>
         ) : (
           <NavButton active={plot}>PLOT</NavButton>
         )}
         {plant ? (
-          <Link to={`/plot/${'123456789'}`}>
+          <Link to={parentIds.boardId ? `/board/${parentIds.boardId}` : '/404'}>
             <NavButton>BOARD</NavButton>
           </Link>
         ) : (
@@ -78,15 +78,21 @@ const Navbar = ({ plot, board, plant }) => {
     </Container>
   );
 };
+
 Navbar.propTypes = {
   plot: PropTypes.bool,
   board: PropTypes.bool,
   plant: PropTypes.bool,
+  parentIds: PropTypes.shape({ plotId: PropTypes.string, boardId: PropTypes.string }),
 };
 Navbar.defaultProps = {
   plot: false,
   board: false,
   plant: false,
+  parentIds: {
+    plotId: null,
+    boardId: null,
+  },
 };
 
 export default Navbar;

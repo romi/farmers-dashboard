@@ -21,6 +21,7 @@ const Plant = ({ match }) => {
     (async () => {
       try {
         const { data } = await axios.get(`${ROMI_API}/scans/${match.params.id}`);
+
         setScan(data);
       } catch (err) {
         console.error(err);
@@ -32,7 +33,7 @@ const Plant = ({ match }) => {
 
   return (
     <div className="Layout">
-      <Navbar plant />
+      <Navbar plant parentIds={{ plotId: scan.farm, boardId: scan.zone }} />
       <Container>
         <Grid>
           <Card title="Picture View">
