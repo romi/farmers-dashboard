@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { withTheme } from '../../utils/theme';
 
 export const Container = styled.div`
+  flex-grow: 1;
   padding: 5rem 2rem;
 `;
 
@@ -29,6 +30,7 @@ export const PlotContainer = styled.div`
   border-radius: 0.5rem;
   display: flex;
   flex-direction: column;
+  height: 100%;
 `;
 
 export const ItemTitle = withTheme(styled.div`

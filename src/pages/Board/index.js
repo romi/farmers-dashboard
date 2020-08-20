@@ -45,14 +45,14 @@ const Board = ({ match }) => {
 
   return (
     <div className="Layout">
-      <Navbar board />
+      <Navbar board parentIds={{ plotId: board.farm }} />
       <Container>
         {board.short_name}
         <Grid>
           <Card title="Picture View">
             <PictureView
-              imgData={pic.analyses.find(f => f.short_name === 'stitching')}
-              plantData={pic.analyses.find(f => f.short_name === 'plant_analysis')}
+              imgData={pic.analyses.find(({ short_name }) => short_name === 'stitching')}
+              plantData={pic.analyses.find(({ short_name }) => short_name === 'plant_analysis')}
             />
           </Card>
           <Card title="Note" />
@@ -72,6 +72,7 @@ const Board = ({ match }) => {
     </div>
   );
 };
+
 Board.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
