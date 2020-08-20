@@ -4,12 +4,14 @@ import MenuIcon from '@material-ui/icons/Menu';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { BREAKPOINT } from '../../utils/constants';
-import useBreakpoint from '../../utils/hooks/breakpoint';
 import { Container, Location, Logo, NavbarLayout, BaseNavButton, NavigationContent } from './style';
+import useBreakpoint from '../../utils/hooks/breakpoint';
+import useRouter from '../../utils/hooks/router';
 
 const Navbar = ({ plot, board, plant }) => {
   const [open, setOpen] = useState(false);
   const breakpoint = useBreakpoint(BREAKPOINT);
+  const router = useRouter();
 
   const getWidth = () => {
     if (breakpoint === 'sm') return 50;
@@ -29,7 +31,7 @@ const Navbar = ({ plot, board, plant }) => {
 
   const BaseNavbar = () => (
     <NavbarLayout>
-      <Logo>
+      <Logo onClick={() => router.push('/')}>
         <img alt="logo" src="/logo_romi.png" width="100%" />
       </Logo>
       <NavigationContent>

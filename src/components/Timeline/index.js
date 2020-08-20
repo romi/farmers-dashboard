@@ -103,7 +103,11 @@ const Timeline = ({ scans }) => {
     });
 
     return () => {
-      chart.destroy();
+      try {
+        chart.destroy();
+      } catch (err) {
+        console.error(err);
+      }
     };
   }, [isActive]);
 
