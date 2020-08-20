@@ -15,12 +15,9 @@ export const PictureView = ({ farmId, zoneId, imgData, plantData }) => {
       if (!imgData) return;
 
       try {
-        const dataImg = (await axios.get(
-          `${ROMI_API}/farms/${farmId}/zones/${zoneId}/analyses/${imgData.id}`,
-        )).data;
-        const dataPlant = (await axios.get(
-          `${ROMI_API}/farms/${farmId}/zones/${zoneId}/analyses/${plantData.id}`,
-        )).data;
+        const dataImg = (await axios.get(`${ROMI_API}/farms/${farmId}/zones/${zoneId}/analyses/${imgData.id}`)).data;
+        const dataPlant = (await axios.get(`${ROMI_API}/farms/${farmId}/zones/${zoneId}/analyses/${plantData.id}`))
+          .data;
         setViewOptions({
           options: {
             picture: dataImg.results.map,
@@ -35,7 +32,7 @@ export const PictureView = ({ farmId, zoneId, imgData, plantData }) => {
             id: e.id,
             PLA: e.PLA,
             mask: e.mask,
-          }))
+          })),
         });
         setOnRequest(false);
       } catch (e) {
@@ -45,17 +42,19 @@ export const PictureView = ({ farmId, zoneId, imgData, plantData }) => {
     })();
   }, [farmId, zoneId, plantData.id, imgData]);
 
-  if (onRequest) return <Center>Loading...</Center>
+  if (onRequest) return <Center>Loading...</Center>;
 
-  if (!imgData || !viewOptions)
-  return <Center>There is no image or plant analyses of the board</Center>;
+  if (!imgData || !viewOptions) return <Center>There is no image or plant analyses of the board</Center>;
 
-  console.log('data', viewOptions);
-
-  return <Layout>
+  return (
+    <Layout>
       <ButtonList>
-        <Button active={select === 'picture'} onClick={() => setSelect('picture')}>Picture</Button>
-        <Button active={select === 'inspection'} onClick={() => setSelect('inspection')}>Inspection</Button>
+        <Button active={select === 'picture'} onClick={() => setSelect('picture')}>
+          Picture
+        </Button>
+        <Button active={select === 'inspection'} onClick={() => setSelect('inspection')}>
+          Inspection
+        </Button>
       </ButtonList>
       <ImgContainer>
         <Image
@@ -65,15 +64,20 @@ export const PictureView = ({ farmId, zoneId, imgData, plantData }) => {
           src={`${ROMI_API}/images/${farmId}/${zoneId}/${viewOptions.options[select]}?size=large`}
         />
       </ImgContainer>
-    </Layout>;
-}
+    </Layout>
+  );
+};
 PictureView.propTypes = {
   farmId: PropTypes.string.isRequired,
   zoneId: PropTypes.string.isRequired,
-  imgData: PropTypes.any,
-  plantData: PropTypes.any
-}
-PictureView.defaultProp = {
+  imgData: PropTypes.shape({
+    id: PropTypes.string,
+  }),
+  plantData: PropTypes.shape({
+    id: PropTypes.string,
+  }),
+};
+PictureView.defaultProps = {
   imgData: undefined,
-  plantData: undefined
-}
+  plantData: undefined,
+};

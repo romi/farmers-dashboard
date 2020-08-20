@@ -67,7 +67,7 @@ const Board = ({ match }) => {
     })();
   }, [match.params.id]);
 
-  if (onRequest) return <div>Loading...</div>
+  if (onRequest) return <div>Loading...</div>;
 
   return (
     <div className="Layout">
@@ -79,8 +79,8 @@ const Board = ({ match }) => {
             <PictureView
               farmId={scans.farm}
               zoneId={scans.zone}
-              imgData={scans.analyses?.find(f => f.short_name === "stitching")}
-              plantData={scans.analyses?.find(f => f.short_name === "plant_analysis")}
+              imgData={scans.analyses?.find(f => f.short_name === 'stitching')}
+              plantData={scans.analyses?.find(f => f.short_name === 'plant_analysis')}
             />
           </Card>
           <Card title="Note" />

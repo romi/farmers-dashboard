@@ -32,5 +32,5 @@ export const ImgContainer = styled.div`
 export const Image = styled.img`
   position: absolute;
   transform-origin: top left;
-  transform: rotate(270deg) translate(-100%, 0)
+  transform: rotate(270deg) translate(-100%, 0);
 `;
