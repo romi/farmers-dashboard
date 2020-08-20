@@ -12,6 +12,7 @@ import useBreakpoint from '../../utils/hooks/breakpoint';
 import { Container, Grid } from './style';
 import { PictureView } from '../../components/PictureView';
 import NotesProvider from '../../utils/providers/notes';
+import { LineChart } from '../../components/LineChart';
 
 const Board = ({ match }) => {
   const [onRequest, setOnRequest] = useState(true);
@@ -62,7 +63,9 @@ const Board = ({ match }) => {
             </Card>
           </NotesProvider>
           {breakpoint !== 'sm' && <Card title="" />}
-          <Card title="Analytics" />
+          <Card title="Analytics">
+            <LineChart />
+          </Card>
           <Card title="Report" />
         </Grid>
       </Container>
