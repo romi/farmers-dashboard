@@ -111,8 +111,7 @@ const Timeline = ({ scans }) => {
 };
 
 Timeline.propTypes = {
-  // eslint-disable-next-line react/forbid-prop-types
-  scans: PropTypes.array.isRequired,
+  scans: PropTypes.arrayOf(PropTypes.shape({ id: PropTypes.string, date: PropTypes.string })).isRequired,
 };
 
 export default Timeline;
