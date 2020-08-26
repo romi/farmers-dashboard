@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
+import Error from '../../components/Error';
 import Title from '../../components/Title';
 import Navbar from '../../components/Navbar';
 import useRouter from '../../utils/hooks/router';
@@ -10,16 +11,23 @@ import { ROMI_API } from '../../utils/constants';
 
 const Plot = ({ match }) => {
   const [plots, setPlots] = useState([]);
+  const [error, setError] = useState('');
   const router = useRouter();
 
   useEffect(() => {
     (async () => {
-      const { data } = await axios.get(`${ROMI_API}/farms/${match.params.id}`);
+      try {
+        const { data } = await axios.get(`${ROMI_API}/farms/${match.params.id}`);
 
-      setPlots(data);
+        setPlots(data);
+      } catch (err) {
+        console.error(err);
+        setError('An invalid ID was provided');
+      }
     })();
   }, [match.params.id]);
 
+  if (error.length > 0) return <Error error={error} />;
   if (!plots.id) return <div>Loading...</div>;
 
   return (

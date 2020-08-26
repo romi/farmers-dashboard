@@ -7,6 +7,7 @@ import { BREAKPOINT, ROMI_API } from '../../utils/constants';
 import useBreakpoint from '../../utils/hooks/breakpoint';
 
 import { Container, Grid } from '../Board/style';
+import Error from '../../components/Error';
 import Navbar from '../../components/Navbar';
 import Card from '../../components/Card';
 import Notes from '../../components/Notes';
@@ -15,6 +16,7 @@ import NotesProvider from '../../utils/providers/notes';
 
 const Plant = ({ match }) => {
   const [scan, setScan] = useState();
+  const [error, setError] = useState('');
   const breakpoint = useBreakpoint(BREAKPOINT);
 
   useEffect(() => {
@@ -25,10 +27,12 @@ const Plant = ({ match }) => {
         setScan(data);
       } catch (err) {
         console.error(err);
+        setError('An invalid ID was provided');
       }
     })();
   }, [match.params.id]);
 
+  if (error.length > 0) return <Error error={error} />;
   if (!scan) return <div>Loading...</div>;
 
   return (
