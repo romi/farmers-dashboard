@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import TitleComponent from 'components/Title';
 import Container, { Content } from './style';
-import TitleComponent from '../Title';
 
 const Card = ({ title, children, ...props }) => (
   <Container {...props}>

@@ -1,6 +1,6 @@
 import React from 'react';
-import useBreakpoint from './hooks/breakpoint';
-import { BREAKPOINT } from './constants';
+import useBreakpoint from 'utils/hooks/breakpoint';
+import { BREAKPOINT } from 'utils/constants';
 
 export const theme = {
   light: '#FAFBED',

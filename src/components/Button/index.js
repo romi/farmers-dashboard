@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { withTheme } from '../../utils/theme';
+import { withTheme } from 'utils/theme';
 
 export default withTheme(styled.button`
   border-radius: 1rem;

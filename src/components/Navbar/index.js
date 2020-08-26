@@ -3,9 +3,9 @@ import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import MenuIcon from '@material-ui/icons/Menu';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { BREAKPOINT } from '../../utils/constants';
+import { BREAKPOINT } from 'utils/constants';
+import useBreakpoint from 'utils/hooks/breakpoint';
 import { Container, Location, Logo, NavbarLayout, BaseNavButton, NavigationContent } from './style';
-import useBreakpoint from '../../utils/hooks/breakpoint';
 
 const Navbar = ({ farm, zone, plant, parentIds }) => {
   const [open, setOpen] = useState(false);

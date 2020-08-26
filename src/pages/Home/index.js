@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+import { ROMI_API } from 'utils/constants';
+import useRouter from 'utils/hooks/router';
 import { Container, Flex, Title, Logo, Card, Description } from './style';
-import { ROMI_API } from '../../utils/constants';
-import useRouter from '../../utils/hooks/router';
 
 const Home = () => {
   const [farms, setFarms] = useState([]);

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { withTheme } from '../../utils/theme';
+import { withTheme } from 'utils/theme';
 
 export const Container = styled.div`
   padding: 5rem 2rem;
