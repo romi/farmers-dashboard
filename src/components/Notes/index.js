@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 
+import { NoteContext } from 'utils/providers/notes';
 import { BubbleNote, Placement } from './style';
-import { NoteContext } from '../../utils/providers/notes';
 
 const Notes = () => {
   const { isActive, setActive } = useContext(NoteContext);

@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-import Error from '../../components/Error';
-import Title from '../../components/Title';
-import Navbar from '../../components/Navbar';
-import useRouter from '../../utils/hooks/router';
+import Error from 'components/Error';
+import Title from 'components/Title';
+import Navbar from 'components/Navbar';
+import useRouter from 'utils/hooks/router';
+import { ROMI_API } from 'utils/constants';
 import { Container, PlotContainer, PlotItem, ItemTitle } from './style';
-import { ROMI_API } from '../../utils/constants';
 
 const Farm = ({ match }) => {
   const [plots, setPlots] = useState([]);

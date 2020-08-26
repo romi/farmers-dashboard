@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { ROMI_API } from '../../utils/constants';
+import { ROMI_API } from 'utils/constants';
+import Button from 'components/Button';
 import { Center, Layout, ButtonList, Image, ImgContainer } from './style';
-import Button from '../Button';
 
 export const PictureView = ({ imgData, plantData }) => {
   const [viewOptions, setViewOptions] = useState(undefined);

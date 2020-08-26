@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Navbar from 'components/Navbar';
 import { Container, Card, Text, Alert } from './style';
-import Navbar from '../Navbar';
 
 const ErrorComponent = ({ error }) => (
   <div className="Layout">

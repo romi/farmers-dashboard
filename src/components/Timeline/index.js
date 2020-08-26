@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useContext, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Chart from 'chart.js';
 
-import useRouter from '../../utils/hooks/router';
+import useRouter from 'utils/hooks/router';
+import { NoteContext } from 'utils/providers/notes';
 import { FullLine } from './style';
-import { NoteContext } from '../../utils/providers/notes';
 
 const options = {
   maintainAspectRatio: false,

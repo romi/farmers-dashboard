@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js';
 import axios from 'axios';
 import PropTypes from 'prop-types';
+import { ROMI_API } from 'utils/constants';
 import { Container } from './style';
 import baseConfig from './config';
-import { ROMI_API } from '../../utils/constants';
 
 export const LineChart = ({ range, config }) => {
   const chartRef = useRef();

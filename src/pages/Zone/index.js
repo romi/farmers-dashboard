@@ -3,17 +3,18 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-import Error from '../../components/Error';
-import Timeline from '../../components/Timeline';
-import Notes from '../../components/Notes';
-import Card from '../../components/Card';
-import { BREAKPOINT, ROMI_API } from '../../utils/constants';
-import Navbar from '../../components/Navbar';
-import useBreakpoint from '../../utils/hooks/breakpoint';
+import Error from 'components/Error';
+import Timeline from 'components/Timeline';
+import Notes from 'components/Notes';
+import Card from 'components/Card';
+import { BREAKPOINT, ROMI_API } from 'utils/constants';
+import Navbar from 'components/Navbar';
+import useBreakpoint from 'utils/hooks/breakpoint';
+import { PictureView } from 'components/PictureView';
+import NotesProvider from 'utils/providers/notes';
+import { LineChart } from 'components/LineChart';
+
 import { Container, Grid } from './style';
-import { PictureView } from '../../components/PictureView';
-import NotesProvider from '../../utils/providers/notes';
-import { LineChart } from '../../components/LineChart';
 
 const Zone = ({ match }) => {
   const [onRequest, setOnRequest] = useState(true);

@@ -3,16 +3,16 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-import { BREAKPOINT, ROMI_API } from '../../utils/constants';
-import useBreakpoint from '../../utils/hooks/breakpoint';
+import { BREAKPOINT, ROMI_API } from 'utils/constants';
+import useBreakpoint from 'utils/hooks/breakpoint';
 
+import Error from 'components/Error';
+import Navbar from 'components/Navbar';
+import Card from 'components/Card';
+import Notes from 'components/Notes';
+import { PictureView } from 'components/PictureView';
+import NotesProvider from 'utils/providers/notes';
 import { Container, Grid } from '../Zone/style';
-import Error from '../../components/Error';
-import Navbar from '../../components/Navbar';
-import Card from '../../components/Card';
-import Notes from '../../components/Notes';
-import { PictureView } from '../../components/PictureView';
-import NotesProvider from '../../utils/providers/notes';
 
 const Plant = ({ match }) => {
   const [scan, setScan] = useState();
