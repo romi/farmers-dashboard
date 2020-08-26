@@ -67,7 +67,7 @@ const Board = ({ match }) => {
           {breakpoint !== 'sm' && <Card title="" />}
           <Card title="Analytics">
             <LineChart
-              range={2}
+              range={1}
               config={[
                 {
                   label: 'Temperature (°C)',
