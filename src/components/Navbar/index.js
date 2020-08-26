@@ -68,7 +68,7 @@ const Navbar = ({ plot, board, plant, parentIds }) => {
       {breakpoint === 'sm' ? (
         <>
           <MenuIcon style={{ marginTop: '10px' }} fontSize="large" onClick={() => setOpen(true)} />
-          <SwipeableDrawer open={open} onClose={() => setOpen(false)}>
+          <SwipeableDrawer open={open} onClose={() => setOpen(false)} onOpen={() => {}}>
             <BaseNavbar />
           </SwipeableDrawer>
         </>
