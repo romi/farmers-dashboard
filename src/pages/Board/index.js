@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
+import Error from '../../components/Error';
 import Timeline from '../../components/Timeline';
 import Notes from '../../components/Notes';
 import Card from '../../components/Card';
@@ -16,6 +17,7 @@ import { LineChart } from '../../components/LineChart';
 
 const Board = ({ match }) => {
   const [onRequest, setOnRequest] = useState(true);
+  const [error, setError] = useState('');
   const [board, setBoard] = useState(null);
   const [pic, setPic] = useState(null);
 
@@ -31,16 +33,16 @@ const Board = ({ match }) => {
 
         setBoard(boardData);
         setPic(lastScanData);
-        setOnRequest(false);
       } catch (err) {
-        setOnRequest(false);
         console.error(err);
+        setError('An invalid ID was provided');
       }
+      setOnRequest(false);
     })();
   }, [match.params.id]);
 
-  if (onRequest) return <div>Loading...</div>;
-  if (!board) return <div>Loading</div>;
+  if (error.length > 0) return <Error error={error} />;
+  if (!board || onRequest) return <div>Loading</div>;
   if (board.scans.length === 0) return <div>Empty</div>;
 
   return (
