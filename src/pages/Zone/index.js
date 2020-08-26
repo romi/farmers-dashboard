@@ -15,7 +15,7 @@ import { PictureView } from '../../components/PictureView';
 import NotesProvider from '../../utils/providers/notes';
 import { LineChart } from '../../components/LineChart';
 
-const Board = ({ match }) => {
+const Zone = ({ match }) => {
   const [onRequest, setOnRequest] = useState(true);
   const [error, setError] = useState('');
   const [board, setBoard] = useState(null);
@@ -47,7 +47,7 @@ const Board = ({ match }) => {
 
   return (
     <div className="Layout">
-      <Navbar board parentIds={{ plotId: board.farm }} />
+      <Navbar zone parentIds={{ farmId: board.farm }} />
       <Container>
         {board.short_name}
         <Grid>
@@ -66,7 +66,30 @@ const Board = ({ match }) => {
           </NotesProvider>
           {breakpoint !== 'sm' && <Card title="" />}
           <Card title="Analytics">
-            <LineChart />
+            <LineChart
+              range={1}
+              config={[
+                {
+                  label: 'Temperature (°C)',
+                  id: 'temp',
+                  apiId: board.datastreams?.find(f => f.observable === 'air temperature')?.id,
+                  color: '#C7B95B',
+                },
+                {
+                  label: 'Soil humidity (%)',
+                  id: 'soil',
+                  apiId: board.datastreams?.find(f => f.observable === 'soil humidity')?.id,
+                  color: '#23AFF9',
+                },
+                {
+                  label: 'Sunlight (umole/m²/s)',
+                  id: 'sun',
+                  apiId: board.datastreams?.find(f => f.observable === 'sunlight (photosynthetically active radiation)')
+                    ?.id,
+                  color: '#01AA55',
+                },
+              ]}
+            />
           </Card>
           <Card title="Report" />
         </Grid>
@@ -75,7 +98,7 @@ const Board = ({ match }) => {
   );
 };
 
-Board.propTypes = {
+Zone.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
       id: PropTypes.string,
@@ -83,4 +106,4 @@ Board.propTypes = {
   }).isRequired,
 };
 
-export default Board;
+export default Zone;

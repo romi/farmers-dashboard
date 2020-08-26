@@ -1,89 +1,42 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import { Container } from './style';
+import baseConfig from './config';
+import { ROMI_API } from '../../utils/constants';
 
-export const LineChart = () => {
+export const LineChart = ({ range, config }) => {
   const chartRef = useRef();
   let chart = useRef();
-  const [data, setData] = useState(undefined);
-  const lastDays = 1;
+  const [datastreams, setDatastreams] = useState(undefined);
+  const period = (range * 24 * 60) / 15;
+  const randColor = () => {
+    const lRange = '0123456789abcdef';
+    let color = '#';
+    for (let i = 0; i < 6; i++) color += lRange[Math.floor(Math.random() * 16)];
+    return color;
+  };
 
   useEffect(() => {
     (async () => {
-      const tmp = {
-        temp: (
-          await axios.get('https://db.romi-project.eu/api/datastreams/eae15b30-4776-4217-b1ca-f8afc52f6bd2/values')
-        ).data.slice(0, (lastDays * 24 * 60) / 15),
-        hum: (
-          await axios.get('https://db.romi-project.eu/api/datastreams/dd9ccc1b-6ba2-4bf8-a925-361ca8027be0/values')
-        ).data.slice(0, (lastDays * 24 * 60) / 15),
-        sun: (
-          await axios.get('https://db.romi-project.eu/api/datastreams/c661a874-e835-47e5-aefd-695609d876d6/values')
-        ).data.slice(0, (lastDays * 24 * 60) / 15),
-      };
-      setData(tmp);
-      const config = {
-        type: 'line',
+      const datas = config.filter(({ apiId }) => apiId);
+      const response = await axios.all(datas.map(({ apiId }) => axios.get(`${ROMI_API}/datastreams/${apiId}/values`)));
+      const tmp = Object.fromEntries(response.map(({ data }, i) => [datas[i].id, data]));
+      setDatastreams(tmp);
+      const chartConfig = {
+        ...baseConfig,
         data: {
-          datasets: [
-            {
-              label: 'Temperature (°C)',
-              borderColor: '#C7B95B',
-              fill: false,
-              data: tmp.temp.map(({ date, value }) => ({ x: date, y: value })),
-            },
-            {
-              label: 'Soil humidity (%)',
-              borderColor: '#23AFF9',
-              fill: false,
-              data: tmp.hum.map(({ date, value }) => ({ x: date, y: value })),
-            },
-            {
-              label: 'Sunlight (umole/m²/s)',
-              borderColor: '#01AA55',
-              fill: false,
-              data: tmp.sun.map(({ date, value }) => ({ x: date, y: value })),
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            xAxes: [
-              {
-                type: 'time',
-                time: {
-                  unit: 'day',
-                },
-                display: true,
-                scaleLabel: {
-                  display: true,
-                  labelString: 'Date',
-                },
-                ticks: {
-                  major: {
-                    fontStyle: 'bold',
-                    fontColor: '#FF0000',
-                  },
-                },
-              },
-            ],
-            yAxes: [
-              {
-                display: true,
-                scaleLabel: {
-                  display: true,
-                  labelString: 'value',
-                },
-              },
-            ],
-          },
+          datasets: datas.map(({ label, id, color }) => ({
+            label: label || '',
+            borderColor: color || randColor(),
+            fill: false,
+            data: tmp[id].slice(0, period).map(({ date, value }) => ({ x: date, y: value })),
+          })),
         },
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      chart = new Chart(chartRef.current.getContext('2d'), config);
+      chart = new Chart(chartRef.current.getContext('2d'), chartConfig);
     })();
     return () => {
       try {
@@ -94,11 +47,25 @@ export const LineChart = () => {
     };
   }, []);
 
-  if (!data) return <div>Loading...</div>;
+  if (!datastreams) return <div>Loading...</div>;
 
   return (
     <Container>
       <canvas id="my_canvas" ref={chartRef} />
     </Container>
   );
+};
+LineChart.propTypes = {
+  range: PropTypes.number,
+  config: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
+      apiId: PropTypes.string.isRequired,
+      color: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
+};
+LineChart.defaultProps = {
+  range: 1,
 };
