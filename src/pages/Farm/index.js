@@ -1,62 +1,63 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 
-import { Container, Flex, Title, Logo, Card, Description } from './style';
-import { ROMI_API } from '../../utils/constants';
+import Error from '../../components/Error';
+import Title from '../../components/Title';
+import Navbar from '../../components/Navbar';
 import useRouter from '../../utils/hooks/router';
+import { Container, PlotContainer, PlotItem, ItemTitle } from './style';
+import { ROMI_API } from '../../utils/constants';
 
-const Farm = () => {
-  const [farms, setFarms] = useState([]);
+const Farm = ({ match }) => {
+  const [plots, setPlots] = useState([]);
+  const [error, setError] = useState('');
   const router = useRouter();
 
   useEffect(() => {
     (async () => {
-      const { data } = await axios.get(`${ROMI_API}/farms`);
+      try {
+        const { data } = await axios.get(`${ROMI_API}/farms/${match.params.id}`);
 
-      setFarms(
-        await Promise.all(
-          data.map(async ({ id }) => {
-            const {
-              data: { name, description },
-            } = await axios.get(`${ROMI_API}/farms/${id}`);
-
-            return {
-              name,
-              description,
-              farmId: id,
-            };
-          }),
-        ),
-      );
+        setPlots(data);
+      } catch (err) {
+        console.error(err);
+        setError('An invalid ID was provided');
+      }
     })();
-  }, []);
+  }, [match.params.id]);
+
+  if (error.length > 0) return <Error error={error} />;
+  if (!plots.id) return <div>Loading...</div>;
 
   return (
-    <>
-      <Logo>
-        <img alt="logo" src="/logo_romi.png" width="300rem" />
-      </Logo>
-      <Container className="Layout">
-        <Flex>
-          {farms.length > 0 ? (
-            farms.map(({ name, description, farmId }) => (
-              <Card
-                key={farmId}
-                onClick={() => {
-                  router.push(`/plot/${farmId}`);
-                }}
-              >
-                <Title>{name}</Title>
-                <Description>{description}</Description>
-              </Card>
+    <div className="Layout">
+      <Navbar farm />
+      <Container>
+        <PlotContainer>
+          <Title title={plots.short_name || ''} />
+
+          {plots.zones && plots.zones.length > 0 ? (
+            plots.zones.map(({ id, short_name: shortName }) => (
+              <PlotItem key={id} onClick={() => router.push(`/zone/${id}`)}>
+                <ItemTitle>{shortName}</ItemTitle>
+              </PlotItem>
             ))
           ) : (
-            <div>Loading...</div>
+            <div>Empty</div>
           )}
-        </Flex>
+        </PlotContainer>
       </Container>
-    </>
+    </div>
   );
+};
+
+Farm.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  }).isRequired,
 };
 
 export default Farm;

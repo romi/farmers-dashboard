@@ -2,42 +2,38 @@ import styled from 'styled-components';
 import { withTheme } from '../../utils/theme';
 
 export const Container = styled.div`
+  flex-grow: 1;
   padding: 5rem 2rem;
+`;
+
+export const PlotItem = styled.div`
+  height: 5rem;
+  border: 1px solid transparent;
+  border-radius: 0.5rem;
+  margin: 2rem 4rem;
+  background: url('http://placekitten.com/1200/200');
+  cursor: pointer;
+
+  width: calc(50% - 4rem);
+  @media (max-width: 800px) {
+    width: 80%;
+  }
+  @media (max-width: 400px) {
+    width: 90%;
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+`;
+
+export const PlotContainer = styled.div`
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
   height: 100%;
 `;
 
-export const Flex = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-export const Title = withTheme(styled.div`
-  color: ${({ theme }) => theme.primary};
-  font-size: 2rem;
-`);
-
-export const Description = withTheme(styled.div`
-  font-size: 1rem;
-  color: ${({ theme }) => theme.dark};
-  margin-top: 1rem;
-  margin-bottom: 0.5rem;
-`);
-
-export const Logo = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-export const Card = withTheme(styled.div`
-  border: 1px solid ${({ theme }) => theme.accent};
-  border-radius: 1rem;
-  margin: 2rem;
-  padding: 1rem;
-  cursor: pointer;
-`);
-
-export const PlotTitle = withTheme(styled.span`
-  color: ${({ theme }) => theme.primary};
-  font-weight: bold;
+export const ItemTitle = withTheme(styled.div`
+  margin: 1rem;
+  color: ${({ theme: { primary } }) => primary};
 `);

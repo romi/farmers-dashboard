@@ -6,7 +6,7 @@ import axios from 'axios';
 import { BREAKPOINT, ROMI_API } from '../../utils/constants';
 import useBreakpoint from '../../utils/hooks/breakpoint';
 
-import { Container, Grid } from '../Board/style';
+import { Container, Grid } from '../Zone/style';
 import Error from '../../components/Error';
 import Navbar from '../../components/Navbar';
 import Card from '../../components/Card';
@@ -37,7 +37,7 @@ const Plant = ({ match }) => {
 
   return (
     <div className="Layout">
-      <Navbar plant parentIds={{ plotId: scan.farm, boardId: scan.zone }} />
+      <Navbar plant parentIds={{ farmId: scan.farm, zoneId: scan.zone }} />
       <Container>
         <Grid>
           <Card title="Picture View">

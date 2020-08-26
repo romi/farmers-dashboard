@@ -7,7 +7,7 @@ import { BREAKPOINT } from '../../utils/constants';
 import { Container, Location, Logo, NavbarLayout, BaseNavButton, NavigationContent } from './style';
 import useBreakpoint from '../../utils/hooks/breakpoint';
 
-const Navbar = ({ plot, board, plant, parentIds }) => {
+const Navbar = ({ farm, zone, plant, parentIds }) => {
   const [open, setOpen] = useState(false);
   const breakpoint = useBreakpoint(BREAKPOINT);
 
@@ -35,23 +35,25 @@ const Navbar = ({ plot, board, plant, parentIds }) => {
         </Logo>
       </Link>
       <NavigationContent>
-        {board || plant ? (
-          <Link to={parentIds.plotId ? `/plot/${parentIds.plotId}` : '/404'}>
-            <NavButton>PLOT</NavButton>
+        {zone || plant ? (
+          <Link to={parentIds.farmId ? `/farm/${parentIds.farmId}` : '/404'}>
+            <NavButton>FARM</NavButton>
           </Link>
         ) : (
-          <NavButton active={plot}>PLOT</NavButton>
-        )}
-        {plant ? (
-          <Link to={parentIds.boardId ? `/board/${parentIds.boardId}` : '/404'}>
-            <NavButton>BOARD</NavButton>
-          </Link>
-        ) : (
-          <NavButton active={board} disable={plot}>
-            BOARD
+          <NavButton active={farm} disable={!farm}>
+            FARM
           </NavButton>
         )}
-        <NavButton active={plant} disable={plot || board}>
+        {plant ? (
+          <Link to={parentIds.zoneId ? `/zone/${parentIds.zoneId}` : '/404'}>
+            <NavButton>ZONE</NavButton>
+          </Link>
+        ) : (
+          <NavButton active={zone} disable={!zone}>
+            ZONE
+          </NavButton>
+        )}
+        <NavButton active={plant} disable={!plant}>
           PLANT
         </NavButton>
       </NavigationContent>
@@ -80,18 +82,18 @@ const Navbar = ({ plot, board, plant, parentIds }) => {
 };
 
 Navbar.propTypes = {
-  plot: PropTypes.bool,
-  board: PropTypes.bool,
+  farm: PropTypes.bool,
+  zone: PropTypes.bool,
   plant: PropTypes.bool,
-  parentIds: PropTypes.shape({ plotId: PropTypes.string, boardId: PropTypes.string }),
+  parentIds: PropTypes.shape({ farmId: PropTypes.string, zoneId: PropTypes.string }),
 };
 Navbar.defaultProps = {
-  plot: false,
-  board: false,
+  farm: false,
+  zone: false,
   plant: false,
   parentIds: {
-    plotId: null,
-    boardId: null,
+    farmId: null,
+    zoneId: null,
   },
 };
 
