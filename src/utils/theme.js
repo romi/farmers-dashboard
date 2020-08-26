@@ -10,6 +10,7 @@ export const theme = {
   primary: '#00A960',
   accent: '#6FE8AE',
   secondary: '#FF8400',
+  error: '#F45757',
 };
 
 export const withTheme = Component => props => {
