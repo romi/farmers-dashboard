@@ -34,3 +34,13 @@ export const Image = styled.img`
   transform-origin: top left;
   transform: rotate(270deg) translate(-100%, 0);
 `;
+
+export const ThumbnailContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const Thumbnail = styled(Image)`
+  border-radius: 1rem;
+`;
