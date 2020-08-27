@@ -7,6 +7,7 @@ import Title from 'components/Title';
 import Navbar from 'components/Navbar';
 import useRouter from 'utils/hooks/router';
 import { ROMI_API } from 'utils/constants';
+import Loading from 'components/Loader';
 import { Container, PlotContainer, PlotItem, ItemTitle } from './style';
 
 const Farm = ({ match }) => {
@@ -28,7 +29,7 @@ const Farm = ({ match }) => {
   }, [match.params.id]);
 
   if (error.length > 0) return <Error error={error} />;
-  if (!plots.id) return <div>Loading...</div>;
+  if (!plots.id) return <Loading />;
 
   return (
     <div className="Layout">

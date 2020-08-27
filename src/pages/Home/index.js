@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import { ROMI_API } from 'utils/constants';
 import useRouter from 'utils/hooks/router';
+import Loading from 'components/Loader';
 import { Container, Flex, Title, Logo, Card, Description } from './style';
 
 const Home = () => {
@@ -51,7 +52,7 @@ const Home = () => {
               </Card>
             ))
           ) : (
-            <div>Loading...</div>
+            <Loading />
           )}
         </Flex>
       </Container>

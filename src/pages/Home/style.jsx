@@ -2,6 +2,8 @@ import styled from 'styled-components';
 import { withTheme } from 'utils/theme';
 
 export const Container = styled.div`
+  display: flex;
+  flex-direction: column;
   padding: 5rem 2rem;
   height: 100%;
 `;
@@ -9,6 +11,7 @@ export const Container = styled.div`
 export const Flex = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: stretch;
 `;
 
 export const Title = withTheme(styled.div`

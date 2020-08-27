@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { ROMI_API } from 'utils/constants';
 import Button from 'components/Button';
+import Loading from 'components/Loader';
 import { Center, Layout, ButtonList, Image, ImgContainer } from './style';
 
 export const PictureView = ({ imgData, plantData }) => {
@@ -42,7 +43,12 @@ export const PictureView = ({ imgData, plantData }) => {
     })();
   }, [plantData.id, imgData]);
 
-  if (onRequest) return <Center>Loading...</Center>;
+  if (onRequest)
+    return (
+      <Center>
+        <Loading />
+      </Center>
+    );
 
   if (!imgData || !viewOptions) return <Center>There is no image or plant analyses of the board</Center>;
 

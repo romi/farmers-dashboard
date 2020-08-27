@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 export const Center = styled.div`
+  flex-grow: 1;
   height: 100%;
   display: grid;
   place-items: center;
