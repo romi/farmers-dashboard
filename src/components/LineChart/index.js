@@ -3,8 +3,9 @@ import Chart from 'chart.js';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import { ROMI_API } from 'utils/constants';
-import { Container } from './style';
+import Loading from 'components/Loader';
 import baseConfig from './config';
+import { Container } from './style';
 
 export const LineChart = ({ range, config }) => {
   const chartRef = useRef();
@@ -47,7 +48,7 @@ export const LineChart = ({ range, config }) => {
     };
   }, []);
 
-  if (!datastreams) return <div>Loading...</div>;
+  if (!datastreams) return <Loading />;
 
   return (
     <Container>

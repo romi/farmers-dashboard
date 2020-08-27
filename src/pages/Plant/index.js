@@ -11,6 +11,7 @@ import Card from 'components/Card';
 import { PictureView } from 'components/PictureView';
 import NotesProvider from 'utils/providers/notes';
 import Stages from 'components/Stages';
+import Loading from 'components/Loader';
 import { Container, Grid } from 'pages/Zone/style';
 import StageProvider from 'utils/providers/stage';
 
@@ -33,7 +34,7 @@ const Plant = ({ match }) => {
   }, [match.params.id]);
 
   if (error.length > 0) return <Error error={error} />;
-  if (!scan) return <div>Loading...</div>;
+  if (!scan) return <Loading />;
 
   return (
     <div className="Layout">

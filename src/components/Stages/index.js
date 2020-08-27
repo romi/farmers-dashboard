@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { ROMI_API } from 'utils/constants';
 import Button from 'components/Button';
 import { StageContext } from 'utils/providers/stage';
+import Loading from 'components/Loader';
 import { Layout, SmoothImg, ButtonList, ImageList } from './style';
 
 const Stages = ({ scan }) => {
@@ -35,7 +36,7 @@ const Stages = ({ scan }) => {
     }
   }, [scan.zone, plantId]);
 
-  if (!stages) return <div>Loading...</div>;
+  if (!stages) return <Loading />;
 
   return (
     <Layout>

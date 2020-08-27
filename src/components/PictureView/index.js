@@ -4,6 +4,7 @@ import axios from 'axios';
 import { ROMI_API } from 'utils/constants';
 import Button from 'components/Button';
 import { StageContext } from 'utils/providers/stage';
+import Loading from 'components/Loader';
 import { Center, Layout, ButtonList, Image, ImgContainer, ThumbnailContainer, Thumbnail } from './style';
 
 export const PictureView = ({ imgData, plantData }) => {
@@ -68,7 +69,7 @@ export const PictureView = ({ imgData, plantData }) => {
     setPlantId(plant.id);
   };
 
-  if (onRequest) return <Center>Loading...</Center>;
+  if (onRequest) return <Loading />;
   if (!imgData || !viewOptions) return <Center>There is no image or plant analyses of the board</Center>;
 
   return (

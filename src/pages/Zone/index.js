@@ -12,7 +12,7 @@ import useBreakpoint from 'utils/hooks/breakpoint';
 import { PictureView } from 'components/PictureView';
 import NotesProvider from 'utils/providers/notes';
 import { LineChart } from 'components/LineChart';
-
+import Loading from 'components/Loader';
 import { Container, Grid } from './style';
 
 const Zone = ({ match }) => {
@@ -42,7 +42,7 @@ const Zone = ({ match }) => {
   }, [match.params.id]);
 
   if (error.length > 0) return <Error error={error} />;
-  if (!board || onRequest) return <div>Loading</div>;
+  if (!board || onRequest) return <Loading />;
   if (board.scans.length === 0) return <div>Empty</div>;
 
   return (
