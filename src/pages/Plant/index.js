@@ -49,7 +49,7 @@ const Plant = ({ match }) => {
           <Card title="Note" />
           <NotesProvider>
             <Card title="Stages">
-              <Stages scan={scan} plantId="20" />
+              <Stages scan={scan} plantId="0" />
             </Card>
           </NotesProvider>
           {breakpoint !== 'sm' && <Card title="" />}
