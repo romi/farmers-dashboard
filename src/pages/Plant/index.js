@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
@@ -9,10 +8,10 @@ import useBreakpoint from 'utils/hooks/breakpoint';
 import Error from 'components/Error';
 import Navbar from 'components/Navbar';
 import Card from 'components/Card';
-import Notes from 'components/Notes';
 import { PictureView } from 'components/PictureView';
 import NotesProvider from 'utils/providers/notes';
-import { Container, Grid } from '../Zone/style';
+import Stages from 'components/Stages';
+import { Container, Grid } from 'pages/Zone/style';
 
 const Plant = ({ match }) => {
   const [scan, setScan] = useState();
@@ -49,7 +48,7 @@ const Plant = ({ match }) => {
           <Card title="Note" />
           <NotesProvider>
             <Card title="Stages">
-              <Notes />
+              <Stages scan={scan} plantId="0" />
             </Card>
           </NotesProvider>
           {breakpoint !== 'sm' && <Card title="" />}

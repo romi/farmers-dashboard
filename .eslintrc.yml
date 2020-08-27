@@ -17,6 +17,7 @@ plugins:
   - "prettier"
 
 rules:
+  camelcase: "off"
   no-plusplus: 0
   react/jsx-props-no-spreading: "off"
   import/prefer-default-export: "off"
