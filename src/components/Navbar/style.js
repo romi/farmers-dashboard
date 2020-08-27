@@ -6,6 +6,7 @@ export const Container = withTheme(styled.div`
   flex-direction: column;
   align-items: center;
   width: ${({ width }) => width ?? 100}px;
+  min-width: ${({ width }) => width ?? 100}px;
   background-color: ${({ theme }) => theme.primary};
 `);
 

@@ -9,10 +9,11 @@ import useBreakpoint from 'utils/hooks/breakpoint';
 import Error from 'components/Error';
 import Navbar from 'components/Navbar';
 import Card from 'components/Card';
-import Notes from 'components/Notes';
+// import Notes from 'components/Notes';
 import { PictureView } from 'components/PictureView';
 import NotesProvider from 'utils/providers/notes';
 import { Container, Grid } from '../Zone/style';
+import Stages from '../../components/Stages';
 
 const Plant = ({ match }) => {
   const [scan, setScan] = useState();
@@ -49,7 +50,7 @@ const Plant = ({ match }) => {
           <Card title="Note" />
           <NotesProvider>
             <Card title="Stages">
-              <Notes />
+              <Stages scan={scan} plantId="20" />
             </Card>
           </NotesProvider>
           {breakpoint !== 'sm' && <Card title="" />}
