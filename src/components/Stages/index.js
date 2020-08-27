@@ -14,11 +14,9 @@ const Stages = ({ scan, plantId }) => {
         const zone = (await axios.get(`${ROMI_API}/zones/${scan.zone}`)).data;
         const scansAnalyses = (await axios.all(zone.scans.map(({ id }) => axios.get(`${ROMI_API}/scans/${id}`))))
           .map(({ data }) => data)
-          // eslint-disable-next-line camelcase
           .filter(({ analyses }) => analyses.find(({ short_name }) => short_name === 'plant_analysis'))
           .map(({ date, analyses }) => ({
             date,
-            // eslint-disable-next-line camelcase
             id: analyses.find(({ short_name }) => short_name === 'plant_analysis').id,
           }));
         const analyses = (await axios.all(scansAnalyses.map(({ id }) => axios.get(`${ROMI_API}/analyses/${id}`))))
