@@ -12,7 +12,7 @@ import Card from 'components/Card';
 import { PictureView } from 'components/PictureView';
 import NotesProvider from 'utils/providers/notes';
 import { Container, Grid } from '../Zone/style';
-import Stages from '../../components/Stages';
+import Stages from 'components/Stages';
 
 const Plant = ({ match }) => {
   const [scan, setScan] = useState();
