@@ -49,7 +49,6 @@ const Zone = ({ match }) => {
     <div className="Layout">
       <Navbar zone parentIds={{ farmId: board.farm }} />
       <Container>
-        {board.short_name}
         <Grid>
           <Card title="Picture View">
             <PictureView
