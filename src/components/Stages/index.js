@@ -13,6 +13,7 @@ const Stages = ({ scan }) => {
   const [select, setSelect] = useState('image');
 
   useEffect(() => {
+    if (plantId < 0) return;
     try {
       (async () => {
         const zone = (await axios.get(`${ROMI_API}/zones/${scan.zone}`)).data;
