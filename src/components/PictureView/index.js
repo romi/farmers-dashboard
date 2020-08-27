@@ -62,7 +62,7 @@ export const PictureView = ({ imgData, plantData }) => {
       ({ x: px, y: py, width, height }) => x <= py + width && y <= px + height && x >= py - width && y >= px - height,
     );
     if (!plant) return;
-    setCurrentPlant({ id: plant.id || -1, image: plant.image });
+    setCurrentPlant({ id: plant.id, image: plant.image });
   };
 
   if (onRequest) return <Center>Loading...</Center>;
