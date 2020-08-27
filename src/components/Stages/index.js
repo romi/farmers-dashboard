@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import { ROMI_API } from 'utils/constants';
 import Button from 'components/Button';
+import { StageContext } from 'utils/providers/stage';
 import { Layout, SmoothImg, ButtonList, ImageList } from './style';
 
-const Stages = ({ scan, plantId }) => {
+const Stages = ({ scan }) => {
+  const { plantId } = useContext(StageContext);
   const [stages, setStages] = useState(undefined);
   const [select, setSelect] = useState('image');
+
   useEffect(() => {
     try {
       (async () => {
@@ -60,7 +63,6 @@ Stages.propTypes = {
   scan: PropTypes.shape({
     zone: PropTypes.string,
   }).isRequired,
-  plantId: PropTypes.string.isRequired,
 };
 
 export default Stages;
