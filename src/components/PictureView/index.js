@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { ROMI_API } from 'utils/constants';
 import Button from 'components/Button';
+import { StageContext } from 'utils/providers/stage';
 import Loading from 'components/Loader';
 import { Center, Layout, ButtonList, Image, ImgContainer, ThumbnailContainer, Thumbnail } from './style';
 
 export const PictureView = ({ imgData, plantData }) => {
+  const { setPlantId } = useContext(StageContext);
   const [viewOptions, setViewOptions] = useState(undefined);
   const [onRequest, setOnRequest] = useState(true);
   const [currentPlant, setCurrentPlant] = useState({ id: -1, image: '' });
@@ -64,6 +66,7 @@ export const PictureView = ({ imgData, plantData }) => {
     );
     if (!plant) return;
     setCurrentPlant({ id: plant.id, image: plant.image });
+    setPlantId(plant.id);
   };
 
   if (onRequest) return <Loading />;
