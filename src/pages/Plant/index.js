@@ -9,7 +9,6 @@ import useBreakpoint from 'utils/hooks/breakpoint';
 import Error from 'components/Error';
 import Navbar from 'components/Navbar';
 import Card from 'components/Card';
-// import Notes from 'components/Notes';
 import { PictureView } from 'components/PictureView';
 import NotesProvider from 'utils/providers/notes';
 import { Container, Grid } from '../Zone/style';
