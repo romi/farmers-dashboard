@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { ROMI_API } from 'utils/constants';
 import Button from 'components/Button';
-import { Center, Layout, ButtonList, Image, ImgContainer } from './style';
+import { Center, Layout, ButtonList, Image, ImgContainer, ThumbnailContainer, Thumbnail } from './style';
 
 export const PictureView = ({ imgData, plantData }) => {
   const [viewOptions, setViewOptions] = useState(undefined);
   const [onRequest, setOnRequest] = useState(true);
+  const [currentPlant, setCurrentPlant] = useState({ id: -1, image: '' });
   const [select, setSelect] = useState('picture');
 
   useEffect(() => {
@@ -42,13 +43,44 @@ export const PictureView = ({ imgData, plantData }) => {
     })();
   }, [plantData.id, imgData]);
 
-  if (onRequest) return <Center>Loading...</Center>;
+  const calculateClickArea = ({ clientY, clientX, target }) => {
+    const { scrollLeft, scrollLeftMax, scrollTop, scrollTopMax, offsetTop, offsetLeft } = document.getElementById(
+      'board-picture',
+    );
+    const ratioX = viewOptions.height / (target.height + scrollTopMax);
+    const ratioY = viewOptions.width / (target.width + scrollLeftMax);
 
+    return {
+      x: (clientX + scrollLeft - offsetLeft) * ratioX,
+      y: (clientY + scrollTop - offsetTop) * ratioY,
+    };
+  };
+
+  const clickEvent = evt => {
+    const { x, y } = calculateClickArea(evt);
+    const plant = viewOptions.plants.find(
+      ({ x: px, y: py, width, height }) => x <= py + width && y <= px + height && x >= py - width && y >= px - height,
+    );
+    if (!plant) return;
+    setCurrentPlant({ id: plant.id || -1, image: plant.image });
+  };
+
+  if (onRequest) return <Center>Loading...</Center>;
   if (!imgData || !viewOptions) return <Center>There is no image or plant analyses of the board</Center>;
 
   return (
     <Layout>
       <ButtonList>
+        {currentPlant?.image && (
+          <ThumbnailContainer>
+            <Thumbnail
+              alt="Selected Plant"
+              width="80px"
+              height="80px"
+              src={`${ROMI_API}/images/${currentPlant?.image}?size=thumb`}
+            />
+          </ThumbnailContainer>
+        )}
         <Button active={select === 'picture'} onClick={() => setSelect('picture')}>
           Picture
         </Button>
@@ -56,7 +88,7 @@ export const PictureView = ({ imgData, plantData }) => {
           Inspection
         </Button>
       </ButtonList>
-      <ImgContainer>
+      <ImgContainer id="board-picture" onClick={clickEvent}>
         <Image
           alt="board picture"
           width="250px"
@@ -67,6 +99,7 @@ export const PictureView = ({ imgData, plantData }) => {
     </Layout>
   );
 };
+
 PictureView.propTypes = {
   imgData: PropTypes.shape({
     id: PropTypes.string,
@@ -75,6 +108,7 @@ PictureView.propTypes = {
     id: PropTypes.string,
   }),
 };
+
 PictureView.defaultProps = {
   imgData: undefined,
   plantData: undefined,
