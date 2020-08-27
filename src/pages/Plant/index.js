@@ -11,8 +11,8 @@ import Navbar from 'components/Navbar';
 import Card from 'components/Card';
 import { PictureView } from 'components/PictureView';
 import NotesProvider from 'utils/providers/notes';
-import { Container, Grid } from '../Zone/style';
 import Stages from 'components/Stages';
+import { Container, Grid } from '../Zone/style';
 
 const Plant = ({ match }) => {
   const [scan, setScan] = useState();
