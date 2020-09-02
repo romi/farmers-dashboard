@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useContext, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Chart from 'chart.js';
 
-import useRouter from 'utils/hooks/router';
 import { NoteContext } from 'utils/providers/notes';
+import { TimelineContext } from 'utils/providers/timeline';
 import { FullLine } from './style';
 
 const options = {
@@ -44,7 +44,7 @@ const Timeline = ({ scans }) => {
   const chartRef = useRef();
   let chart = useRef();
   const { isActive } = useContext(NoteContext);
-  const router = useRouter();
+  const { setPicView } = useContext(TimelineContext);
 
   const data = {
     datasets: [
@@ -85,14 +85,13 @@ const Timeline = ({ scans }) => {
           chart.data.datasets[1].pointBackgroundColor[index] === '#d3d3d3' ? 'transparent' : '#d3d3d3';
         chart.update();
       } else {
-        router.push(`/plant/${chart.data.datasets[0].data[index].id}`);
+        setPicView(chart.data.datasets[0].data[index].id);
       }
     },
-    [isActive, router],
+    [isActive, setPicView],
   );
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     chart = new Chart(chartRef.current.getContext('2d'), {
       type: 'line',
       data,

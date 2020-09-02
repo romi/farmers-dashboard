@@ -36,7 +36,6 @@ export const LineChart = ({ range, config }) => {
           })),
         },
       };
-      // eslint-disable-next-line react-hooks/exhaustive-deps
       chart = new Chart(chartRef.current.getContext('2d'), chartConfig);
     })();
     return () => {

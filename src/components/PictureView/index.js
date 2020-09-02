@@ -1,23 +1,25 @@
 import React, { useEffect, useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+
+import useRouter from 'utils/hooks/router';
 import { ROMI_API } from 'utils/constants';
 import Button from 'components/Button';
 import { StageContext } from 'utils/providers/stage';
 import Loading from 'components/Loader';
 import { Center, Layout, ButtonList, Image, ImgContainer, ThumbnailContainer, Thumbnail } from './style';
 
-export const PictureView = ({ imgData, plantData }) => {
+export const PictureView = ({ imgData, plantData, scanId }) => {
   const { setPlantId } = useContext(StageContext);
   const [viewOptions, setViewOptions] = useState(undefined);
   const [onRequest, setOnRequest] = useState(true);
   const [currentPlant, setCurrentPlant] = useState({ id: -1, image: '' });
   const [select, setSelect] = useState('picture');
+  const router = useRouter();
 
   useEffect(() => {
     (async () => {
       if (!imgData) return;
-
       try {
         const {
           data: { results: dataImg },
@@ -66,7 +68,9 @@ export const PictureView = ({ imgData, plantData }) => {
     );
     if (!plant) return;
     setCurrentPlant({ id: plant.id, image: plant.image });
-    setPlantId(plant.id);
+
+    if (!router.pathname.includes('plant')) router.push(`/plant/${scanId}`);
+    else setPlantId(plant.id);
   };
 
   if (onRequest) return <Loading />;
@@ -111,9 +115,11 @@ PictureView.propTypes = {
   plantData: PropTypes.shape({
     id: PropTypes.string,
   }),
+  scanId: PropTypes.string,
 };
 
 PictureView.defaultProps = {
   imgData: undefined,
   plantData: undefined,
+  scanId: '',
 };
