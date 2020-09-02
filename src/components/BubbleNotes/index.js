@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import { NoteContext } from 'utils/providers/notes';
 import { BaseBubbleNote, Placement } from './style';
 
-const BubleNotes = () => {
+const BubbleNotes = () => {
   const { isActive, setActive } = useContext(NoteContext);
 
   return (
@@ -20,4 +20,4 @@ const BubleNotes = () => {
   );
 };
 
-export default BubleNotes;
+export default BubbleNotes;

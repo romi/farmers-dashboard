@@ -4,7 +4,7 @@ import axios from 'axios';
 
 import Error from 'components/Error';
 import Timeline from 'components/Timeline';
-import BubleNotes from 'components/BubleNotes';
+import BubbleNotes from 'components/BubbleNotes';
 import Card from 'components/Card';
 import { BREAKPOINT, ROMI_API } from 'utils/constants';
 import Navbar from 'components/Navbar';
@@ -62,7 +62,7 @@ const Crop = ({ match }) => {
           </Card>
           <NotesProvider>
             <Card title="Timeline">
-              <BubleNotes />
+              <BubbleNotes />
               <Timeline scans={board.scans} />
             </Card>
           </NotesProvider>
