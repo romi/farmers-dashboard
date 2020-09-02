@@ -92,7 +92,6 @@ const Timeline = ({ scans }) => {
   );
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     chart = new Chart(chartRef.current.getContext('2d'), {
       type: 'line',
       data,
