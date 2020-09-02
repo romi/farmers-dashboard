@@ -4,7 +4,7 @@ import axios from 'axios';
 
 import Error from 'components/Error';
 import Timeline from 'components/Timeline';
-import Notes from 'components/BubleNotes';
+import BubleNotes from 'components/BubleNotes';
 import Card from 'components/Card';
 import { BREAKPOINT, ROMI_API } from 'utils/constants';
 import Navbar from 'components/Navbar';
@@ -13,6 +13,7 @@ import { PictureView } from 'components/PictureView';
 import NotesProvider from 'utils/providers/notes';
 import { LineChart } from 'components/LineChart';
 import Loading from 'components/Loader';
+import Notes from 'components/Notes';
 import { Container, Grid } from './style';
 
 const Crop = ({ match }) => {
@@ -56,10 +57,12 @@ const Crop = ({ match }) => {
               plantData={pic.analyses.find(({ short_name }) => short_name === 'plant_analysis')}
             />
           </Card>
-          <Card title="Note" />
+          <Card title="Note">
+            <Notes ids={board.notes.map(({ id }) => id)} />
+          </Card>
           <NotesProvider>
             <Card title="Timeline">
-              <Notes />
+              <BubleNotes />
               <Timeline scans={board.scans} />
             </Card>
           </NotesProvider>
