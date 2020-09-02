@@ -10,10 +10,12 @@ describe('Routing Farm', () => {
     cy.url().should('include', '/farm/');
     cy.get('#navbar-farm');
   });
+
   it('Test the navigation if you enter a wrong farm id on URL', () => {
     cy.visit('/farm/invalid');
     cy.contains('An invalid ID was provided');
   });
+
   it('Test the navigation if you enter a valid farm id URL', () => {
     cy.visit('/farm/2f536d58-7ef2-4543-8e58-f06a71f26a85');
     cy.get('#navbar-farm');
@@ -27,10 +29,12 @@ describe('Routing Zone', () => {
     cy.url().should('include', '/crop/');
     cy.get('#navbar-crop');
   });
+
   it('Test the navigation if you enter a wrong crop id on URL', () => {
     cy.visit('/crop/invalid');
     cy.contains('An invalid ID was provided');
   });
+
   it('Test the navigation if you enter a valid crop id URL', () => {
     cy.visit('/crop/984d1e84-cc6d-4b42-b7bd-e7318c177ed8');
     cy.get('#navbar-crop');
@@ -42,6 +46,7 @@ describe('Routing Plant', () => {
     cy.visit('/plant/invalid');
     cy.contains('An invalid ID was provided');
   });
+  
   it('Test the navigation if you enter a valid plant id URL', () => {
     cy.visit('/plant/442fbf27-97ca-40f5-acff-c1cb5e7e9452');
     cy.get('#navbar-plant');
