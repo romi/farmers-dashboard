@@ -11,7 +11,7 @@ const Navbar = ({ farm, zone, plant, parentIds }) => {
   const [open, setOpen] = useState(false);
   const breakpoint = useBreakpoint(BREAKPOINT);
   // eslint-disable-next-line no-nested-ternary
-  const navTagId = `navbar${farm ? '-farm' : zone ? '-zone' : plant ? '-plant' : ''}`;
+  const navTagId = `navbar${farm ? '-farm' : zone ? '-crop' : plant ? '-plant' : ''}`;
 
   const getWidth = () => {
     if (breakpoint === 'sm') return 50;

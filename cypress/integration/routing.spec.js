@@ -15,26 +15,25 @@ describe('Routing Farm', () => {
     cy.contains('An invalid ID was provided');
   });
   it('Test the navigation if you enter a valid farm id URL', () => {
-    cy.visit('/farm/55d24ee2-4d44-443e-ae98-c8f2f69938cc');
-    cy.contains('testzone_rails');
+    cy.visit('/farm/2f536d58-7ef2-4543-8e58-f06a71f26a85');
     cy.get('#navbar-farm');
   });
 });
 
 describe('Routing Zone', () => {
   it('Test the navigation from farm page', () => {
-    cy.visit('/farm/55d24ee2-4d44-443e-ae98-c8f2f69938cc');
-    cy.contains('testzone_rails').click();
-    cy.url().should('include', '/zone/');
-    cy.get('#navbar-zone');
+    cy.visit('/farm/2f536d58-7ef2-4543-8e58-f06a71f26a85');
+    cy.contains('lettuce').click();
+    cy.url().should('include', '/crop/');
+    cy.get('#navbar-crop');
   });
   it('Test the navigation if you enter a wrong zone id on URL', () => {
-    cy.visit('/zone/123456789');
+    cy.visit('/crop/123456789');
     cy.contains('An invalid ID was provided');
   });
   it('Test the navigation if you enter a valid zone id URL', () => {
-    cy.visit('/zone/3c4f00bb-4687-48a5-9f9e-b23b72e02d60');
-    cy.get('#navbar-zone');
+    cy.visit('/zone/984d1e84-cc6d-4b42-b7bd-e7318c177ed8');
+    cy.get('#navbar-crop');
   });
 });
 
