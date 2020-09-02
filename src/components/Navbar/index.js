@@ -47,12 +47,12 @@ const Navbar = ({ farm, zone, plant, parentIds }) => {
           </NavButton>
         )}
         {plant ? (
-          <Link to={parentIds.zoneId ? `/zone/${parentIds.zoneId}` : '/404'}>
-            <NavButton>ZONE</NavButton>
+          <Link to={parentIds.zoneId ? `/crops/${parentIds.zoneId}` : '/404'}>
+            <NavButton>CROP</NavButton>
           </Link>
         ) : (
           <NavButton active={zone} disable={!zone}>
-            ZONE
+            CROP
           </NavButton>
         )}
         <NavButton active={plant} disable={!plant}>

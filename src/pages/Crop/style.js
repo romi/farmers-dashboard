@@ -20,10 +20,6 @@ export const Grid = withTheme(styled.div`
     display: flex;
     overflow-y: scroll;
     flex-direction: column;
-    & > div {
-      min-height: 250px;
-      margin: 10px;
-    }
   `
       : ''}
 `);

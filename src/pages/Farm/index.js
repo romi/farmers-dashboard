@@ -19,7 +19,6 @@ const Farm = ({ match }) => {
     (async () => {
       try {
         const { data } = await axios.get(`${ROMI_API}/farms/${match.params.id}`);
-
         setPlots(data);
       } catch (err) {
         console.error(err);
@@ -38,9 +37,9 @@ const Farm = ({ match }) => {
         <PlotContainer>
           <Title title={plots.short_name || ''} />
 
-          {plots.zones && plots.zones.length > 0 ? (
-            plots.zones.map(({ id, short_name: shortName }) => (
-              <PlotItem key={id} onClick={() => router.push(`/zone/${id}`)}>
+          {plots.crops && plots.crops.length > 0 ? (
+            plots.crops.map(({ id, short_name: shortName }) => (
+              <PlotItem key={id} onClick={() => router.push(`/crops/${id}`)}>
                 <ItemTitle>{shortName}</ItemTitle>
               </PlotItem>
             ))

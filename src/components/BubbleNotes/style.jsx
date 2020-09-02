@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Bubble from 'components/Bubble';
 
-export const BubbleNote = styled(Bubble)`
+export const BaseBubbleNote = styled(Bubble)`
   background-color: ${({ isActive }) => (isActive ? '#696969' : '#d3d3d3d3')};
   padding: 0 1rem;
 `;

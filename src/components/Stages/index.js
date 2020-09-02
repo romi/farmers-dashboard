@@ -1,18 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import { ROMI_API } from 'utils/constants';
 import Button from 'components/Button';
+import { StageContext } from 'utils/providers/stage';
 import Loading from 'components/Loader';
 import { Layout, SmoothImg, ButtonList, ImageList } from './style';
 
-const Stages = ({ scan, plantId }) => {
+const Stages = ({ scan }) => {
+  const { plantId } = useContext(StageContext);
   const [stages, setStages] = useState(undefined);
   const [select, setSelect] = useState('image');
+
   useEffect(() => {
-    try {
-      (async () => {
-        const zone = (await axios.get(`${ROMI_API}/zones/${scan.zone}`)).data;
+    if (plantId < 0) return;
+    (async () => {
+      try {
+        const zone = (await axios.get(`${ROMI_API}/crops/${scan.zone}`)).data;
         const scansAnalyses = (await axios.all(zone.scans.map(({ id }) => axios.get(`${ROMI_API}/scans/${id}`))))
           .map(({ data }) => data)
           .filter(({ analyses }) => analyses.find(({ short_name }) => short_name === 'plant_analysis'))
@@ -27,10 +31,10 @@ const Stages = ({ scan, plantId }) => {
             plant: plants.find(({ id }) => id === plantId),
           }));
         setStages(analyses);
-      })();
-    } catch (e) {
-      console.error(e);
-    }
+      } catch (e) {
+        console.error(e);
+      }
+    })();
   }, [scan.zone, plantId]);
 
   if (!stages) return <Loading />;
@@ -61,7 +65,6 @@ Stages.propTypes = {
   scan: PropTypes.shape({
     zone: PropTypes.string,
   }).isRequired,
-  plantId: PropTypes.string.isRequired,
 };
 
 export default Stages;

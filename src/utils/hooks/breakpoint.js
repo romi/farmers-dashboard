@@ -17,7 +17,6 @@ const useBreakpoint = (options = {}) => {
     }, 200);
     window.addEventListener('resize', calcInnerWidth);
     return () => window.removeEventListener('resize', calcInnerWidth);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return breakpoint;
 };
