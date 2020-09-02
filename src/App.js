@@ -9,17 +9,17 @@ import TimelineProvider from 'utils/providers/timeline';
 
 const App = () => (
   <Router>
-    <div>
-      <Switch>
-        <Route exact path="/" component={Home} />
-        <Route exact path="/farm/:id" component={Farm} />
-        <TimelineProvider>
+    <TimelineProvider>
+      <div>
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route exact path="/farm/:id" component={Farm} />
           <Route exact path="/crops/:id" component={Crop} />
-        </TimelineProvider>
-        <Route exact path="/plant/:id" component={Plant} />
-        <Route component={ErrorNotFound} />
-      </Switch>
-    </div>
+          <Route exact path="/plant/:id" component={Plant} />
+          <Route component={ErrorNotFound} />
+        </Switch>
+      </div>
+    </TimelineProvider>
   </Router>
 );
 

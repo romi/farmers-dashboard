@@ -24,7 +24,7 @@ const Plant = ({ match }) => {
     (async () => {
       try {
         const { data } = await axios.get(`${ROMI_API}/scans/${match.params.id}`);
-
+        console.log(data);
         setScan(data);
       } catch (err) {
         console.error(err);

@@ -61,6 +61,7 @@ const Crop = ({ match }) => {
             <PictureView
               imgData={pic.analyses.find(({ short_name }) => short_name === 'stitching')}
               plantData={pic.analyses.find(({ short_name }) => short_name === 'plant_analysis')}
+              scanId={pic?.id}
             />
           </Card>
           <Card title="Note" />
