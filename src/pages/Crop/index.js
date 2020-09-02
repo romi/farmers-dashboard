@@ -4,7 +4,7 @@ import axios from 'axios';
 
 import Error from 'components/Error';
 import Timeline from 'components/Timeline';
-import Notes from 'components/Notes';
+import BubbleNotes from 'components/BubbleNotes';
 import Card from 'components/Card';
 import Navbar from 'components/Navbar';
 import useBreakpoint from 'utils/hooks/breakpoint';
@@ -12,6 +12,7 @@ import NotesProvider from 'utils/providers/notes';
 import Loading from 'components/Loader';
 import { PictureView } from 'components/PictureView';
 import { LineChart } from 'components/LineChart';
+import Notes from 'components/Notes';
 import { TimelineContext } from 'utils/providers/timeline';
 import { BREAKPOINT, ROMI_API } from 'utils/constants';
 import { Container, Grid } from './style';
@@ -64,10 +65,12 @@ const Crop = ({ match }) => {
               scanId={pic?.id}
             />
           </Card>
-          <Card title="Note" />
+          <Card title="Note">
+            <Notes ids={board.notes.map(({ id }) => id)} />
+          </Card>
           <NotesProvider>
             <Card title="Timeline">
-              <Notes />
+              <BubbleNotes />
               <Timeline scans={board.scans} />
             </Card>
           </NotesProvider>
