@@ -5,6 +5,7 @@ import Crop from 'pages/Crop';
 import Plant from 'pages/Plant';
 import Home from 'pages/Home';
 import ErrorNotFound from 'pages/ErrorNotFound';
+import TimelineProvider from 'utils/providers/timeline';
 
 const App = () => (
   <Router>
@@ -12,7 +13,9 @@ const App = () => (
       <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/farm/:id" component={Farm} />
-        <Route exact path="/crops/:id" component={Crop} />
+        <TimelineProvider>
+          <Route exact path="/crops/:id" component={Crop} />
+        </TimelineProvider>
         <Route exact path="/plant/:id" component={Plant} />
         <Route component={ErrorNotFound} />
       </Switch>
