@@ -12,7 +12,7 @@ import { PictureView } from 'components/PictureView';
 import NotesProvider from 'utils/providers/notes';
 import Stages from 'components/Stages';
 import Loading from 'components/Loader';
-import { Container, Grid } from 'pages/Zone/style';
+import { Container, Grid } from 'pages/Crop/style';
 import StageProvider from 'utils/providers/stage';
 
 const Plant = ({ match }) => {

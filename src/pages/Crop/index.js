@@ -15,7 +15,7 @@ import { LineChart } from 'components/LineChart';
 import Loading from 'components/Loader';
 import { Container, Grid } from './style';
 
-const Zone = ({ match }) => {
+const Crop = ({ match }) => {
   const [onRequest, setOnRequest] = useState(true);
   const [error, setError] = useState('');
   const [board, setBoard] = useState(null);
@@ -26,7 +26,7 @@ const Zone = ({ match }) => {
   useEffect(() => {
     (async () => {
       try {
-        const { data: boardData } = await axios.get(`${ROMI_API}/zones/${match.params.id}`);
+        const { data: boardData } = await axios.get(`${ROMI_API}/crops/${match.params.id}`);
         const { data: lastScanData } = await axios.get(
           `${ROMI_API}/scans/${boardData.scans[boardData.scans.length - 1]?.id}`,
         );
@@ -71,20 +71,19 @@ const Zone = ({ match }) => {
                 {
                   label: 'Temperature (°C)',
                   id: 'temp',
-                  apiId: board.datastreams?.find(f => f.observable === 'air temperature')?.id,
+                  apiId: board.datastreams?.find(f => f.observable.toLowerCase().includes('air temperature'))?.id,
                   color: '#C7B95B',
                 },
                 {
                   label: 'Soil humidity (%)',
                   id: 'soil',
-                  apiId: board.datastreams?.find(f => f.observable === 'soil humidity')?.id,
+                  apiId: board.datastreams?.find(f => f.observable.toLowerCase().includes('soil humidity'))?.id,
                   color: '#23AFF9',
                 },
                 {
                   label: 'Sunlight (umole/m²/s)',
                   id: 'sun',
-                  apiId: board.datastreams?.find(f => f.observable === 'sunlight (photosynthetically active radiation)')
-                    ?.id,
+                  apiId: board.datastreams?.find(f => f.observable.toLowerCase().includes('sunlight'))?.id,
                   color: '#01AA55',
                 },
               ]}
@@ -97,7 +96,7 @@ const Zone = ({ match }) => {
   );
 };
 
-Zone.propTypes = {
+Crop.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
       id: PropTypes.string,
@@ -105,4 +104,4 @@ Zone.propTypes = {
   }).isRequired,
 };
 
-export default Zone;
+export default Crop;
