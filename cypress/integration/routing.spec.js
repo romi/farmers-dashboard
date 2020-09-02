@@ -23,6 +23,14 @@ describe('Routing Farm', () => {
 });
 
 describe('Routing Zone', () => {
+  it('Test the navigation from a homepage', () => {
+    cy.contains('Chatelain').click();
+    cy.url().should('include', '/farm/');
+    cy.contains('lettuce').click();
+    cy.url().should('include', '/crop/');
+    cy.get('#navbar-crop');
+  });
+
   it('Test the navigation from farm page', () => {
     cy.visit('/farm/2f536d58-7ef2-4543-8e58-f06a71f26a85');
     cy.contains('lettuce').click();
@@ -46,7 +54,7 @@ describe('Routing Plant', () => {
     cy.visit('/plant/invalid');
     cy.contains('An invalid ID was provided');
   });
-  
+
   it('Test the navigation if you enter a valid plant id URL', () => {
     cy.visit('/plant/442fbf27-97ca-40f5-acff-c1cb5e7e9452');
     cy.get('#navbar-plant');
