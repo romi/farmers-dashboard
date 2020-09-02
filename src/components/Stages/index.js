@@ -14,9 +14,9 @@ const Stages = ({ scan }) => {
 
   useEffect(() => {
     if (plantId < 0) return;
-    try {
-      (async () => {
-        const zone = (await axios.get(`${ROMI_API}/zones/${scan.zone}`)).data;
+    (async () => {
+      try {
+        const zone = (await axios.get(`${ROMI_API}/crops/${scan.zone}`)).data;
         const scansAnalyses = (await axios.all(zone.scans.map(({ id }) => axios.get(`${ROMI_API}/scans/${id}`))))
           .map(({ data }) => data)
           .filter(({ analyses }) => analyses.find(({ short_name }) => short_name === 'plant_analysis'))
@@ -31,10 +31,10 @@ const Stages = ({ scan }) => {
             plant: plants.find(({ id }) => id === plantId),
           }));
         setStages(analyses);
-      })();
-    } catch (e) {
-      console.error(e);
-    }
+      } catch (e) {
+        console.error(e);
+      }
+    })();
   }, [scan.zone, plantId]);
 
   if (!stages) return <Loading />;
