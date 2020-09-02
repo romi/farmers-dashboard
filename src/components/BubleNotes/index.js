@@ -1,23 +1,23 @@
 import React, { useContext } from 'react';
 
 import { NoteContext } from 'utils/providers/notes';
-import { BubbleNote, Placement } from './style';
+import { BaseBubbleNote, Placement } from './style';
 
-const Notes = () => {
+const BubleNotes = () => {
   const { isActive, setActive } = useContext(NoteContext);
 
   return (
     <Placement>
-      <BubbleNote
+      <BaseBubbleNote
         onClick={() => {
           setActive(!isActive);
         }}
         isActive={isActive}
       >
         + New note
-      </BubbleNote>
+      </BaseBubbleNote>
     </Placement>
   );
 };
 
-export default Notes;
+export default BubleNotes;

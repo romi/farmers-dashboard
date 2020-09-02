@@ -4,7 +4,7 @@ import axios from 'axios';
 
 import Error from 'components/Error';
 import Timeline from 'components/Timeline';
-import Notes from 'components/Notes';
+import Notes from 'components/BubleNotes';
 import Card from 'components/Card';
 import { BREAKPOINT, ROMI_API } from 'utils/constants';
 import Navbar from 'components/Navbar';
