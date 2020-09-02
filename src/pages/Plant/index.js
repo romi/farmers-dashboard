@@ -38,7 +38,7 @@ const Plant = ({ match }) => {
 
   return (
     <div className="Layout">
-      <Navbar plant parentIds={{ farmId: scan.farm, zoneId: scan.zone }} />
+      <Navbar plant parentIds={{ farmId: scan.farm, zoneId: scan.observation_unit.id }} />
       <Container>
         <Grid>
           <StageProvider>

@@ -31,14 +31,14 @@ const Navbar = ({ farm, zone, plant, parentIds }) => {
 
   const BaseNavbar = () => (
     <NavbarLayout>
-      <Link to="/">
+      <Link to="/" id="nav-to-home">
         <Logo>
           <img alt="logo" src="/logo_romi.png" width="100%" />
         </Logo>
       </Link>
       <NavigationContent>
         {zone || plant ? (
-          <Link to={parentIds.farmId ? `/farm/${parentIds.farmId}` : '/404'}>
+          <Link to={parentIds.farmId ? `/farm/${parentIds.farmId}` : '/404'} id="nav-to-farm">
             <NavButton>FARM</NavButton>
           </Link>
         ) : (
@@ -47,7 +47,7 @@ const Navbar = ({ farm, zone, plant, parentIds }) => {
           </NavButton>
         )}
         {plant ? (
-          <Link to={parentIds.zoneId ? `/crops/${parentIds.zoneId}` : '/404'}>
+          <Link to={parentIds.zoneId ? `/crop/${parentIds.zoneId}` : '/404'} id="nav-to-crop">
             <NavButton>CROP</NavButton>
           </Link>
         ) : (
