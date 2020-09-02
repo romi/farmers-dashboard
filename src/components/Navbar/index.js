@@ -10,6 +10,8 @@ import { Container, Location, Logo, NavbarLayout, BaseNavButton, NavigationConte
 const Navbar = ({ farm, zone, plant, parentIds }) => {
   const [open, setOpen] = useState(false);
   const breakpoint = useBreakpoint(BREAKPOINT);
+  // eslint-disable-next-line no-nested-ternary
+  const navTagId = `navbar${farm ? '-farm' : zone ? '-zone' : plant ? '-plant' : ''}`;
 
   const getWidth = () => {
     if (breakpoint === 'sm') return 50;
@@ -66,7 +68,7 @@ const Navbar = ({ farm, zone, plant, parentIds }) => {
   );
 
   return (
-    <Container width={getWidth()}>
+    <Container width={getWidth()} id={navTagId}>
       {breakpoint === 'sm' ? (
         <>
           <MenuIcon style={{ marginTop: '10px' }} fontSize="large" onClick={() => setOpen(true)} />
