@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
@@ -6,13 +6,14 @@ import Error from 'components/Error';
 import Timeline from 'components/Timeline';
 import Notes from 'components/Notes';
 import Card from 'components/Card';
-import { BREAKPOINT, ROMI_API } from 'utils/constants';
 import Navbar from 'components/Navbar';
 import useBreakpoint from 'utils/hooks/breakpoint';
-import { PictureView } from 'components/PictureView';
 import NotesProvider from 'utils/providers/notes';
-import { LineChart } from 'components/LineChart';
 import Loading from 'components/Loader';
+import { PictureView } from 'components/PictureView';
+import { LineChart } from 'components/LineChart';
+import { TimelineContext } from 'utils/providers/timeline';
+import { BREAKPOINT, ROMI_API } from 'utils/constants';
 import { Container, Grid } from './style';
 
 const Crop = ({ match }) => {
@@ -20,6 +21,7 @@ const Crop = ({ match }) => {
   const [error, setError] = useState('');
   const [board, setBoard] = useState(null);
   const [pic, setPic] = useState(null);
+  const { picView } = useContext(TimelineContext);
 
   const breakpoint = useBreakpoint(BREAKPOINT);
 
@@ -27,12 +29,10 @@ const Crop = ({ match }) => {
     (async () => {
       try {
         const { data: boardData } = await axios.get(`${ROMI_API}/crops/${match.params.id}`);
-        const { data: lastScanData } = await axios.get(
-          `${ROMI_API}/scans/${boardData.scans[boardData.scans.length - 1]?.id}`,
-        );
+        const id = !picView ? boardData.scans[boardData.scans.length - 1]?.id : picView;
 
         setBoard(boardData);
-        setPic(lastScanData);
+        setPic((await axios.get(`${ROMI_API}/scans/${id}`))?.data);
       } catch (err) {
         console.error(err);
         setError('An invalid ID was provided');
@@ -40,6 +40,13 @@ const Crop = ({ match }) => {
       setOnRequest(false);
     })();
   }, [match.params.id]);
+
+  useEffect(() => {
+    if (!picView) return;
+    (async () => {
+      setPic((await axios.get(`${ROMI_API}/scans/${picView}`))?.data);
+    })();
+  }, [picView]);
 
   if (error.length > 0) return <Error error={error} />;
   if (!board || onRequest) return <Loading />;
@@ -54,6 +61,7 @@ const Crop = ({ match }) => {
             <PictureView
               imgData={pic.analyses.find(({ short_name }) => short_name === 'stitching')}
               plantData={pic.analyses.find(({ short_name }) => short_name === 'plant_analysis')}
+              scanId={pic?.id}
             />
           </Card>
           <Card title="Note" />
