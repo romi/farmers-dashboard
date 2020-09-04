@@ -64,7 +64,7 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
   const clickEvent = evt => {
     const { x, y } = calculateClickArea(evt);
     const plant = viewOptions.plants.find(
-      ({ x: px, y: py, width, height }) => x <= px + width && y <= py + height && x >= px - width && y >= py - height,
+      ({ x: px, y: py, width, height }) => x >= px - width && x <= px + width && y >= py - height && y <= py + height,
     );
     if (!plant) return;
     setCurrentPlant({ id: plant.id, image: plant.image });
