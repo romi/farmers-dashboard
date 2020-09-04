@@ -2,43 +2,10 @@ import React, { useEffect, useRef, useContext, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Chart from 'chart.js';
 
-import { NoteContext } from 'utils/providers/notes';
 import { TimelineContext } from 'utils/providers/timeline';
+import { NoteContext } from 'utils/providers/notes';
 import { FullLine } from './style';
-
-const options = {
-  maintainAspectRatio: false,
-  aspectRatio: 5,
-  responsive: true,
-  legend: {
-    display: false,
-  },
-  tooltips: {
-    enabled: true,
-  },
-  scales: {
-    yAxes: [
-      {
-        type: 'category',
-        labels: ['', 'Lettuce'],
-        gridLines: {
-          display: false,
-        },
-      },
-    ],
-    xAxes: [
-      {
-        type: 'time',
-        time: {
-          unit: 'month',
-        },
-        gridLines: {
-          display: false,
-        },
-      },
-    ],
-  },
-};
+import options from './config';
 
 const Timeline = ({ scans }) => {
   const chartRef = useRef();
@@ -60,36 +27,14 @@ const Timeline = ({ scans }) => {
         pointBorderColor: [],
         data: scans.map(({ id, date }) => ({ y: 1, x: date.split('T')[0], id })),
       },
-      {
-        fill: false,
-        backgroundColor: 'transparent',
-        borderColor: 'transparent',
-        pointRadius: 7,
-        pointHoverRadius: 7,
-        pointBorderWidth: 1,
-        pointHoverBorderColor: 'transparent',
-        pointHoverBorderWidth: 3,
-        pointBackgroundColor: [],
-        pointBorderColor: [],
-        data: scans.map(({ date }) => ({ y: 0, x: date.split('T')[0] })),
-      },
     ],
   };
 
-  const clicked = useCallback(
-    (_, i) => {
-      const index = i[0]?._index;
-      if (typeof index !== 'number' || !chart) return;
-      if (isActive) {
-        chart.data.datasets[1].pointBackgroundColor[index] =
-          chart.data.datasets[1].pointBackgroundColor[index] === '#d3d3d3' ? 'transparent' : '#d3d3d3';
-        chart.update();
-      } else {
-        setPicView(chart.data.datasets[0].data[index].id);
-      }
-    },
-    [isActive, setPicView],
-  );
+  const clicked = useCallback((_, i) => {
+    const index = i[0]?._index;
+    if (typeof index !== 'number' || !chart) return;
+    setPicView(chart.data.datasets[0].data[index].id);
+  });
 
   useEffect(() => {
     chart = new Chart(chartRef.current.getContext('2d'), {
@@ -100,11 +45,19 @@ const Timeline = ({ scans }) => {
         ...options,
       },
     });
+
+    return () => {
+      try {
+        chart.destroy();
+      } catch (e) {
+        console.error(e);
+      }
+    };
   }, [isActive]);
 
   return (
     <FullLine>
-      <canvas key={isActive} id="myChart" ref={chartRef} />
+      <canvas id="myChart" ref={chartRef} />
     </FullLine>
   );
 };
