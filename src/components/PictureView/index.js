@@ -32,11 +32,11 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
             picture: dataImg.map,
             inspection: dataImg.mask,
           },
-          width: dataImg.width,
-          height: dataImg.height,
-          plants: dataPlant.plants.map(({ location: [x, y], ...res }) => ({
-            x,
+          width: dataImg.height,
+          height: dataImg.width,
+          plants: dataPlant.plants.map(({ location: [y, x], ...res }) => ({
             y,
+            x,
             ...res,
           })),
         });
@@ -48,12 +48,12 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
     })();
   }, [plantData.id, imgData]);
 
-  const calculateClickArea = ({ clientY, clientX, target }) => {
+  const calculateClickArea = ({ clientX, clientY, target }) => {
     const { scrollLeft, scrollLeftMax, scrollTop, scrollTopMax, offsetTop, offsetLeft } = document.getElementById(
       'board-picture',
     );
-    const ratioX = viewOptions.height / (target.height + scrollTopMax);
-    const ratioY = viewOptions.width / (target.width + scrollLeftMax);
+    const ratioX = parseFloat(viewOptions.width / (target.width + scrollLeftMax));
+    const ratioY = parseFloat(viewOptions.height / (target.height + scrollTopMax));
 
     return {
       x: (clientX + scrollLeft - offsetLeft) * ratioX,
@@ -64,7 +64,7 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
   const clickEvent = evt => {
     const { x, y } = calculateClickArea(evt);
     const plant = viewOptions.plants.find(
-      ({ x: px, y: py, width, height }) => x <= py + width && y <= px + height && x >= py - width && y >= px - height,
+      ({ x: px, y: py, width, height }) => x <= px + width && y <= py + height && x >= px - width && y >= py - height,
     );
     if (!plant) return;
     setCurrentPlant({ id: plant.id, image: plant.image });
@@ -99,9 +99,9 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
       <ImgContainer id="board-picture" onClick={clickEvent}>
         <Image
           alt="board picture"
-          width="250px"
-          height="1000px"
-          src={`${ROMI_API}/images/${viewOptions.options[select]}?size=large`}
+          height="250px"
+          width="1000px"
+          src={`${ROMI_API}/images/${viewOptions.options[select]}?size=large&orientation=horizontal&direction=ccw`}
         />
       </ImgContainer>
     </Layout>
