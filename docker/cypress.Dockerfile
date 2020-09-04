@@ -1,14 +1,23 @@
-FROM cypress/base:latest
+FROM node:14.7.0-alpine3.10 as build
 
-WORKDIR /cyp
-
-RUN yarn global add serve
+WORKDIR /app
 
 COPY package.json .
 COPY yarn.lock .
 RUN yarn
 
 COPY . .
-RUN yarn build 
+COPY ./nginx.conf /nginx.conf
+RUN yarn build
 
-CMD  serve -s build -l 80 & yarn cypress
+FROM cypress/base:latest
+
+WORKDIR /cy
+
+RUN apt-get install nginx
+
+COPY --from=build /app/build/ /usr/share/nginx/html
+COPY --from=build /app/nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80
+
+CMD  nginx & yarn cypress
