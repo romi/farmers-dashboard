@@ -16,7 +16,7 @@
  * @type {Cypress.PluginConfig}
  */
 module.exports = (on, config) => {
-    config.baseUrl = 'http://localhost:3000/';
+    config.baseUrl = 'http://localhost';
     return config;
     // `on` is used to hook into various events Cypress emits
     // `config` is the resolved Cypress config

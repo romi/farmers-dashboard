@@ -11,4 +11,4 @@ RUN yarn
 COPY . .
 RUN yarn build 
 
-CMD  serve -s build -l 3000 & yarn cypress 
+CMD  serve -s build -l 80 & yarn cypress
