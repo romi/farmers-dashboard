@@ -32,6 +32,8 @@ export const ImgContainer = styled.div`
 
 export const Image = styled.img`
   position: relative;
+  height: 250px;
+  width: 1000px;
 `;
 
 export const ThumbnailContainer = styled.div`
@@ -42,4 +44,6 @@ export const ThumbnailContainer = styled.div`
 
 export const Thumbnail = styled(Image)`
   border-radius: 1rem;
+  width: 80px;
+  height: 80px;
 `;
