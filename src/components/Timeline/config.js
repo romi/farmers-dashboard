@@ -38,7 +38,7 @@ export default {
   tooltips: {
     callbacks: {
       title: () => null,
-      label: (item, data) => data.datasets[0]?.data[item.index]?.x.split('-').join(' '),
+      label: (item, data) => data.datasets[0].data[item.index].x.split('-').join(' '),
     },
     titleFontSize: 16,
     bodyFontSize: 14,

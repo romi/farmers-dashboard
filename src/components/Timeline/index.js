@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useContext } from 'react';
+import React, { useEffect, useRef, useContext, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Chart from 'chart.js';
 
+import { TimelineContext } from 'utils/providers/timeline';
 import { NoteContext } from 'utils/providers/notes';
 import { FullLine } from './style';
 import options from './config';
@@ -10,6 +11,7 @@ const Timeline = ({ scans }) => {
   const chartRef = useRef();
   let chart = useRef();
   const { isActive } = useContext(NoteContext);
+  const { setPicView } = useContext(TimelineContext);
 
   const data = {
     datasets: [
@@ -28,11 +30,18 @@ const Timeline = ({ scans }) => {
     ],
   };
 
+  const clicked = useCallback((_, i) => {
+    const index = i[0]?._index;
+    if (typeof index !== 'number' || !chart) return;
+    setPicView(chart.data.datasets[0].data[index].id);
+  });
+
   useEffect(() => {
     chart = new Chart(chartRef.current.getContext('2d'), {
       type: 'line',
       data,
       options: {
+        onClick: clicked,
         ...options,
       },
     });
