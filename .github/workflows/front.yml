@@ -32,6 +32,8 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Run front
+        env:
+          REACT_APP_ROMI_API: 'https://db.romi-project.eu/api'
         run: docker-compose down --volumes && docker-compose up --build -d
       - name: Cypress run
         uses: cypress-io/github-action@v2
