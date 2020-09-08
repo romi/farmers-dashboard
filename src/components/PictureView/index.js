@@ -1,110 +1,103 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
+import { Line } from 'react-lineto';
 import PropTypes from 'prop-types';
-import axios from 'axios';
 
-import useRouter from 'utils/hooks/router';
 import { ROMI_API } from 'utils/constants';
 import Button from 'components/Button';
-import { StageContext } from 'utils/providers/stage';
 import Loading from 'components/Loader';
-import { Center, Layout, ButtonList, Image, ImgContainer, ThumbnailContainer, Thumbnail } from './style';
+import { PlantContext } from 'utils/providers/plant';
+import useRouter from 'utils/hooks/router';
+
+import { useRomiAnalyses } from './api';
+import {
+  Center,
+  Layout,
+  ButtonList,
+  Image,
+  ImgContainer,
+  ThumbnailContainer,
+  Thumbnail,
+  ThumbnailInView,
+} from './style';
 
 export const PictureView = ({ imgData, plantData, scanId }) => {
-  const { setPlantId } = useContext(StageContext);
-  const [viewOptions, setViewOptions] = useState(undefined);
-  const [onRequest, setOnRequest] = useState(true);
-  const [currentPlant, setCurrentPlant] = useState({ id: -1, image: '' });
   const [select, setSelect] = useState('picture');
+  const { onRequest, viewOptions } = useRomiAnalyses(imgData, plantData.id);
   const router = useRouter();
-
-  useEffect(() => {
-    (async () => {
-      if (!imgData) return;
-      try {
-        const {
-          data: { results: dataImg },
-        } = await axios.get(`${ROMI_API}/analyses/${imgData.id}`);
-        const {
-          data: { results: dataPlant },
-        } = await axios.get(`${ROMI_API}/analyses/${plantData.id}`);
-        setViewOptions({
-          options: {
-            picture: dataImg.map,
-            inspection: dataImg.mask,
-          },
-          width: dataImg.height,
-          height: dataImg.width,
-          plants: dataPlant.plants.map(({ location: [y, x], ...res }) => ({
-            y,
-            x,
-            ...res,
-          })),
-        });
-        setOnRequest(false);
-      } catch (e) {
-        setOnRequest(false);
-        console.error(e);
-      }
-    })();
-  }, [plantData.id, imgData]);
-
-  const calculateClickArea = ({ clientX, clientY, target }) => {
-    const { scrollLeft, scrollLeftMax, scrollTop, scrollTopMax, offsetTop, offsetLeft } = document.getElementById(
-      'board-picture',
-    );
-    const ratioX = parseFloat(viewOptions.width / (target.width + scrollLeftMax));
-    const ratioY = parseFloat(viewOptions.height / (target.height + scrollTopMax));
-
-    return {
-      x: (clientX + scrollLeft - offsetLeft) * ratioX,
-      y: (clientY + scrollTop - offsetTop) * ratioY,
-    };
-  };
+  const { plant, setPlant } = useContext(PlantContext);
 
   const clickEvent = evt => {
-    const { x, y } = calculateClickArea(evt);
-    const plant = viewOptions.plants.find(
+    const boardPic = document.getElementById('board-picture');
+    const thumb = document.getElementById('thumbnail');
+    const ratioX = parseFloat(viewOptions.width / (evt.target.width + boardPic.scrollLeftMax));
+    const ratioY = parseFloat(viewOptions.height / (evt.target.height + boardPic.scrollTopMax));
+    const x = (evt.clientX + boardPic.scrollLeft - boardPic.offsetLeft) * ratioX;
+    const y = (evt.clientY + boardPic.scrollTop - boardPic.offsetTop) * ratioY;
+    const value = viewOptions.plants.find(
       ({ x: px, y: py, width, height }) => x >= px - width && x <= px + width && y >= py - height && y <= py + height,
     );
-    if (!plant) return;
-    setCurrentPlant({ id: plant.id, image: plant.image });
 
+    if (!value) return;
+    setPlant({
+      id: value.id,
+      image: value.image,
+      x: value.x / ratioX,
+      y: (value.y - value.height / 2) / ratioY,
+      width: value.width / ratioX,
+      height: value.height / ratioY,
+      line: {
+        x0: thumb.offsetLeft + thumb.offsetWidth,
+        y0: thumb.offsetTop + thumb.offsetHeight / 2,
+        x1: value.x / ratioX + boardPic.scrollLeft + boardPic.offsetLeft,
+        y1: value.y / ratioY + boardPic.scrollTop + boardPic.offsetTop,
+      },
+      bright: true,
+    });
     if (!router.pathname.includes('plant')) router.push(`/plant/${scanId}`);
-    else setPlantId(plant.id);
   };
 
   if (onRequest) return <Loading />;
   if (!imgData || !viewOptions) return <Center>There is no image or plant analyses of the board</Center>;
-
   return (
-    <Layout>
-      <ButtonList>
-        {currentPlant?.image && (
-          <ThumbnailContainer>
+    <>
+      {Object.keys(plant.line).some(key => plant.line[key] !== 0) && (
+        <Line {...plant.line} borderStyle="dashed" borderColor="#d3d3d3" borderWidth="2" />
+      )}
+      <Layout>
+        <ButtonList>
+          <ThumbnailContainer id="thumbnail" show={plant?.image}>
             <Thumbnail
               alt="Selected Plant"
-              width="80px"
-              height="80px"
-              src={`${ROMI_API}/images/${currentPlant?.image}?size=thumb`}
+              show={plant?.image}
+              src={`${ROMI_API}/images/${plant?.image}?size=thumb&orientation=horizontal&direction=ccw`}
             />
           </ThumbnailContainer>
-        )}
-        <Button active={select === 'picture'} onClick={() => setSelect('picture')}>
-          Picture
-        </Button>
-        <Button active={select === 'inspection'} onClick={() => setSelect('inspection')}>
-          Inspection
-        </Button>
-      </ButtonList>
-      <ImgContainer id="board-picture" onClick={clickEvent}>
-        <Image
-          alt="board picture"
-          height="250px"
-          width="1000px"
-          src={`${ROMI_API}/images/${viewOptions.options[select]}?size=large&orientation=horizontal&direction=ccw`}
-        />
-      </ImgContainer>
-    </Layout>
+          <Button active={select === 'picture'} onClick={() => setSelect('picture')}>
+            Picture
+          </Button>
+          <Button active={select === 'inspection'} onClick={() => setSelect('inspection')}>
+            Inspection
+          </Button>
+        </ButtonList>
+        <ImgContainer id="board-picture" onClick={clickEvent}>
+          {plant?.bright && (
+            <ThumbnailInView
+              alt="thumbnail-view"
+              x={plant?.x}
+              y={plant?.y}
+              width={plant?.width}
+              height={plant?.height}
+              src={`${ROMI_API}/images/${plant?.image}?size=thumb&orientation=horizontal&direction=ccw`}
+            />
+          )}
+          <Image
+            alt="board picture"
+            brightness={plant?.bright}
+            src={`${ROMI_API}/images/${viewOptions.options[select]}?size=large&orientation=horizontal&direction=ccw`}
+          />
+        </ImgContainer>
+      </Layout>
+    </>
   );
 };
 

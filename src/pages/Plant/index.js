@@ -13,7 +13,6 @@ import NotesProvider from 'utils/providers/notes';
 import Stages from 'components/Stages';
 import Loading from 'components/Loader';
 import { Container, Grid } from 'pages/Crop/style';
-import StageProvider from 'utils/providers/stage';
 
 const Plant = ({ match }) => {
   const [scan, setScan] = useState();
@@ -41,20 +40,18 @@ const Plant = ({ match }) => {
       <Navbar plant parentIds={{ farmId: scan.farm, zoneId: scan.zone }} />
       <Container>
         <Grid>
-          <StageProvider>
-            <Card title="Picture View">
-              <PictureView
-                imgData={scan.analyses.find(({ short_name }) => short_name === 'stitching')}
-                plantData={scan.analyses.find(({ short_name }) => short_name === 'plant_analysis')}
-              />
+          <Card title="Picture View">
+            <PictureView
+              imgData={scan.analyses.find(({ short_name }) => short_name === 'stitching')}
+              plantData={scan.analyses.find(({ short_name }) => short_name === 'plant_analysis')}
+            />
+          </Card>
+          <Card title="Note" />
+          <NotesProvider>
+            <Card title="Stages">
+              <Stages scan={scan} />
             </Card>
-            <Card title="Note" />
-            <NotesProvider>
-              <Card title="Stages">
-                <Stages scan={scan} />
-              </Card>
-            </NotesProvider>
-          </StageProvider>
+          </NotesProvider>
           {breakpoint !== 'sm' && <Card title="" />}
           <Card title="Analytics" />
           <Card title="Report" />
