@@ -28,7 +28,7 @@ const Notes = ({ ids }) => {
   return (
     <Container>
       {notes.map(({ text, date, author: { short_name } }) => (
-        <Card style={{ border: `solid 1px ${theme.accent}`, margin: '0 10px', marginBottom: '15px' }}>
+        <Card key={text + date} style={{ border: `solid 1px ${theme.accent}`, margin: '0 10px', marginBottom: '15px' }}>
           <div>
             <Text>{text}</Text>
             <Footer>

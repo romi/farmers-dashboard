@@ -60,17 +60,19 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
   if (!imgData || !viewOptions) return <Center>There is no image or plant analyses of the board</Center>;
   return (
     <>
-      {Object.keys(plant.line).some(key => plant.line[key] !== 0) && (
-        <Line {...plant.line} borderStyle="dashed" borderColor="#d3d3d3" borderWidth="2" />
+      {plant?.line && Object.keys(plant.line).some(key => plant.line[key] !== 0) && (
+        <Line {...plant.line} borderStyle="dashed" borderColor="#d3d3d3" borderWidth={2} />
       )}
       <Layout>
         <ButtonList>
           <ThumbnailContainer id="thumbnail" show={plant?.image}>
-            <Thumbnail
-              alt="Selected Plant"
-              show={plant?.image}
-              src={`${ROMI_API}/images/${plant?.image}?size=thumb&orientation=horizontal&direction=ccw`}
-            />
+            {plant?.image && (
+              <Thumbnail
+                alt="Selected Plant"
+                show={plant.image}
+                src={`${ROMI_API}/images/${plant.image}?size=thumb&orientation=horizontal&direction=ccw`}
+              />
+            )}
           </ThumbnailContainer>
           <Button active={select === 'picture'} onClick={() => setSelect('picture')}>
             Picture
@@ -79,23 +81,26 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
             Inspection
           </Button>
         </ButtonList>
-        <ImgContainer id="board-picture" onClick={clickEvent}>
-          {plant?.bright && (
-            <ThumbnailInView
-              alt="thumbnail-view"
-              x={plant?.x}
-              y={plant?.y}
-              width={plant?.width}
-              height={plant?.height}
-              src={`${ROMI_API}/images/${plant?.image}?size=thumb&orientation=horizontal&direction=ccw`}
+        {viewOptions?.options[select] && (
+          <ImgContainer id="board-picture" onClick={clickEvent}>
+            {plant?.bright && (
+              <ThumbnailInView
+                alt="thumbnail-view"
+                x={plant?.x}
+                y={plant?.y}
+                width={plant?.width}
+                height={plant?.height}
+                src={`${ROMI_API}/images/${plant?.image}?size=thumb&orientation=horizontal&direction=ccw`}
+              />
+            )}
+
+            <Image
+              alt="board picture"
+              brightness={plant?.bright}
+              src={`${ROMI_API}/images/${viewOptions.options[select]}?size=large&orientation=horizontal&direction=ccw`}
             />
-          )}
-          <Image
-            alt="board picture"
-            brightness={plant?.bright}
-            src={`${ROMI_API}/images/${viewOptions.options[select]}?size=large&orientation=horizontal&direction=ccw`}
-          />
-        </ImgContainer>
+          </ImgContainer>
+        )}
       </Layout>
     </>
   );
