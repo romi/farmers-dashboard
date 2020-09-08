@@ -1,6 +1,0 @@
-version: '3'
-
-services: 
-    front:
-        build:
-            dockerfile: ./docker/cypress.Dockerfile

@@ -16,7 +16,7 @@ const Stages = ({ scan }) => {
     if (plant?.id < 0) return;
     (async () => {
       try {
-        const zone = (await axios.get(`${ROMI_API}/crops/${scan.zone}`)).data;
+        const zone = (await axios.get(`${ROMI_API}/crop/${scan.zone}`)).data;
         const scansAnalyses = (await axios.all(zone.scans.map(({ id }) => axios.get(`${ROMI_API}/scans/${id}`))))
           .map(({ data }) => data)
           .filter(({ analyses }) => analyses.find(({ short_name }) => short_name === 'plant_analysis'))

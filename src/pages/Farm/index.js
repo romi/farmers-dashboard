@@ -39,7 +39,7 @@ const Farm = ({ match }) => {
 
           {plots.crops && plots.crops.length > 0 ? (
             plots.crops.map(({ id, short_name: shortName }) => (
-              <PlotItem key={id} onClick={() => router.push(`/crops/${id}`)}>
+              <PlotItem key={id} onClick={() => router.push(`/crop/${id}`)}>
                 <ItemTitle>{shortName}</ItemTitle>
               </PlotItem>
             ))

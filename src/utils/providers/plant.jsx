@@ -15,8 +15,8 @@ export const PlantContext = createContext({
 });
 
 const PlantProvider = ({ children }) => {
-  const [plant, setPlant] = useState();
-  const router = useRouter({
+  const router = useRouter();
+  const [plant, setPlant] = useState({
     line: {
       x0: 0,
       y0: 0,
@@ -26,7 +26,7 @@ const PlantProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    if (router.pathname.includes('crops')) {
+    if (router.pathname.includes('crop')) {
       setPlant({
         line: {
           x0: 0,

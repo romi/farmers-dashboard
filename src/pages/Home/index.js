@@ -34,7 +34,7 @@ const Home = () => {
 
   return (
     <>
-      <Logo>
+      <Logo id="homepage-logo">
         <img alt="logo" src="/logo_romi.png" width="300rem" />
       </Logo>
       <Container className="Layout">
