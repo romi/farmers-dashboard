@@ -6,11 +6,12 @@ import Plant from 'pages/Plant';
 import Home from 'pages/Home';
 import ErrorNotFound from 'pages/ErrorNotFound';
 import TimelineProvider from 'utils/providers/timeline';
+import PlantProvider from 'utils/providers/plant';
 
 const App = () => (
   <Router>
     <TimelineProvider>
-      <div>
+      <PlantProvider>
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/farm/:id" component={Farm} />
@@ -18,7 +19,7 @@ const App = () => (
           <Route exact path="/plant/:id" component={Plant} />
           <Route component={ErrorNotFound} />
         </Switch>
-      </div>
+      </PlantProvider>
     </TimelineProvider>
   </Router>
 );
