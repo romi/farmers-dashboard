@@ -47,3 +47,13 @@ export const Thumbnail = styled(Image)`
   width: 80px;
   height: 80px;
 `;
+
+export const ThumbnailInView = styled(Image)`
+  z-index: 1;
+  position: absolute;
+  border-radius: 0.5rem;
+  left: ${({ x }) => x}px;
+  top: ${({ y }) => y}px;
+  width: ${({ width }) => width}px;
+  height: ${({ height }) => height}px;
+`;
