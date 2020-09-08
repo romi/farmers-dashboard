@@ -29,14 +29,10 @@ jobs:
 
   tests:
     runs-on: ubuntu-latest
-    container: cypress/included:5.1.0
     steps:
       - uses: actions/checkout@v1
-
       - name: Run front
-        run: |
-          docker-compose down --volumes
-          docker-compose up --build -d
+        run: docker-compose down --volumes && docker-compose up --build -d
 
       - name: Cypress run
         uses: cypress-io/github-action@v2
