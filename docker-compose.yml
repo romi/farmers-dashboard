@@ -8,4 +8,4 @@ services:
         ports: 
             - 80:80
         environment:
-            - REACT_APP_ROMI_API=${REACT_APP_ROMI_API}
+            - REACT_APP_ROMI_API=https://db.romi-project.eu/api
