@@ -2,9 +2,7 @@ version: '3'
 
 services: 
     front:
-        build:
-            context: .
-            dockerfile: ./docker/prod.Dockerfile
+        build: .
         ports: 
             - 80:80
         environment:
