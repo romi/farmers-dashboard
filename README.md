@@ -36,7 +36,7 @@ $> docker-compose up --build -d
 
 > Deploy without docker-compose
 > ```sh
-> $> docker built -f docker/prod.Dockerfile -t `image_name`
+> $> docker built -f ./Dockerfile -t `image_name`
 > $> docker run -p 80:80 `image_name`
 > ```
 
