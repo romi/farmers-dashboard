@@ -3,17 +3,17 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import { ROMI_API } from 'utils/constants';
 import Button from 'components/Button';
-import { StageContext } from 'utils/providers/stage';
+import { PlantContext } from 'utils/providers/plant';
 import Loading from 'components/Loader';
 import { Layout, SmoothImg, ButtonList, ImageList } from './style';
 
 const Stages = ({ scan }) => {
-  const { plantId } = useContext(StageContext);
+  const { plant } = useContext(PlantContext);
   const [stages, setStages] = useState(undefined);
   const [select, setSelect] = useState('image');
 
   useEffect(() => {
-    if (plantId < 0) return;
+    if (plant?.id < 0) return;
     (async () => {
       try {
         const zone = (await axios.get(`${ROMI_API}/crops/${scan.zone}`)).data;
@@ -28,21 +28,21 @@ const Stages = ({ scan }) => {
           .map(({ data }) => data)
           .map(({ results: { plants } }, i) => ({
             date: scansAnalyses[i].date,
-            plant: plants.find(({ id }) => id === plantId),
+            plant: plants.find(({ id }) => id === plant?.id),
           }));
         setStages(analyses);
       } catch (e) {
         console.error(e);
       }
     })();
-  }, [scan.zone, plantId]);
+  }, [scan.zone, plant?.id]);
 
   if (!stages) return <Loading />;
 
   return (
     <Layout>
       <ButtonList>
-        Lettuce #{plantId}
+        Lettuce #{plant?.id}
         <Button active={select === 'image'} onClick={() => setSelect('image')}>
           Picture
         </Button>
