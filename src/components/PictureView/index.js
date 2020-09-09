@@ -40,6 +40,7 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
     if (!value) return;
     setPlant({
       id: value.id,
+      plantId: value.observation_unit,
       image: value.image,
       x: value.x / ratioX,
       y: (value.y - value.height / 2) / ratioY,
