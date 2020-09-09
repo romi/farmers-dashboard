@@ -13,11 +13,13 @@ const Card = ({ title, children, ...props }) => (
 Card.propTypes = {
   title: PropTypes.string,
   children: PropTypes.node,
+  border: PropTypes.bool,
 };
 
 Card.defaultProps = {
   title: '',
   children: <div />,
+  border: false,
 };
 
 export default Card;

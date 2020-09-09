@@ -4,7 +4,6 @@ import axios from 'axios';
 import Card from 'components/Card';
 import Loading from 'components/Loader';
 import { ROMI_API } from 'utils/constants';
-import { theme } from 'utils/theme';
 import { Author, Container, Footer, Text } from './style';
 
 const capitalize = string => string.charAt(0).toUpperCase() + string.slice(1);
@@ -28,7 +27,7 @@ const Notes = ({ ids }) => {
   return (
     <Container>
       {notes.map(({ text, date, author: { short_name } }) => (
-        <Card key={text + date} style={{ border: `solid 1px ${theme.accent}`, margin: '0 10px', marginBottom: '15px' }}>
+        <Card key={text + date} border>
           <div>
             <Text>{text}</Text>
             <Footer>

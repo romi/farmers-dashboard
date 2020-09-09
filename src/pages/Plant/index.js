@@ -54,7 +54,6 @@ const Plant = ({ match }) => {
           </NotesProvider>
           {breakpoint !== 'sm' && <Card title="" />}
           <Card title="Analytics" />
-          <Card title="Report" />
         </Grid>
       </Container>
     </div>

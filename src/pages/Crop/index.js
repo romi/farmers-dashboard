@@ -4,6 +4,7 @@ import axios from 'axios';
 
 import Error from 'components/Error';
 import Timeline from 'components/Timeline';
+import TimelineMobile from 'components/Mobile/timeline';
 import BubbleNotes from 'components/BubbleNotes';
 import Card from 'components/Card';
 import Navbar from 'components/Navbar';
@@ -15,6 +16,7 @@ import { LineChart } from 'components/LineChart';
 import Notes from 'components/Notes';
 import { TimelineContext } from 'utils/providers/timeline';
 import { BREAKPOINT, ROMI_API } from 'utils/constants';
+import isMobile from 'utils/isMobile';
 import { Container, Grid } from './style';
 
 const Crop = ({ match }) => {
@@ -32,6 +34,7 @@ const Crop = ({ match }) => {
         const { data: boardData } = await axios.get(`${ROMI_API}/crops/${match.params.id}`);
         const id = !picView ? boardData.scans[boardData.scans.length - 1]?.id : picView;
 
+        boardData.scans.sort(({ date: a }, { date: b }) => new Date(a) - new Date(b));
         setBoard(boardData);
         setPic((await axios.get(`${ROMI_API}/scans/${id}`))?.data);
       } catch (err) {
@@ -70,8 +73,14 @@ const Crop = ({ match }) => {
           </Card>
           <NotesProvider>
             <Card title="Timeline">
-              <BubbleNotes />
-              <Timeline scans={board.scans} />
+              {isMobile ? (
+                <TimelineMobile scans={board.scans} />
+              ) : (
+                <>
+                  <BubbleNotes />
+                  <Timeline scans={board.scans} />
+                </>
+              )}
             </Card>
           </NotesProvider>
           {breakpoint !== 'sm' && <Card title="" />}
@@ -100,7 +109,6 @@ const Crop = ({ match }) => {
               ]}
             />
           </Card>
-          <Card title="Report" />
         </Grid>
       </Container>
     </div>
