@@ -16,26 +16,36 @@ const Stages = ({ scan }) => {
     if (plant?.id < 0) return;
     (async () => {
       try {
-        const zone = (await axios.get(`${ROMI_API}/crop/${scan.zone}`)).data;
-        const scansAnalyses = (await axios.all(zone.scans.map(({ id }) => axios.get(`${ROMI_API}/scans/${id}`))))
-          .map(({ data }) => data)
-          .filter(({ analyses }) => analyses.find(({ short_name }) => short_name === 'plant_analysis'))
-          .map(({ date, analyses }) => ({
-            date,
-            id: analyses.find(({ short_name }) => short_name === 'plant_analysis').id,
-          }));
-        const analyses = (await axios.all(scansAnalyses.map(({ id }) => axios.get(`${ROMI_API}/analyses/${id}`))))
-          .map(({ data }) => data)
-          .map(({ results: { plants } }, i) => ({
-            date: scansAnalyses[i].date,
-            plant: plants.find(({ id }) => id === plant?.id),
-          }));
-        setStages(analyses);
+        const crop = (await axios.get(`${ROMI_API}/crops/${scan?.observation_unit?.id}`)).data;
+        const scans = crop.scans.sort(({ date: dateA }, { date: dateB }) => new Date(dateA) - new Date(dateB));
+        const allAnalyses = scans.map(({ id }) =>
+          crop?.analyses?.find(
+            ({ scan: scanId, short_name, state }) =>
+              scanId === id && short_name === 'plant_analysis' && state === 'Finished',
+          ),
+        );
+        const plantAnalysis = (
+          await axios.all(allAnalyses.map(({ id }) => axios.get(`${ROMI_API}/analyses/${id}`)))
+        ).map(({ data: { results: { plants } } }, index) => ({ date: scans[index]?.date, plants }));
+        const plantEvolution = plantAnalysis[0].plants.map(({ id }) => ({
+          id,
+          evolution: plantAnalysis.map(({ date, plants }) => {
+            const { image, mask } = plants.find(({ id: plantId }) => plantId === id);
+            return {
+              date,
+              image,
+              mask,
+            };
+          }),
+        }));
+        console.log('plantEvolution', plantEvolution);
+        setStages(plantEvolution);
       } catch (e) {
         console.error(e);
       }
     })();
-  }, [scan.zone, plant?.id]);
+  }, [scan, plant?.id]);
+  console.log('plant', plant);
 
   if (!stages) return <Loading />;
 
@@ -51,19 +61,24 @@ const Stages = ({ scan }) => {
         </Button>
       </ButtonList>
       <ImageList>
+{/*
         {stages.map((e, i) => (
           <SmoothImg key={e.plant.image} first={i === 0}>
             {new Date(e.date).toISOString().split('T')[0].split('-').reverse().join('/')}
             <img height={100} width={100} alt="plant" src={`${ROMI_API}/images/${e.plant[select]}`} />
           </SmoothImg>
         ))}
+*/}
       </ImageList>
     </Layout>
   );
 };
 Stages.propTypes = {
   scan: PropTypes.shape({
-    zone: PropTypes.string,
+    observation_unit: PropTypes.shape({
+      id: PropTypes.string,
+      type: PropTypes.string,
+    }),
   }).isRequired,
 };
 
