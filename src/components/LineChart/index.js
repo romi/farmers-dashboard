@@ -7,7 +7,7 @@ import Loading from 'components/Loader';
 import baseConfig from './config';
 import { Container } from './style';
 
-export const LineChart = ({ range, config }) => {
+export const LineChart = ({ range, config, isDatastream }) => {
   const chartRef = useRef();
   let chart = useRef();
   const [datastreams, setDatastreams] = useState(undefined);
@@ -22,7 +22,11 @@ export const LineChart = ({ range, config }) => {
   useEffect(() => {
     (async () => {
       const datas = config.filter(({ apiId }) => apiId);
-      const response = await axios.all(datas.map(({ apiId }) => axios.get(`${ROMI_API}/datastreams/${apiId}/values`)));
+      const response = isDatastream
+        ? await axios.all(datas.map(({ apiId }) => axios.get(`${ROMI_API}/datastreams/${apiId}/values`)))
+        : (await axios.all(datas.map(({ apiId }) => axios.get(`${ROMI_API}/analyses/${apiId}`)))).map(({ data }) => ({
+            data: data?.results?.curve,
+          }));
       const tmp = Object.fromEntries(response.map(({ data }, i) => [datas[i].id, data]));
       setDatastreams(tmp);
       const chartConfig = {
@@ -45,7 +49,7 @@ export const LineChart = ({ range, config }) => {
         console.error(e);
       }
     };
-  }, []);
+  }, [config]);
 
   if (!datastreams) return <Loading />;
 
@@ -57,6 +61,7 @@ export const LineChart = ({ range, config }) => {
 };
 LineChart.propTypes = {
   range: PropTypes.number,
+  isDatastream: PropTypes.bool,
   config: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
@@ -68,4 +73,5 @@ LineChart.propTypes = {
 };
 LineChart.defaultProps = {
   range: 1,
+  isDatastream: false,
 };

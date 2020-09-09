@@ -14,10 +14,14 @@ import Stages from 'components/Stages';
 import Loading from 'components/Loader';
 import { TimelineContext } from 'utils/providers/timeline';
 import { Container, Grid } from 'pages/Crop/style';
+import { LineChart } from '../../components/LineChart';
+import { PlantContext } from '../../utils/providers/plant';
 
 const Plant = ({ match }) => {
   const [scan, setScan] = useState();
   const [error, setError] = useState('');
+  const { plant } = useContext(PlantContext);
+  const [plantGrowth, setPlantGrowth] = useState(undefined);
   const { picView } = useContext(TimelineContext);
   const breakpoint = useBreakpoint(BREAKPOINT);
 
@@ -33,6 +37,14 @@ const Plant = ({ match }) => {
       }
     })();
   }, [match.params.id]);
+
+  useEffect(() => {
+    if (!plant || !plant?.plantId) return;
+    (async () => {
+      const response = (await axios.get(`${ROMI_API}/plants/${plant.plantId}`))?.data?.analyses[0]?.id;
+      setPlantGrowth(response);
+    })();
+  }, [plant]);
 
   useEffect(() => {
     if (!picView) return;
@@ -62,7 +74,23 @@ const Plant = ({ match }) => {
             </Card>
           </NotesProvider>
           {breakpoint !== 'sm' && <Card title="" />}
-          <Card title="Analytics" />
+          <Card title="Analytics">
+            {plant?.plantId && plantGrowth ? (
+              <LineChart
+                range={1}
+                config={[
+                  {
+                    label: 'Growth',
+                    id: 'growth',
+                    apiId: plantGrowth,
+                    color: '#C7B95B',
+                  },
+                ]}
+              />
+            ) : (
+              <div>No plant selected</div>
+            )}
+          </Card>
         </Grid>
       </Container>
     </div>
