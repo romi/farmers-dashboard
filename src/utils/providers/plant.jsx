@@ -38,7 +38,7 @@ const PlantProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem('plants', JSON.stringify(plant));
     if (router.pathname.includes('crop')) {
-      setPlant();
+      setPlant(DEFAULT);
     }
   }, [router.pathname]);
 
