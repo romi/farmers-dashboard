@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
@@ -12,11 +12,13 @@ import { PictureView } from 'components/PictureView';
 import NotesProvider from 'utils/providers/notes';
 import Stages from 'components/Stages';
 import Loading from 'components/Loader';
+import { TimelineContext } from 'utils/providers/timeline';
 import { Container, Grid } from 'pages/Crop/style';
 
 const Plant = ({ match }) => {
   const [scan, setScan] = useState();
   const [error, setError] = useState('');
+  const { picView } = useContext(TimelineContext);
   const breakpoint = useBreakpoint(BREAKPOINT);
 
   useEffect(() => {
@@ -31,6 +33,13 @@ const Plant = ({ match }) => {
       }
     })();
   }, [match.params.id]);
+
+  useEffect(() => {
+    if (!picView) return;
+    (async () => {
+      setScan((await axios.get(`${ROMI_API}/scans/${picView}`))?.data);
+    })();
+  }, [picView]);
 
   if (error.length > 0) return <Error error={error} />;
   if (!scan) return <Loading />;

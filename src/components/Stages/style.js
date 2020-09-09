@@ -10,6 +10,7 @@ export const SmoothImg = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  cursor: pointer;
   margin-left: ${({ first }) => (first ? '0' : '15px')};
   & > img {
     border-radius: 10%;
