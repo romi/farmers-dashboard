@@ -2,6 +2,15 @@ import React, { createContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import useRouter from 'utils/hooks/router';
 
+const DEFAULT = {
+  line: {
+    x0: 0,
+    y0: 0,
+    x1: 0,
+    y1: 0,
+  },
+};
+
 export const PlantContext = createContext({
   plant: {
     line: {
@@ -14,27 +23,22 @@ export const PlantContext = createContext({
   setPlant: () => {},
 });
 
+const getPlants = () => {
+  try {
+    return JSON.parse(localStorage.getItem('plants')) || DEFAULT;
+  } catch (err) {
+    return DEFAULT;
+  }
+};
+
 const PlantProvider = ({ children }) => {
   const router = useRouter();
-  const [plant, setPlant] = useState({
-    line: {
-      x0: 0,
-      y0: 0,
-      x1: 0,
-      y1: 0,
-    },
-  });
+  const [plant, setPlant] = useState(getPlants());
 
   useEffect(() => {
+    localStorage.setItem('plants', JSON.stringify(plant));
     if (router.pathname.includes('crop')) {
-      setPlant({
-        line: {
-          x0: 0,
-          y0: 0,
-          x1: 0,
-          y1: 0,
-        },
-      });
+      setPlant();
     }
   }, [router.pathname]);
 
