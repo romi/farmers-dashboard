@@ -46,6 +46,8 @@ const Stages = ({ scan }) => {
     })();
   }, [scan, plant?.id]);
   console.log('plant', plant);
+  
+  if (!stages.find(({ id }) => id === plant.id)) return <div>Something went wrong</div>;
 
   if (!stages) return <Loading />;
 
@@ -61,14 +63,12 @@ const Stages = ({ scan }) => {
         </Button>
       </ButtonList>
       <ImageList>
-{/*
         {stages.map((e, i) => (
           <SmoothImg key={e.plant.image} first={i === 0}>
             {new Date(e.date).toISOString().split('T')[0].split('-').reverse().join('/')}
             <img height={100} width={100} alt="plant" src={`${ROMI_API}/images/${e.plant[select]}`} />
           </SmoothImg>
         ))}
-*/}
       </ImageList>
     </Layout>
   );
