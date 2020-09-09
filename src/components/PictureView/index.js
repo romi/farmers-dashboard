@@ -29,8 +29,8 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
   const clickEvent = evt => {
     const boardPic = document.getElementById('board-picture');
     const thumb = document.getElementById('thumbnail');
-    const ratioX = parseFloat(viewOptions.width / (evt.target.width + boardPic.scrollLeftMax));
-    const ratioY = parseFloat(viewOptions.height / (evt.target.height + boardPic.scrollTopMax));
+    const ratioX = viewOptions.width / (evt.target.width + (boardPic.scrollLeftMax || 0));
+    const ratioY = viewOptions.height / (evt.target.height + (boardPic.scrollTopMax || 0));
     const x = (evt.clientX + boardPic.scrollLeft - boardPic.offsetLeft) * ratioX;
     const y = (evt.clientY + boardPic.scrollTop - boardPic.offsetTop) * ratioY;
     const value = viewOptions.plants.find(

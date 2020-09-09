@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { withTheme } from '../../utils/theme';
+import { withTheme } from 'utils/theme';
 
 const Container = withTheme(styled.div`
   display: flex;
@@ -13,6 +13,14 @@ const Container = withTheme(styled.div`
     margin: 10px;
   `
       : ''}
+
+  ${({ border, theme }) =>
+    border &&
+    `
+    border: solid 1px ${theme.accent}; 
+    margin: 0 10px;
+    margin-bottom: 15px; 
+  `}
 `);
 
 export const Content = styled.div`
