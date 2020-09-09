@@ -23,9 +23,9 @@ export const PlantContext = createContext({
   setPlant: () => {},
 });
 
-const getPlants = () => {
+const getPlant = () => {
   try {
-    return JSON.parse(localStorage.getItem('plants')) || DEFAULT;
+    return JSON.parse(localStorage.getItem('plant')) || DEFAULT;
   } catch (err) {
     return DEFAULT;
   }
@@ -33,10 +33,10 @@ const getPlants = () => {
 
 const PlantProvider = ({ children }) => {
   const router = useRouter();
-  const [plant, setPlant] = useState(getPlants());
+  const [plant, setPlant] = useState(getPlant());
 
   useEffect(() => {
-    localStorage.setItem('plants', JSON.stringify(plant));
+    localStorage.setItem('plant', JSON.stringify(plant));
     if (router.pathname.includes('crop')) {
       setPlant(DEFAULT);
     }
