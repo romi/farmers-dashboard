@@ -14,8 +14,8 @@ import Stages from 'components/Stages';
 import Loading from 'components/Loader';
 import { TimelineContext } from 'utils/providers/timeline';
 import { Container, Grid } from 'pages/Crop/style';
-import { LineChart } from '../../components/LineChart';
-import { PlantContext } from '../../utils/providers/plant';
+import { LineChart } from 'components/LineChart';
+import { PlantContext } from 'utils/providers/plant';
 
 const Plant = ({ match }) => {
   const [scan, setScan] = useState();
