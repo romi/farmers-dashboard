@@ -1,27 +1,46 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { TimelineContext } from 'utils/providers/timeline';
-import Card from 'components/Card';
-import { Centered } from './style';
+import { MONTHS } from 'utils/constants';
+import { Centered, SquareCardContainer, SquareCard, MonthSpan } from './style';
 
 const Timeline = ({ scans }) => {
+  const [dates, setDates] = useState([]);
   const { setPicView } = useContext(TimelineContext);
 
-  const formatDate = date => new Date(date).toISOString().split('T')[0].split('-').reverse().join('/');
+  const formatDate = date => new Date(date).toISOString().split('T')[0].split('-').reverse()[0];
 
-  return scans.map(({ id, date }) => (
-    <Card
-      key={id}
-      border
-      onClick={() => {
-        setPicView(id);
-      }}
-    >
+  useEffect(() => {
+    const months = Array.from(new Set([...scans.map(({ date }) => new Date(date).getMonth())]));
+
+    setDates(
+      months.map(month => ({
+        month,
+        values: scans.filter(({ date }) => new Date(date).getMonth() === month),
+      })),
+    );
+  }, []);
+
+  return dates.map(({ month, values }) => (
+    <>
       <Centered>
-        <span>{formatDate(date)}</span>
+        <MonthSpan key={month}>{MONTHS[month]}</MonthSpan>
       </Centered>
-    </Card>
+      <SquareCardContainer>
+        {values.map(value => (
+          <SquareCard
+            key={value.id + value.date}
+            border
+            onClick={() => {
+              setPicView(value.id);
+            }}
+          >
+            <Centered>{formatDate(value.date)}</Centered>
+          </SquareCard>
+        ))}
+      </SquareCardContainer>
+    </>
   ));
 };
 
