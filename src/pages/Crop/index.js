@@ -16,7 +16,6 @@ import { LineChart } from 'components/LineChart';
 import Notes from 'components/Notes';
 import { TimelineContext } from 'utils/providers/timeline';
 import { BREAKPOINT, ROMI_API } from 'utils/constants';
-import isMobile from 'utils/isMobile';
 import { Container, Grid } from './style';
 
 const Crop = ({ match }) => {
@@ -73,7 +72,7 @@ const Crop = ({ match }) => {
           </Card>
           <NotesProvider>
             <Card title="Timeline">
-              {isMobile ? (
+              {breakpoint === 'sm' ? (
                 <TimelineMobile scans={board.scans} />
               ) : (
                 <>
