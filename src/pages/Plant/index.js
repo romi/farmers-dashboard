@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
@@ -12,11 +12,17 @@ import { PictureView } from 'components/PictureView';
 import NotesProvider from 'utils/providers/notes';
 import Stages from 'components/Stages';
 import Loading from 'components/Loader';
+import { TimelineContext } from 'utils/providers/timeline';
 import { Container, Grid } from 'pages/Crop/style';
+import { LineChart } from 'components/LineChart';
+import { PlantContext } from 'utils/providers/plant';
 
 const Plant = ({ match }) => {
   const [scan, setScan] = useState();
   const [error, setError] = useState('');
+  const { plant } = useContext(PlantContext);
+  const [plantGrowth, setPlantGrowth] = useState(undefined);
+  const { picView } = useContext(TimelineContext);
   const breakpoint = useBreakpoint(BREAKPOINT);
 
   useEffect(() => {
@@ -31,6 +37,21 @@ const Plant = ({ match }) => {
       }
     })();
   }, [match.params.id]);
+
+  useEffect(() => {
+    if (!plant || !plant?.plantId) return;
+    (async () => {
+      const response = (await axios.get(`${ROMI_API}/plants/${plant.plantId}`))?.data?.analyses[0]?.id;
+      setPlantGrowth(response);
+    })();
+  }, [plant]);
+
+  useEffect(() => {
+    if (!picView) return;
+    (async () => {
+      setScan((await axios.get(`${ROMI_API}/scans/${picView}`))?.data);
+    })();
+  }, [picView]);
 
   if (error.length > 0) return <Error error={error} />;
   if (!scan) return <Loading />;
@@ -53,7 +74,23 @@ const Plant = ({ match }) => {
             </Card>
           </NotesProvider>
           {breakpoint !== 'sm' && <Card title="" />}
-          <Card title="Analytics" />
+          <Card title="Analytics">
+            {plant?.plantId && plantGrowth ? (
+              <LineChart
+                range={1}
+                config={[
+                  {
+                    label: 'Growth',
+                    id: 'growth',
+                    apiId: plantGrowth,
+                    color: '#C7B95B',
+                  },
+                ]}
+              />
+            ) : (
+              <div>No plant selected</div>
+            )}
+          </Card>
         </Grid>
       </Container>
     </div>

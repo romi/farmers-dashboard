@@ -12,7 +12,7 @@ export default {
           },
           display: true,
           scaleLabel: {
-            display: true,
+            display: false,
             labelString: 'Date',
           },
           ticks: {
@@ -27,7 +27,7 @@ export default {
         {
           display: true,
           scaleLabel: {
-            display: true,
+            display: false,
             labelString: 'value',
           },
         },

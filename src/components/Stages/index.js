@@ -5,39 +5,55 @@ import { ROMI_API } from 'utils/constants';
 import Button from 'components/Button';
 import { PlantContext } from 'utils/providers/plant';
 import Loading from 'components/Loader';
+import { TimelineContext } from 'utils/providers/timeline';
 import { Layout, SmoothImg, ButtonList, ImageList } from './style';
 
 const Stages = ({ scan }) => {
-  const { plant } = useContext(PlantContext);
+  const { plant, setPlant } = useContext(PlantContext);
   const [stages, setStages] = useState(undefined);
+  const [scanList, setScanList] = useState(undefined);
   const [select, setSelect] = useState('image');
+  const { picView, setPicView } = useContext(TimelineContext);
 
   useEffect(() => {
     if (plant?.id < 0) return;
     (async () => {
       try {
-        const zone = (await axios.get(`${ROMI_API}/crop/${scan.zone}`)).data;
-        const scansAnalyses = (await axios.all(zone.scans.map(({ id }) => axios.get(`${ROMI_API}/scans/${id}`))))
-          .map(({ data }) => data)
-          .filter(({ analyses }) => analyses.find(({ short_name }) => short_name === 'plant_analysis'))
-          .map(({ date, analyses }) => ({
-            date,
-            id: analyses.find(({ short_name }) => short_name === 'plant_analysis').id,
-          }));
-        const analyses = (await axios.all(scansAnalyses.map(({ id }) => axios.get(`${ROMI_API}/analyses/${id}`))))
-          .map(({ data }) => data)
-          .map(({ results: { plants } }, i) => ({
-            date: scansAnalyses[i].date,
-            plant: plants.find(({ id }) => id === plant?.id),
-          }));
-        setStages(analyses);
+        const crop = (await axios.get(`${ROMI_API}/crops/${scan?.observation_unit?.id}`)).data;
+        const scans = crop.scans.sort(({ date: dateA }, { date: dateB }) => new Date(dateA) - new Date(dateB));
+        setScanList(scans);
+        const allAnalyses = scans.map(({ id }) =>
+          crop?.analyses?.find(
+            ({ scan: scanId, short_name, state }) =>
+              scanId === id && short_name === 'plant_analysis' && state === 'Finished',
+          ),
+        );
+        const plantAnalysis = (
+          await axios.all(allAnalyses.map(({ id }) => axios.get(`${ROMI_API}/analyses/${id}`)))
+        ).map(({ data: { results: { plants } } }, index) => ({ date: scans[index]?.date, plants }));
+        const plantEvolution = plantAnalysis[0].plants.map(({ id }) => ({
+          id,
+          evolution: plantAnalysis.map(({ date, plants }) => {
+            const { image, mask } = plants.find(({ id: plantId }) => plantId === id);
+            return {
+              date,
+              image,
+              mask,
+            };
+          }),
+        }));
+        setStages(plantEvolution);
       } catch (e) {
         console.error(e);
       }
     })();
-  }, [scan.zone, plant?.id]);
+  }, [scan, plant?.id]);
 
   if (!stages) return <Loading />;
+
+  if (!plant.id) return <div>Plant not selected</div>;
+
+  if (!stages.find(({ id }) => id === plant.id)) return <div>Something went wrong</div>;
 
   return (
     <Layout>
@@ -51,19 +67,36 @@ const Stages = ({ scan }) => {
         </Button>
       </ButtonList>
       <ImageList>
-        {stages.map((e, i) => (
-          <SmoothImg key={e.plant.image} first={i === 0}>
-            {new Date(e.date).toISOString().split('T')[0].split('-').reverse().join('/')}
-            <img height={100} width={100} alt="plant" src={`${ROMI_API}/images/${e.plant[select]}`} />
-          </SmoothImg>
-        ))}
+        {stages
+          .find(({ id }) => id === plant.id)
+          ?.evolution.map((e, idx) => (
+            <SmoothImg
+              key={e.image}
+              first={idx === 0}
+              onClick={() => {
+                const { id: scanId } = scanList.find(({ date }) => date === e.date);
+                if (scanId === picView) return;
+                setPicView(scanId);
+                setPlant({
+                  ...plant,
+                  image: e.image,
+                });
+              }}
+            >
+              {new Date(e.date).toISOString().split('T')[0].split('-').reverse().join('/')}
+              <img height={100} width={100} alt="plant" src={`${ROMI_API}/images/${e[select]}`} />
+            </SmoothImg>
+          ))}
       </ImageList>
     </Layout>
   );
 };
 Stages.propTypes = {
   scan: PropTypes.shape({
-    zone: PropTypes.string,
+    observation_unit: PropTypes.shape({
+      id: PropTypes.string,
+      type: PropTypes.string,
+    }),
   }).isRequired,
 };
 

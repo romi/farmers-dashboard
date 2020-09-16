@@ -85,6 +85,7 @@ const Crop = ({ match }) => {
           {breakpoint !== 'sm' && <Card title="" />}
           <Card title="Analytics">
             <LineChart
+              isDatastream
               range={1}
               config={[
                 {
