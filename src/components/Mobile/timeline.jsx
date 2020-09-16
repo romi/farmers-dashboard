@@ -7,13 +7,14 @@ import { Centered, SquareCardContainer, SquareCard, MonthSpan } from './style';
 
 const Timeline = ({ scans }) => {
   const [dates, setDates] = useState([]);
-  const { setPicView } = useContext(TimelineContext);
+  const { picView, setPicView } = useContext(TimelineContext);
 
   const formatDate = date => new Date(date).toISOString().split('T')[0].split('-').reverse()[0];
 
   useEffect(() => {
     const months = Array.from(new Set([...scans.map(({ date }) => new Date(date).getMonth())]));
 
+    if (picView.length === 0) setPicView(scans[0].id);
     setDates(
       months.map(month => ({
         month,
@@ -31,7 +32,7 @@ const Timeline = ({ scans }) => {
         {values.map(value => (
           <SquareCard
             key={value.id + value.date}
-            border
+            selected={picView === value.id}
             onClick={() => {
               setPicView(value.id);
             }}

@@ -14,7 +14,18 @@ export const SquareCardContainer = styled.div`
 `;
 
 export const SquareCard = withTheme(styled.div`
-  border: solid 1px ${({ theme }) => theme.accent};
+  ${({ theme, selected }) =>
+    selected
+      ? `
+        background-color: ${theme.primary};
+        color: white;
+        font-weight: bold;
+        border: 1px solid transparent;
+      `
+      : `
+        border: 1px solid ${theme.accent};
+      `}
+
   border-radius: 0.5rem;
   width: 20%;
   padding: 0.4rem 0.2rem;
