@@ -73,7 +73,7 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
               <Thumbnail
                 alt="Selected Plant"
                 show={plant.image}
-                src={`${ROMI_API}/images/${plant.image}?size=thumb&orientation=horizontal&direction=ccw`}
+                src={`${ROMI_API}/images/${plant.image}?size=thumb&orientation=horizontal`}
               />
             )}
           </ThumbnailContainer>
@@ -93,7 +93,7 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
                 y={plant?.y}
                 width={plant?.width}
                 height={plant?.height}
-                src={`${ROMI_API}/images/${plant?.image}?size=thumb&orientation=horizontal&direction=ccw`}
+                src={`${ROMI_API}/images/${plant?.image}?size=thumb&orientation=horizontal`}
               />
             )}
 
