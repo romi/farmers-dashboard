@@ -29,8 +29,10 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
   const clickEvent = evt => {
     const boardPic = document.getElementById('board-picture');
     const thumb = document.getElementById('thumbnail');
-    const ratioX = viewOptions.width / (evt.target.width + (boardPic.scrollLeftMax || 0));
-    const ratioY = viewOptions.height / (evt.target.height + (boardPic.scrollTopMax || 0));
+    const scrollLeftMax = boardPic.scrollLeftMax || 0;
+    const scrollTopMax = boardPic.scrollTopMax || 0;
+    const ratioX = viewOptions.width / (evt.target.width + scrollLeftMax);
+    const ratioY = viewOptions.height / (evt.target.height + scrollTopMax);
     const x = (evt.clientX + boardPic.scrollLeft - boardPic.offsetLeft) * ratioX;
     const y = (evt.clientY + boardPic.scrollTop - boardPic.offsetTop) * ratioY;
     const value = viewOptions.plants.find(
@@ -98,7 +100,7 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
             <Image
               alt="board picture"
               brightness={plant?.bright}
-              src={`${ROMI_API}/images/${viewOptions.options[select]}?size=large&orientation=horizontal&direction=ccw`}
+              src={`${ROMI_API}/images/${viewOptions.options[select]}?size=large&direction=ccw`}
             />
           </ImgContainer>
         )}
