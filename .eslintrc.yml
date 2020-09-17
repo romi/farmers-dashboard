@@ -23,9 +23,9 @@ rules:
   import/prefer-default-export: "off"
   react-hooks/exhaustive-deps: "off"
   no-underscore-dangle: "off"
-  no-console: 
-    - "error"
-    - allow: 
+  no-console:
+    - "warn"
+    - allow:
       - "warn"
       - "error"
   react/jsx-filename-extension:
