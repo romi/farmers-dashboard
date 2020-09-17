@@ -9,8 +9,10 @@ import { Container } from './style';
 
 export const LineChart = ({ range, config, isDatastream }) => {
   const chartRef = useRef();
-  let chart = useRef();
+  const [chart, setChart] = useState(undefined);
+  const [persistConfig, setPersistConfig] = useState(undefined);
   const [datastreams, setDatastreams] = useState(undefined);
+  const datas = config.filter(({ apiId }) => apiId);
   const period = (range * 24 * 60) / 15;
   const randColor = () => {
     const lRange = '0123456789abcdef';
@@ -19,16 +21,18 @@ export const LineChart = ({ range, config, isDatastream }) => {
     return color;
   };
 
+  const fetchData = async () => {
+    const response = isDatastream
+      ? await axios.all(datas.map(({ apiId }) => axios.get(`${ROMI_API}/datastreams/${apiId}/values`)))
+      : (await axios.all(datas.map(({ apiId }) => axios.get(`${ROMI_API}/analyses/${apiId}`)))).map(({ data }) => ({
+          data: data?.results?.curve,
+        }));
+    return Object.fromEntries(response.map(({ data }, i) => [datas[i].id, data]));
+  };
+
   useEffect(() => {
     (async () => {
-      const datas = config.filter(({ apiId }) => apiId);
-      const response = isDatastream
-        ? await axios.all(datas.map(({ apiId }) => axios.get(`${ROMI_API}/datastreams/${apiId}/values`)))
-        : (await axios.all(datas.map(({ apiId }) => axios.get(`${ROMI_API}/analyses/${apiId}`)))).map(({ data }) => ({
-            data: data?.results?.curve,
-          }));
-      const tmp = Object.fromEntries(response.map(({ data }, i) => [datas[i].id, data]));
-      setDatastreams(tmp);
+      const apiData = await fetchData();
       const chartConfig = {
         ...baseConfig,
         data: {
@@ -36,11 +40,13 @@ export const LineChart = ({ range, config, isDatastream }) => {
             label: label || '',
             borderColor: color || randColor(),
             fill: false,
-            data: tmp[id].slice(0, period).map(({ date, value }) => ({ x: date, y: value })),
+            data: apiData[id].slice(0, period).map(({ date, value }) => ({ x: date, y: value })),
           })),
         },
       };
-      chart = new Chart(chartRef.current.getContext('2d'), chartConfig);
+      setDatastreams(apiData);
+      setPersistConfig(config);
+      setChart(new Chart(chartRef.current, chartConfig));
     })();
     return () => {
       try {
@@ -49,13 +55,30 @@ export const LineChart = ({ range, config, isDatastream }) => {
         console.error(e);
       }
     };
+  }, []);
+
+  useEffect(() => {
+    if (!chart) return;
+    if (JSON.stringify(config) === JSON.stringify(persistConfig)) return;
+    (async () => {
+      const apiData = await fetchData();
+      setDatastreams(apiData);
+      chart.data.datasets = datas.map(({ label, id, color }) => ({
+        label: label || '',
+        borderColor: color || randColor(),
+        fill: false,
+        data: apiData[id].slice(0, period).map(({ date, value }) => ({ x: date, y: value })),
+      }));
+      chart.update();
+      setPersistConfig(config);
+    })();
   }, [config]);
 
   if (!datastreams) return <Loading />;
 
   return (
     <Container>
-      <canvas id="my_canvas" ref={chartRef} />
+      <canvas id="my_canvas_growth" ref={chartRef} />
     </Container>
   );
 };
