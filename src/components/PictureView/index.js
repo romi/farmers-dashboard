@@ -47,7 +47,7 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
       plantId: value.observation_unit,
       image: value.image,
       x: value.x / ratioX,
-      y: (value.y - value.height / 2) / ratioY,
+      y: (value.y + value.height / 2) / ratioY,
       width: value.width / ratioX,
       height: value.height / ratioY,
       line: {
@@ -70,7 +70,7 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
 
     setDebug(
       viewOptions.plants.map(({ x, y, width, height, image, id }) => ({
-        x: x / ratioX,
+        x: (x + width * 5.5) / ratioX,
         y: (y + height / 2) / ratioY,
         width: width / ratioX,
         height: height / ratioY,
