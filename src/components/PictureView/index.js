@@ -1,5 +1,3 @@
-// TODO: REMOVE THAT RULE
-/* eslint-disable no-unused-vars */
 import React, { useState, useContext } from 'react';
 import { Line } from 'react-lineto';
 import PropTypes from 'prop-types';
@@ -65,7 +63,6 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
 
   const doDebug = evt => {
     const boardPic = document.getElementById('debug-pic');
-    const thumb = document.getElementById('thumbnail');
     const scrollLeftMax = boardPic.scrollLeftMax || 0;
     const scrollTopMax = boardPic.scrollTopMax || 0;
     const ratioX = viewOptions.width / (evt.target.width + scrollLeftMax);
@@ -74,7 +71,7 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
     setDebug(
       viewOptions.plants.map(({ x, y, width, height, image, id }) => ({
         x: x / ratioX,
-        y: (y - height / 2) / ratioY,
+        y: (y + height / 2) / ratioY,
         width: width / ratioX,
         height: height / ratioY,
         image,
