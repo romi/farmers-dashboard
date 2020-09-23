@@ -70,7 +70,7 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
 
     setDebug(
       viewOptions.plants.map(({ x, y, width, height, image, id }) => ({
-        x: (x + width * 5.5) / ratioX,
+        x: (x + evt.target.width * 2 + width / 2) / ratioX,
         y: (y + height / 2) / ratioY,
         width: width / ratioX,
         height: height / ratioY,
