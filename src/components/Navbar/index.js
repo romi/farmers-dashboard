@@ -61,7 +61,7 @@ const Navbar = ({ farm, zone, plant, parentIds, address }) => {
       </NavigationContent>
       <Location>
         {address.split(',').map(e => (
-          <p>{e.trim()}</p>
+          <p key={e}>{e.trim()}</p>
         ))}
       </Location>
     </NavbarLayout>

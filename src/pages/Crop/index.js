@@ -61,7 +61,7 @@ const Crop = ({ match }) => {
 
   return (
     <div className="Layout">
-      <Navbar zone parentIds={{ farmId: board.farm }} address={board.farmData.address} />
+      <Navbar zone parentIds={{ farmId: board.farm }} address={board?.farmData?.address} />
       <Container>
         <Grid>
           <Card title="Picture View">
