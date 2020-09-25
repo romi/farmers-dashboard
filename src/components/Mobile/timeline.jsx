@@ -24,9 +24,9 @@ const Timeline = ({ scans }) => {
   }, []);
 
   return dates.map(({ month, values }) => (
-    <>
+    <div key={month}>
       <Centered>
-        <MonthSpan key={month}>{MONTHS[month]}</MonthSpan>
+        <MonthSpan>{MONTHS[month]}</MonthSpan>
       </Centered>
       <SquareCardContainer>
         {values.map(value => (
@@ -41,7 +41,7 @@ const Timeline = ({ scans }) => {
           </SquareCard>
         ))}
       </SquareCardContainer>
-    </>
+    </div>
   ));
 };
 

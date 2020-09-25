@@ -9,6 +9,7 @@ import Error from 'components/Error';
 import Navbar from 'components/Navbar';
 import Card from 'components/Card';
 import { PictureView } from 'components/PictureView';
+import PictureViewMobile from 'components/Mobile/pictureView';
 import NotesProvider from 'utils/providers/notes';
 import Stages from 'components/Stages';
 import Loading from 'components/Loader';
@@ -70,10 +71,17 @@ const Plant = ({ match }) => {
       <Container>
         <Grid>
           <Card title="Picture View">
-            <PictureView
-              imgData={scan.analyses.find(({ short_name }) => short_name === 'stitching')}
-              plantData={scan.analyses.find(({ short_name }) => short_name === 'plant_analysis')}
-            />
+            {breakpoint === 'sm' ? (
+              <PictureViewMobile
+                imgData={scan.analyses.find(({ short_name }) => short_name === 'stitching')}
+                plantData={scan.analyses.find(({ short_name }) => short_name === 'plant_analysis')}
+              />
+            ) : (
+              <PictureView
+                imgData={scan.analyses.find(({ short_name }) => short_name === 'stitching')}
+                plantData={scan.analyses.find(({ short_name }) => short_name === 'plant_analysis')}
+              />
+            )}
           </Card>
           <Card title="Note" />
           <NotesProvider>
