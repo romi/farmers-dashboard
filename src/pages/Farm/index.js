@@ -32,7 +32,7 @@ const Farm = ({ match }) => {
 
   return (
     <div className="Layout">
-      <Navbar farm />
+      <Navbar farm address={plots.address} />
       <Container>
         <PlotContainer>
           <Title title={plots.short_name || ''} />

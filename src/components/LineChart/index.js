@@ -50,7 +50,8 @@ export const LineChart = ({ range, config, isDatastream }) => {
     })();
     return () => {
       try {
-        chart.destroy();
+        // TODO: investigate why is is that an error on chart.destroy (undefined)
+        // chart.destroy();
       } catch (e) {
         console.error(e);
       }
@@ -77,7 +78,7 @@ export const LineChart = ({ range, config, isDatastream }) => {
   if (!datastreams) return <Loading />;
 
   return (
-    <Container>
+    <Container key="line-chart">
       <canvas id="my_canvas_growth" ref={chartRef} />
     </Container>
   );

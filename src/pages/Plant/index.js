@@ -29,8 +29,12 @@ const Plant = ({ match }) => {
     (async () => {
       try {
         const { data } = await axios.get(`${ROMI_API}/scans/${match.params.id}`);
+        const { data: farmData } = await axios.get(`${ROMI_API}/farms/${data.farm}`);
 
-        setScan(data);
+        setScan({
+          farmData,
+          ...data,
+        });
       } catch (err) {
         console.error(err);
         setError('An invalid ID was provided');
@@ -58,7 +62,11 @@ const Plant = ({ match }) => {
 
   return (
     <div className="Layout">
-      <Navbar plant parentIds={{ farmId: scan.farm, zoneId: scan.observation_unit.id }} />
+      <Navbar
+        plant
+        parentIds={{ farmId: scan.farm, zoneId: scan.observation_unit.id }}
+        address={scan.farmData.address}
+      />
       <Container>
         <Grid>
           <Card title="Picture View">
