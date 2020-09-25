@@ -31,10 +31,14 @@ const Crop = ({ match }) => {
     (async () => {
       try {
         const { data: boardData } = await axios.get(`${ROMI_API}/crops/${match.params.id}`);
+        const { data: farmData } = await axios.get(`${ROMI_API}/farms/${boardData.farm}`);
         const id = !picView ? boardData.scans[boardData.scans.length - 1]?.id : picView;
 
         boardData.scans.sort(({ date: a }, { date: b }) => new Date(a) - new Date(b));
-        setBoard(boardData);
+        setBoard({
+          farmData,
+          ...boardData,
+        });
         setPic((await axios.get(`${ROMI_API}/scans/${id}`))?.data);
       } catch (err) {
         console.error(err);
@@ -57,7 +61,7 @@ const Crop = ({ match }) => {
 
   return (
     <div className="Layout">
-      <Navbar zone parentIds={{ farmId: board.farm }} />
+      <Navbar zone parentIds={{ farmId: board.farm }} address={board.farmData.address} />
       <Container>
         <Grid>
           <Card title="Picture View">

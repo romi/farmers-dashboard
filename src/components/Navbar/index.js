@@ -7,7 +7,7 @@ import { BREAKPOINT } from 'utils/constants';
 import useBreakpoint from 'utils/hooks/breakpoint';
 import { Container, Location, Logo, NavbarLayout, BaseNavButton, NavigationContent } from './style';
 
-const Navbar = ({ farm, zone, plant, parentIds }) => {
+const Navbar = ({ farm, zone, plant, parentIds, address }) => {
   const [open, setOpen] = useState(false);
   const breakpoint = useBreakpoint(BREAKPOINT);
   // eslint-disable-next-line no-nested-ternary
@@ -60,9 +60,9 @@ const Navbar = ({ farm, zone, plant, parentIds }) => {
         </NavButton>
       </NavigationContent>
       <Location>
-        <p>6 Rue Amyot</p>
-        <p>75005</p>
-        <p>PARIS</p>
+        {address.split(',').map(e => (
+          <p>{e.trim()}</p>
+        ))}
       </Location>
     </NavbarLayout>
   );
@@ -88,6 +88,7 @@ Navbar.propTypes = {
   zone: PropTypes.bool,
   plant: PropTypes.bool,
   parentIds: PropTypes.shape({ farmId: PropTypes.string, zoneId: PropTypes.string }),
+  address: PropTypes.string,
 };
 Navbar.defaultProps = {
   farm: false,
@@ -97,6 +98,7 @@ Navbar.defaultProps = {
     farmId: null,
     zoneId: null,
   },
+  address: '6 Rue Amyot, 75005, PARIS',
 };
 
 export default Navbar;
