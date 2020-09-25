@@ -29,28 +29,40 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
   const clickEvent = evt => {
     const boardPic = document.getElementById('board-picture');
     const thumb = document.getElementById('thumbnail');
-    const ratioX = viewOptions.width / (evt.target.width + (boardPic.scrollLeftMax || 0));
-    const ratioY = viewOptions.height / (evt.target.height + (boardPic.scrollTopMax || 0));
-    const x = (evt.clientX + boardPic.scrollLeft - boardPic.offsetLeft) * ratioX;
-    const y = (evt.clientY + boardPic.scrollTop - boardPic.offsetTop) * ratioY;
-    const value = viewOptions.plants.find(
-      ({ x: px, y: py, width, height }) => x >= px - width && x <= px + width && y >= py - height && y <= py + height,
-    );
+    const scrollLeftMax = boardPic.scrollLeftMax || 0;
+    const scrollTopMax = boardPic.scrollTopMax || 0;
+    const ratioX = viewOptions.width / (evt.target.width + scrollLeftMax);
+    const ratioY = viewOptions.height / (evt.target.height + scrollTopMax);
+    const clientx = evt.clientX + boardPic.scrollLeft - boardPic.offsetLeft;
+    const clienty = evt.clientY + boardPic.scrollTop - boardPic.offsetTop;
+
+    const value = viewOptions.plants
+      .map(({ x: px, y: py, width, height, ...res }) => ({
+        x: (px + evt.target.width * 2 + width / 2) / ratioX,
+        y: (py + height / 2) / ratioY,
+        width: width / ratioX,
+        height: height / ratioY,
+        ...res,
+      }))
+      .find(
+        ({ x: px, y: py, width, height }) =>
+          clientx >= px - width && clientx <= px + width && clienty >= py - height && clienty <= py + height,
+      );
 
     if (!value) return;
     setPlant({
       id: value.id,
       plantId: value.observation_unit,
       image: value.image,
-      x: value.x / ratioX,
-      y: (value.y - value.height / 2) / ratioY,
-      width: value.width / ratioX,
-      height: value.height / ratioY,
+      x: value.x,
+      y: value.y,
+      width: value.width,
+      height: value.height,
       line: {
         x0: thumb.offsetLeft + thumb.offsetWidth,
         y0: thumb.offsetTop + thumb.offsetHeight / 2,
-        x1: value.x / ratioX + boardPic.scrollLeft + boardPic.offsetLeft,
-        y1: value.y / ratioY + boardPic.scrollTop + boardPic.offsetTop,
+        x1: value.x + boardPic.scrollLeft + boardPic.offsetLeft,
+        y1: value.y + boardPic.scrollTop + boardPic.offsetTop + value.height / 2,
       },
       bright: true,
     });
@@ -71,7 +83,7 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
               <Thumbnail
                 alt="Selected Plant"
                 show={plant.image}
-                src={`${ROMI_API}/images/${plant.image}?size=thumb&orientation=horizontal&direction=ccw`}
+                src={`${ROMI_API}/images/${plant.image}?size=thumb&orientation=horizontal`}
               />
             )}
           </ThumbnailContainer>
@@ -82,6 +94,7 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
             Inspection
           </Button>
         </ButtonList>
+
         {viewOptions?.options[select] && (
           <ImgContainer id="board-picture" onClick={clickEvent}>
             {plant?.bright && (
@@ -91,14 +104,14 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
                 y={plant?.y}
                 width={plant?.width}
                 height={plant?.height}
-                src={`${ROMI_API}/images/${plant?.image}?size=thumb&orientation=horizontal&direction=ccw`}
+                src={`${ROMI_API}/images/${plant?.image}?size=thumb&orientation=horizontal`}
               />
             )}
 
             <Image
               alt="board picture"
               brightness={plant?.bright}
-              src={`${ROMI_API}/images/${viewOptions.options[select]}?size=large&orientation=horizontal&direction=ccw`}
+              src={`${ROMI_API}/images/${viewOptions.options[select]}?size=large`}
             />
           </ImgContainer>
         )}

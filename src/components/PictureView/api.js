@@ -11,19 +11,21 @@ export const useRomiAnalyses = (imgData, plantDataId) => {
       if (!imgData) return;
       try {
         const {
-          data: { results: dataImg },
+          data: {
+            results: { map, mask, width, height },
+          },
         } = await axios.get(`${ROMI_API}/analyses/${imgData.id}`);
         const {
           data: { results: dataPlant },
         } = await axios.get(`${ROMI_API}/analyses/${plantDataId}`);
         setViewOptions({
           options: {
-            picture: dataImg.map,
-            inspection: dataImg.mask,
+            picture: map,
+            inspection: mask,
           },
-          width: dataImg.height,
-          height: dataImg.width,
-          plants: dataPlant.plants.map(({ location: [y, x], ...res }) => ({
+          width,
+          height,
+          plants: dataPlant.plants.map(({ location: [x, y], ...res }) => ({
             y,
             x,
             ...res,
