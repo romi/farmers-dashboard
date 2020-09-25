@@ -18,12 +18,10 @@ import {
   ThumbnailContainer,
   Thumbnail,
   ThumbnailInView,
-  DebugInputs,
 } from './style';
 
 export const PictureView = ({ imgData, plantData, scanId }) => {
   const [select, setSelect] = useState('picture');
-  const [debug, setDebug] = useState([]);
   const { onRequest, viewOptions } = useRomiAnalyses(imgData, plantData.id);
   const router = useRouter();
   const { plant, setPlant } = useContext(PlantContext);
@@ -35,49 +33,40 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
     const scrollTopMax = boardPic.scrollTopMax || 0;
     const ratioX = viewOptions.width / (evt.target.width + scrollLeftMax);
     const ratioY = viewOptions.height / (evt.target.height + scrollTopMax);
-    const x = (evt.clientX + boardPic.scrollLeft - boardPic.offsetLeft) * ratioX;
-    const y = (evt.clientY + boardPic.scrollTop - boardPic.offsetTop) * ratioY;
-    const value = viewOptions.plants.find(
-      ({ x: px, y: py, width, height }) => x >= px - width && x <= px + width && y >= py - height && y <= py + height,
-    );
+    const clientx = evt.clientX + boardPic.scrollLeft - boardPic.offsetLeft;
+    const clienty = evt.clientY + boardPic.scrollTop - boardPic.offsetTop;
+
+    const value = viewOptions.plants
+      .map(({ x: px, y: py, width, height, ...res }) => ({
+        x: (px + evt.target.width * 2 + width / 2) / ratioX,
+        y: (py + height / 2) / ratioY,
+        width: width / ratioX,
+        height: height / ratioY,
+        ...res,
+      }))
+      .find(
+        ({ x: px, y: py, width, height }) =>
+          clientx >= px - width && clientx <= px + width && clienty >= py - height && clienty <= py + height,
+      );
 
     if (!value) return;
     setPlant({
       id: value.id,
       plantId: value.observation_unit,
       image: value.image,
-      x: value.x / ratioX,
-      y: (value.y + value.height / 2) / ratioY,
-      width: value.width / ratioX,
-      height: value.height / ratioY,
+      x: value.x,
+      y: value.y,
+      width: value.width,
+      height: value.height,
       line: {
         x0: thumb.offsetLeft + thumb.offsetWidth,
         y0: thumb.offsetTop + thumb.offsetHeight / 2,
-        x1: value.x / ratioX + boardPic.scrollLeft + boardPic.offsetLeft,
-        y1: value.y / ratioY + boardPic.scrollTop + boardPic.offsetTop,
+        x1: value.x + boardPic.scrollLeft + boardPic.offsetLeft,
+        y1: value.y + boardPic.scrollTop + boardPic.offsetTop + value.height / 2,
       },
       bright: true,
     });
     if (!router.pathname.includes('plant')) router.push(`/plant/${scanId}`);
-  };
-
-  const doDebug = evt => {
-    const boardPic = document.getElementById('debug-pic');
-    const scrollLeftMax = boardPic.scrollLeftMax || 0;
-    const scrollTopMax = boardPic.scrollTopMax || 0;
-    const ratioX = viewOptions.width / (evt.target.width + scrollLeftMax);
-    const ratioY = viewOptions.height / (evt.target.height + scrollTopMax);
-
-    setDebug(
-      viewOptions.plants.map(({ x, y, width, height, image, id }) => ({
-        x: (x + evt.target.width * 2 + width / 2) / ratioX,
-        y: (y + height / 2) / ratioY,
-        width: width / ratioX,
-        height: height / ratioY,
-        image,
-        id,
-      })),
-    );
   };
 
   if (onRequest) return <Loading />;
@@ -106,34 +95,7 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
           </Button>
         </ButtonList>
 
-        {router.pathname.includes('crop') && viewOptions?.options[select] && (
-          <ImgContainer id="debug-pic" onClick={doDebug}>
-            {debug.length > 0 &&
-              debug.map(({ x, y, width, height, image, id }) => (
-                <div key={id}>
-                  <ThumbnailInView
-                    alt="thumbnail-view"
-                    x={x}
-                    y={y}
-                    width={width}
-                    height={height}
-                    src={`${ROMI_API}/images/${image}?size=thumb&orientation=horizontal`}
-                  />
-                  <DebugInputs x={x} y={y}>
-                    {id}
-                  </DebugInputs>
-                </div>
-              ))}
-
-            <Image
-              alt="board picture"
-              brightness
-              src={`${ROMI_API}/images/${viewOptions.options[select]}?size=large`}
-            />
-          </ImgContainer>
-        )}
-
-        {router.pathname.includes('plant') && viewOptions?.options[select] && (
+        {viewOptions?.options[select] && (
           <ImgContainer id="board-picture" onClick={clickEvent}>
             {plant?.bright && (
               <ThumbnailInView
