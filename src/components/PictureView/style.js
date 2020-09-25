@@ -64,11 +64,3 @@ export const ThumbnailInView = styled(Image)`
   width: ${({ width }) => width}px;
   height: ${({ height }) => height}px;
 `;
-
-export const DebugInputs = styled.div`
-  z-index: 1;
-  position: absolute;
-  left: ${({ x }) => x}px;
-  top: ${({ y }) => y}px;
-  color: white;
-`;
