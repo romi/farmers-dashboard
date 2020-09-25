@@ -8,7 +8,7 @@ import Navbar from 'components/Navbar';
 import useRouter from 'utils/hooks/router';
 import { ROMI_API } from 'utils/constants';
 import Loading from 'components/Loader';
-import { Container, PlotContainer, PlotItem, ItemTitle } from './style';
+import { Container, PlotContainer, PlotItem, ItemTitle, PlotWrapper } from './style';
 
 const Farm = ({ match }) => {
   const [plots, setPlots] = useState([]);
@@ -32,20 +32,25 @@ const Farm = ({ match }) => {
 
   return (
     <div className="Layout">
-      <Navbar farm address={plots.address} />
+      <Navbar farm address={plots?.address} />
       <Container>
         <PlotContainer>
           <Title title={plots.short_name || ''} />
-
-          {plots.crops && plots.crops.length > 0 ? (
-            plots.crops.map(({ id, short_name: shortName }) => (
-              <PlotItem key={id} onClick={() => router.push(`/crop/${id}`)}>
-                <ItemTitle>{shortName}</ItemTitle>
-              </PlotItem>
-            ))
-          ) : (
-            <div>Empty</div>
-          )}
+          <PlotWrapper>
+            {plots.crops && plots.crops.length > 0 ? (
+              plots.crops.map(({ id, short_name: shortName }) => (
+                <PlotItem
+                  key={id}
+                  onClick={() => router.push(`/crop/${id}`)}
+                  background={`${ROMI_API}/images/${plots.photo}`}
+                >
+                  <ItemTitle>{shortName}</ItemTitle>
+                </PlotItem>
+              ))
+            ) : (
+              <div>Empty</div>
+            )}
+          </PlotWrapper>
         </PlotContainer>
       </Container>
     </div>

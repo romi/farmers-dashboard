@@ -65,7 +65,7 @@ const Plant = ({ match }) => {
       <Navbar
         plant
         parentIds={{ farmId: scan.farm, zoneId: scan.observation_unit.id }}
-        address={scan.farmData.address}
+        address={scan?.farmData?.address}
       />
       <Container>
         <Grid>
