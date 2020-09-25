@@ -12,6 +12,7 @@ import useBreakpoint from 'utils/hooks/breakpoint';
 import NotesProvider from 'utils/providers/notes';
 import Loading from 'components/Loader';
 import { PictureView } from 'components/PictureView';
+import PictureViewMobile from 'components/Mobile/pictureView';
 import { LineChart } from 'components/LineChart';
 import Notes from 'components/Notes';
 import { TimelineContext } from 'utils/providers/timeline';
@@ -65,11 +66,19 @@ const Crop = ({ match }) => {
       <Container>
         <Grid>
           <Card title="Picture View">
-            <PictureView
-              imgData={pic.analyses.find(({ short_name }) => short_name === 'stitching')}
-              plantData={pic.analyses.find(({ short_name }) => short_name === 'plant_analysis')}
-              scanId={pic?.id}
-            />
+            {breakpoint === 'sm' ? (
+              <PictureViewMobile
+                imgData={pic.analyses.find(({ short_name }) => short_name === 'stitching')}
+                plantData={pic.analyses.find(({ short_name }) => short_name === 'plant_analysis')}
+                scanId={pic?.id}
+              />
+            ) : (
+              <PictureView
+                imgData={pic.analyses.find(({ short_name }) => short_name === 'stitching')}
+                plantData={pic.analyses.find(({ short_name }) => short_name === 'plant_analysis')}
+                scanId={pic?.id}
+              />
+            )}
           </Card>
           <Card title="Note">
             <Notes ids={board.notes.map(({ id }) => id)} />
