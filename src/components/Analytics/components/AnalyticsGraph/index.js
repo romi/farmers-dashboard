@@ -1,0 +1,110 @@
+import React, { useEffect, useRef, useState } from 'react';
+import Chart from 'chart.js';
+import axios from 'axios';
+import PropTypes from 'prop-types';
+import { ROMI_API } from 'utils/constants';
+import Loading from 'components/Loader';
+import baseConfig from './config';
+import { Container } from './style';
+
+export const AnalyticsGraph = ({ range, config }) => {
+  const chartRef = useRef();
+  const [chart, setChart] = useState(undefined);
+  const [persistConfig, setPersistConfig] = useState(undefined);
+  const [datastreams, setDatastreams] = useState(undefined);
+  const datas = config.filter(({ apiId }) => apiId);
+  const randColor = () => {
+    const lRange = '0123456789abcdef';
+    let color = '#';
+    for (let i = 0; i < 6; i++) color += lRange[Math.floor(Math.random() * 16)];
+    return color;
+  };
+
+  const fetchData = async () => {
+    const response = await axios.all(datas.map(({ apiId }) => axios.get(`${ROMI_API}/datastreams/${apiId}/values`)));
+    return Object.fromEntries(response.map(({ data }, i) => [datas[i].id, data]));
+  };
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const apiData = await fetchData();
+        const chartConfig = {
+          ...baseConfig,
+          data: {
+            datasets: datas.map(({ label, id, color }) => ({
+              label: label || '',
+              borderColor: color || randColor(),
+              fill: false,
+              data: apiData[id].slice(0, range).map(({ date, value }) => ({ x: date, y: value })),
+            })),
+          },
+        };
+        setDatastreams(apiData);
+        setPersistConfig(config);
+        setChart(new Chart(chartRef.current, chartConfig));
+      } catch (e) {
+        console.error(e);
+      }
+    })();
+    // eslint-disable-next-line
+  }, [config]);
+
+  useEffect(() => {
+    if (!chart) return;
+    if (JSON.stringify(config) === JSON.stringify(persistConfig)) return;
+    (async () => {
+      try {
+        const apiData = await fetchData();
+        setDatastreams(apiData);
+        chart.data.datasets = datas.map(({ label, id, color }) => ({
+          label: label || '',
+          borderColor: color || randColor(),
+          fill: false,
+          data: apiData[id].slice(0, range).map(({ date, value }) => ({ x: date, y: value })),
+        }));
+        chart.update();
+        setPersistConfig(config);
+      } catch (e) {
+        console.error(e);
+      }
+    })();
+    // eslint-disable-next-line
+  }, [config]);
+
+  useEffect(() => {
+    if (!chart || !datastreams) return;
+    try {
+      chart.data.datasets = datas.map(({ label, id, color }) => ({
+        label: label || '',
+        borderColor: color || randColor(),
+        fill: false,
+        data: datastreams[id].slice(0, range).map(({ date, value }) => ({ x: date, y: value })),
+      }));
+      chart.update();
+    } catch (e) {
+      console.error(e);
+    }
+  }, [range]);
+  if (!datastreams) return <Loading />;
+
+  return (
+    <Container key="line-chart-analytics">
+      <canvas id="my_canvas" ref={chartRef} />
+    </Container>
+  );
+};
+AnalyticsGraph.propTypes = {
+  range: PropTypes.number,
+  config: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      label: PropTypes.string.isRequired,
+      apiId: PropTypes.string.isRequired,
+      color: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
+};
+AnalyticsGraph.defaultProps = {
+  range: 1,
+};

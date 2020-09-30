@@ -1,88 +1,36 @@
-import React, { useEffect, useRef, useState } from 'react';
-import Chart from 'chart.js';
-import axios from 'axios';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { ROMI_API } from 'utils/constants';
-import Loading from 'components/Loader';
-import baseConfig from './config';
-import { Container } from './style';
+import { AnalyticsGraph } from './components/AnalyticsGraph';
+import { Container, Extend, Select } from './style';
 
-export const Analytics = ({ range, config }) => {
-  const chartRef = useRef();
-  const [chart, setChart] = useState(undefined);
-  const [persistConfig, setPersistConfig] = useState(undefined);
-  const [datastreams, setDatastreams] = useState(undefined);
-  const datas = config.filter(({ apiId }) => apiId);
-  const period = (range * 24 * 60) / 15;
-  const randColor = () => {
-    const lRange = '0123456789abcdef';
-    let color = '#';
-    for (let i = 0; i < 6; i++) color += lRange[Math.floor(Math.random() * 16)];
-    return color;
+const Analytics = ({ config }) => {
+  const selectMode = {
+    Day: 1,
+    Week: 7,
+    Month: 30,
+    Trimester: 90,
+    Semester: 180,
+    Year: 365,
   };
-
-  const fetchData = async () => {
-    const response = await axios.all(datas.map(({ apiId }) => axios.get(`${ROMI_API}/datastreams/${apiId}/values`)));
-    return Object.fromEntries(response.map(({ data }, i) => [datas[i].id, data]));
-  };
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const apiData = await fetchData();
-        const chartConfig = {
-          ...baseConfig,
-          data: {
-            datasets: datas.map(({ label, id, color }) => ({
-              label: label || '',
-              borderColor: color || randColor(),
-              fill: false,
-              data: apiData[id].slice(0, period).map(({ date, value }) => ({ x: date, y: value })),
-            })),
-          },
-        };
-        setDatastreams(apiData);
-        setPersistConfig(config);
-        setChart(new Chart(chartRef.current, chartConfig));
-      } catch (e) {
-        console.error(e);
-      }
-    })();
-    // eslint-disable-next-line
-  }, [range, config]);
-
-  useEffect(() => {
-    if (!chart) return;
-    if (JSON.stringify(config) === JSON.stringify(persistConfig)) return;
-    (async () => {
-      try {
-        const apiData = await fetchData();
-        setDatastreams(apiData);
-        chart.data.datasets = datas.map(({ label, id, color }) => ({
-          label: label || '',
-          borderColor: color || randColor(),
-          fill: false,
-          data: apiData[id].slice(0, period).map(({ date, value }) => ({ x: date, y: value })),
-        }));
-        chart.update();
-        setPersistConfig(config);
-      } catch (e) {
-        console.error(e);
-      }
-    })();
-    // eslint-disable-next-line
-  }, [config]);
-
-  if (!datastreams) return <Loading />;
-
+  const [select, setSelect] = useState('Day');
   return (
-    <Container key={`line-chart-${range}-${JSON.stringify(config)}`}>
-      <canvas id="my_canvas_growth" ref={chartRef} />
+    <Container>
+      <Extend>
+        <Select value={select} onChange={({ target: { value } }) => setSelect(value)}>
+          <option value="Day">Day</option>
+          <option value="Week">Week</option>
+          <option value="Month">Month</option>
+          <option value="Trimester">Trimester</option>
+          <option value="Semester">Semester</option>
+          <option value="Year">Year</option>
+        </Select>
+      </Extend>
+      <AnalyticsGraph range={(selectMode[select] * 24 * 60) / 15} config={config} />
     </Container>
   );
 };
+
 Analytics.propTypes = {
-  range: PropTypes.number,
   config: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
@@ -92,6 +40,5 @@ Analytics.propTypes = {
     }),
   ).isRequired,
 };
-Analytics.defaultProps = {
-  range: 1,
-};
+
+export default Analytics;
