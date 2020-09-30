@@ -15,8 +15,8 @@ import Stages from 'components/Stages';
 import Loading from 'components/Loader';
 import { TimelineContext } from 'utils/providers/timeline';
 import { Container, Grid } from 'pages/Crop/style';
-import { LineChart } from 'components/LineChart';
 import { PlantContext } from 'utils/providers/plant';
+import Growth from 'components/Growth';
 
 const Plant = ({ match }) => {
   const [scan, setScan] = useState();
@@ -100,21 +100,7 @@ const Plant = ({ match }) => {
           </NotesProvider>
           {breakpoint !== 'sm' && <Card title="" />}
           <Card title="Analytics">
-            {plant?.plantId && plantGrowth ? (
-              <LineChart
-                range={1}
-                config={[
-                  {
-                    label: 'Growth',
-                    id: 'growth',
-                    apiId: plantGrowth,
-                    color: '#C7B95B',
-                  },
-                ]}
-              />
-            ) : (
-              <div>No plant selected</div>
-            )}
+            {plant?.plantId && plantGrowth ? <Growth apiID={plantGrowth} /> : <div>No plant selected</div>}
           </Card>
         </Grid>
       </Container>
