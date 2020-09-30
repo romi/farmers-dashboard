@@ -1,17 +1,20 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useContext } from 'react';
 import Chart from 'chart.js';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import { ROMI_API } from 'utils/constants';
 import Loading from 'components/Loader';
+import { TimelineContext } from 'utils/providers/timeline';
 import baseConfig from './config';
 import { Container } from './style';
 
 export const AnalyticsGraph = ({ range, config }) => {
   const chartRef = useRef();
   const [chart, setChart] = useState(undefined);
-  const [persistConfig, setPersistConfig] = useState(undefined);
   const [datastreams, setDatastreams] = useState(undefined);
+  const [timelineData, setTimelineData] = useState(undefined);
+  const { picView } = useContext(TimelineContext);
+
   const datas = config.filter(({ apiId }) => apiId);
   const randColor = () => {
     const lRange = '0123456789abcdef';
@@ -29,42 +32,37 @@ export const AnalyticsGraph = ({ range, config }) => {
     (async () => {
       try {
         const apiData = await fetchData();
-        const chartConfig = {
-          ...baseConfig,
-          data: {
-            datasets: datas.map(({ label, id, color }) => ({
-              label: label || '',
-              borderColor: color || randColor(),
-              fill: false,
-              data: apiData[id].slice(0, range).map(({ date, value }) => ({ x: date, y: value })),
-            })),
-          },
-        };
-        setDatastreams(apiData);
-        setPersistConfig(config);
-        setChart(new Chart(chartRef.current, chartConfig));
-      } catch (e) {
-        console.error(e);
-      }
-    })();
-    // eslint-disable-next-line
-  }, [config]);
+        const scanData = picView && (await axios.get(`${ROMI_API}/scans/${picView}`))?.data;
+        setTimelineData(scanData);
+        const datasets = datas.map(({ label, id, color }) => {
+          const sliced = scanData
+            ? apiData[id]
+                .map((val, i) => ({ ...val, i }))
+                .find(({ date }) => new Date(scanData.date).getTime() < new Date(date).getTime())?.i
+            : 0;
 
-  useEffect(() => {
-    if (!chart) return;
-    if (JSON.stringify(config) === JSON.stringify(persistConfig)) return;
-    (async () => {
-      try {
-        const apiData = await fetchData();
+          return {
+            label: label || '',
+            borderColor: color || randColor(),
+            fill: false,
+            data: apiData[id].splice(sliced, range).map(({ date, value }) => ({ x: date, y: value })),
+          };
+        });
+
         setDatastreams(apiData);
-        chart.data.datasets = datas.map(({ label, id, color }) => ({
-          label: label || '',
-          borderColor: color || randColor(),
-          fill: false,
-          data: apiData[id].slice(0, range).map(({ date, value }) => ({ x: date, y: value })),
-        }));
-        chart.update();
-        setPersistConfig(config);
+        if (!chart) {
+          setChart(
+            new Chart(chartRef.current, {
+              ...baseConfig,
+              data: {
+                datasets,
+              },
+            }),
+          );
+        } else {
+          chart.data.datasets = datasets;
+          chart.update();
+        }
       } catch (e) {
         console.error(e);
       }
@@ -75,22 +73,31 @@ export const AnalyticsGraph = ({ range, config }) => {
   useEffect(() => {
     if (!chart || !datastreams) return;
     try {
-      chart.data.datasets = datas.map(({ label, id, color }) => ({
-        label: label || '',
-        borderColor: color || randColor(),
-        fill: false,
-        data: datastreams[id].slice(0, range).map(({ date, value }) => ({ x: date, y: value })),
-      }));
+      chart.data.datasets = datas.map(({ label, id, color }) => {
+        const sliced = timelineData
+          ? datastreams[id]
+              .map((val, i) => ({ ...val, i }))
+              .find(({ date }) => new Date(timelineData.date).getTime() < new Date(date).getTime())?.i
+          : 0;
+
+        const dataSliced = datastreams[id].slice(sliced);
+
+        return {
+          label: label || '',
+          borderColor: color || randColor(),
+          fill: false,
+          data: dataSliced.slice(0, range).map(({ date, value }) => ({ x: date, y: value })),
+        };
+      });
       chart.update();
     } catch (e) {
       console.error(e);
     }
   }, [range]);
   if (!datastreams) return <Loading />;
-
   return (
-    <Container key="line-chart-analytics">
-      <canvas id="my_canvas" ref={chartRef} />
+    <Container>
+      <canvas id="my_canvas_growth" ref={chartRef} />
     </Container>
   );
 };
