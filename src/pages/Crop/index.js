@@ -52,7 +52,11 @@ const Crop = ({ match }) => {
   useEffect(() => {
     if (!picView) return;
     (async () => {
-      setPic((await axios.get(`${ROMI_API}/scans/${picView}`))?.data);
+      try {
+        setPic((await axios.get(`${ROMI_API}/scans/${picView}`))?.data);
+      } catch (e) {
+        console.error(e);
+      }
     })();
   }, [picView]);
 

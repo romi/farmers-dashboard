@@ -12,23 +12,27 @@ const Home = () => {
 
   useEffect(() => {
     (async () => {
-      const { data } = await axios.get(`${ROMI_API}/farms`);
+      try {
+        const { data } = await axios.get(`${ROMI_API}/farms`);
 
-      setFarms(
-        await Promise.all(
-          data.map(async ({ id }) => {
-            const {
-              data: { name, description },
-            } = await axios.get(`${ROMI_API}/farms/${id}`);
+        setFarms(
+          await Promise.all(
+            data.map(async ({ id }) => {
+              const {
+                data: { name, description },
+              } = await axios.get(`${ROMI_API}/farms/${id}`);
 
-            return {
-              name,
-              description,
-              farmId: id,
-            };
-          }),
-        ),
-      );
+              return {
+                name,
+                description,
+                farmId: id,
+              };
+            }),
+          ),
+        );
+      } catch (e) {
+        console.error(e);
+      }
     })();
   }, []);
 

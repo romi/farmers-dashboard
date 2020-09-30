@@ -46,15 +46,23 @@ const Plant = ({ match }) => {
   useEffect(() => {
     if (!plant || !plant?.plantId) return;
     (async () => {
-      const response = (await axios.get(`${ROMI_API}/plants/${plant.plantId}`))?.data?.analyses[0]?.id;
-      setPlantGrowth(response);
+      try {
+        const response = (await axios.get(`${ROMI_API}/plants/${plant.plantId}`))?.data?.analyses[0]?.id;
+        setPlantGrowth(response);
+      } catch (e) {
+        console.error(e);
+      }
     })();
   }, [plant]);
 
   useEffect(() => {
     if (!picView) return;
     (async () => {
-      setScan((await axios.get(`${ROMI_API}/scans/${picView}`))?.data);
+      try {
+        setScan({ farmData: scan?.farmData, ...(await axios.get(`${ROMI_API}/scans/${picView}`))?.data });
+      } catch (e) {
+        console.error(e);
+      }
     })();
   }, [picView]);
 

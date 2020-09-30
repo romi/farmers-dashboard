@@ -32,21 +32,25 @@ export const LineChart = ({ range, config, isDatastream }) => {
 
   useEffect(() => {
     (async () => {
-      const apiData = await fetchData();
-      const chartConfig = {
-        ...baseConfig,
-        data: {
-          datasets: datas.map(({ label, id, color }) => ({
-            label: label || '',
-            borderColor: color || randColor(),
-            fill: false,
-            data: apiData[id].slice(0, period).map(({ date, value }) => ({ x: date, y: value })),
-          })),
-        },
-      };
-      setDatastreams(apiData);
-      setPersistConfig(config);
-      setChart(new Chart(chartRef.current, chartConfig));
+      try {
+        const apiData = await fetchData();
+        const chartConfig = {
+          ...baseConfig,
+          data: {
+            datasets: datas.map(({ label, id, color }) => ({
+              label: label || '',
+              borderColor: color || randColor(),
+              fill: false,
+              data: apiData[id].slice(0, period).map(({ date, value }) => ({ x: date, y: value })),
+            })),
+          },
+        };
+        setDatastreams(apiData);
+        setPersistConfig(config);
+        setChart(new Chart(chartRef.current, chartConfig));
+      } catch (e) {
+        console.error(e);
+      }
     })();
   }, [range, config, isDatastream]);
 
@@ -54,16 +58,20 @@ export const LineChart = ({ range, config, isDatastream }) => {
     if (!chart) return;
     if (JSON.stringify(config) === JSON.stringify(persistConfig)) return;
     (async () => {
-      const apiData = await fetchData();
-      setDatastreams(apiData);
-      chart.data.datasets = datas.map(({ label, id, color }) => ({
-        label: label || '',
-        borderColor: color || randColor(),
-        fill: false,
-        data: apiData[id].slice(0, period).map(({ date, value }) => ({ x: date, y: value })),
-      }));
-      chart.update();
-      setPersistConfig(config);
+      try {
+        const apiData = await fetchData();
+        setDatastreams(apiData);
+        chart.data.datasets = datas.map(({ label, id, color }) => ({
+          label: label || '',
+          borderColor: color || randColor(),
+          fill: false,
+          data: apiData[id].slice(0, period).map(({ date, value }) => ({ x: date, y: value })),
+        }));
+        chart.update();
+        setPersistConfig(config);
+      } catch (e) {
+        console.error(e);
+      }
     })();
   }, [config]);
 
