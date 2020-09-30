@@ -1,0 +1,43 @@
+env:
+  browser: true
+  es6: true
+  node: true
+
+parser: "babel-eslint"
+
+extends:
+  - "airbnb"
+  - "airbnb/hooks"
+  - "prettier"
+  - "prettier/react"
+  - "plugin:prettier/recommended"
+
+plugins:
+  - "react"
+  - "prettier"
+
+rules:
+  camelcase: "off"
+  no-plusplus: 0
+  react/jsx-props-no-spreading: "off"
+  import/prefer-default-export: "off"
+  react-hooks/exhaustive-deps: "off"
+  no-underscore-dangle: "off"
+  no-console:
+    - "warn"
+    - allow:
+      - "warn"
+      - "error"
+  react/jsx-filename-extension:
+    - 1
+    - extensions: 
+      - ".js"
+      - ".jsx"
+  
+settings:
+  import/resolver:
+    node:
+      moduleDirectory:
+        - "node_modules"
+        - "src/"
+      

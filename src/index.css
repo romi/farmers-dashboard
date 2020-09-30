@@ -1,6 +1,12 @@
+@font-face {
+  font-family: 'NunitoSans';
+  src: local('NunitoSans'), url(./fonts/NunitoSans-Regular.ttf) format('truetype');
+}
+
 body {
+  background-color: #f0f0f0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: NunitoSans, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -8,6 +14,33 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: NunitoSans, source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.Layout {
+  display: flex;
+  align-items: stretch;
+  height: 100vh;
+}
+
+.Grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(200px, 20%) auto;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #E1E1DF;
+}
+::-webkit-scrollbar-thumb {
+  background: #C3C4C4;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #535859;
 }
