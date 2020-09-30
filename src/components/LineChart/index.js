@@ -48,15 +48,7 @@ export const LineChart = ({ range, config, isDatastream }) => {
       setPersistConfig(config);
       setChart(new Chart(chartRef.current, chartConfig));
     })();
-    return () => {
-      try {
-        // TODO: investigate why is is that an error on chart.destroy (undefined)
-        // chart.destroy();
-      } catch (e) {
-        console.error(e);
-      }
-    };
-  }, []);
+  }, [range, config, isDatastream]);
 
   useEffect(() => {
     if (!chart) return;
@@ -78,7 +70,7 @@ export const LineChart = ({ range, config, isDatastream }) => {
   if (!datastreams) return <Loading />;
 
   return (
-    <Container key="line-chart">
+    <Container key={`line-chart-${range}-${isDatastream}-${JSON.stringify(config)}`}>
       <canvas id="my_canvas_growth" ref={chartRef} />
     </Container>
   );
