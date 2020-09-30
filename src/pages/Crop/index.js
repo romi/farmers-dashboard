@@ -13,7 +13,7 @@ import NotesProvider from 'utils/providers/notes';
 import Loading from 'components/Loader';
 import { PictureView } from 'components/PictureView';
 import PictureViewMobile from 'components/Mobile/pictureView';
-import { LineChart } from 'components/LineChart';
+import { Analytics } from 'components/Analytics';
 import Notes from 'components/Notes';
 import { TimelineContext } from 'utils/providers/timeline';
 import { BREAKPOINT, ROMI_API } from 'utils/constants';
@@ -101,9 +101,8 @@ const Crop = ({ match }) => {
             </Card>
           </NotesProvider>
           {breakpoint !== 'sm' && <Card title="" />}
-          <Card title="Analytics">
-            <LineChart
-              isDatastream
+          <Card title="Analytics" style={{ gridColumn: '1 / 3' }}>
+            <Analytics
               range={1}
               config={[
                 {
