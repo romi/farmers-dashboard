@@ -49,15 +49,14 @@ export const BaseNavButton = withTheme(styled.div`
   font-size: 1.2rem;
   text-align: center;
   ${({ disable }) =>
-    disable
-      ? `
+    disable &&
+    `
     cursor: default;
     opacity: 0.75;
-  `
-      : ''}
+  `}
   ${({ active, theme }) =>
-    active
-      ? `
+    active &&
+    `
     cursor: default;
     border: solid 2px ${theme.light};
     border-radius: 2em;
@@ -70,8 +69,7 @@ export const BaseNavButton = withTheme(styled.div`
       right: 0%;
       transform: translate(100%, -50%);
     }
-  `
-      : ''}
+  `}
 `);
 
 export const Location = withTheme(styled.div`

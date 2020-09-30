@@ -15,11 +15,10 @@ export const Grid = withTheme(styled.div`
   grid-template-columns: 5fr 2fr;
   grid-gap: 10px;
   ${({ breakpoint }) =>
-    breakpoint === 'sm'
-      ? `
+    breakpoint === 'sm' &&
+    `
     display: flex;
     overflow-y: scroll;
     flex-direction: column;
-  `
-      : ''}
+  `}
 `);

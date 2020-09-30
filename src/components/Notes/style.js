@@ -3,12 +3,11 @@ import { withTheme } from 'utils/theme';
 
 export const Container = withTheme(styled.div`
   ${({ breakpoint }) =>
-    breakpoint !== 'sm'
-      ? `
+    breakpoint !== 'sm' &&
+    `
     height: 250px;
     overflow-y: auto;
-  `
-      : ''};
+  `};
   display: flex;
   flex-direction: column;
   align-items: stretch;

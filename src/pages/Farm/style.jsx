@@ -23,12 +23,11 @@ export const PlotItem = withTheme(styled.div`
       : `background-color: #b5b6b6;`};
 
   ${({ breakpoint }) =>
-    breakpoint === 'sm'
-      ? `
+    breakpoint === 'sm' &&
+    `
         height: 5rem;
         width: calc(5rem * 1.77);
-    `
-      : ''}
+    `}
 `);
 
 export const PlotContainer = styled.div`
