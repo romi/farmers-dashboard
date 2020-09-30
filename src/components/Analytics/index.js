@@ -1,19 +1,20 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useContext } from 'react';
 import Chart from 'chart.js';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import { ROMI_API } from 'utils/constants';
 import Loading from 'components/Loader';
+import { TimelineContext } from 'utils/providers/timeline';
 import baseConfig from './config';
 import { Container } from './style';
 
 export const Analytics = ({ range, config }) => {
   const chartRef = useRef();
   const [chart, setChart] = useState(undefined);
-  const [persistConfig, setPersistConfig] = useState(undefined);
   const [datastreams, setDatastreams] = useState(undefined);
+  const { picView } = useContext(TimelineContext);
+
   const datas = config.filter(({ apiId }) => apiId);
-  const period = (range * 24 * 60) / 15;
   const randColor = () => {
     const lRange = '0123456789abcdef';
     let color = '#';
@@ -30,20 +31,36 @@ export const Analytics = ({ range, config }) => {
     (async () => {
       try {
         const apiData = await fetchData();
-        const chartConfig = {
-          ...baseConfig,
-          data: {
-            datasets: datas.map(({ label, id, color }) => ({
-              label: label || '',
-              borderColor: color || randColor(),
-              fill: false,
-              data: apiData[id].slice(0, period).map(({ date, value }) => ({ x: date, y: value })),
-            })),
-          },
-        };
+        const timelineData = picView && (await axios.get(`${ROMI_API}/scans/${picView}`))?.data;
+        const datasets = datas.map(({ label, id, color }) => {
+          const sliced = timelineData
+            ? apiData[id]
+                .map((val, i) => ({ ...val, i }))
+                .find(({ date }) => new Date(timelineData.date).getTime() < new Date(date).getTime())?.i
+            : 0;
+
+          return {
+            label: label || '',
+            borderColor: color || randColor(),
+            fill: false,
+            data: apiData[id].splice(sliced, apiData[id].length).map(({ date, value }) => ({ x: date, y: value })),
+          };
+        });
+
         setDatastreams(apiData);
-        setPersistConfig(config);
-        setChart(new Chart(chartRef.current, chartConfig));
+        if (!chart) {
+          setChart(
+            new Chart(chartRef.current, {
+              ...baseConfig,
+              data: {
+                datasets,
+              },
+            }),
+          );
+        } else {
+          chart.data.datasets = datasets;
+          chart.update();
+        }
       } catch (e) {
         console.error(e);
       }
@@ -51,32 +68,9 @@ export const Analytics = ({ range, config }) => {
     // eslint-disable-next-line
   }, [range, config]);
 
-  useEffect(() => {
-    if (!chart) return;
-    if (JSON.stringify(config) === JSON.stringify(persistConfig)) return;
-    (async () => {
-      try {
-        const apiData = await fetchData();
-        setDatastreams(apiData);
-        chart.data.datasets = datas.map(({ label, id, color }) => ({
-          label: label || '',
-          borderColor: color || randColor(),
-          fill: false,
-          data: apiData[id].slice(0, period).map(({ date, value }) => ({ x: date, y: value })),
-        }));
-        chart.update();
-        setPersistConfig(config);
-      } catch (e) {
-        console.error(e);
-      }
-    })();
-    // eslint-disable-next-line
-  }, [config]);
-
   if (!datastreams) return <Loading />;
-
   return (
-    <Container key={`line-chart-${range}-${JSON.stringify(config)}`}>
+    <Container>
       <canvas id="my_canvas_growth" ref={chartRef} />
     </Container>
   );
