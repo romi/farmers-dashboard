@@ -34,9 +34,11 @@ const Timeline = ({ scans }) => {
     const index = i[0]?._index;
     if (typeof index !== 'number' || !chart) return;
     setPicView(chart.data.datasets[0].data[index].id);
-  });
+    // eslint-disable-next-line
+  }, []);
 
   useEffect(() => {
+    // eslint-disable-next-line
     chart = new Chart(chartRef.current.getContext('2d'), {
       type: 'line',
       data,

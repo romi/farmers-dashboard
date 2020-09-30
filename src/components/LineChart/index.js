@@ -52,6 +52,7 @@ export const LineChart = ({ range, config, isDatastream }) => {
         console.error(e);
       }
     })();
+    // eslint-disable-next-line
   }, [range, config, isDatastream]);
 
   useEffect(() => {
@@ -73,6 +74,7 @@ export const LineChart = ({ range, config, isDatastream }) => {
         console.error(e);
       }
     })();
+    // eslint-disable-next-line
   }, [config]);
 
   if (!datastreams) return <Loading />;

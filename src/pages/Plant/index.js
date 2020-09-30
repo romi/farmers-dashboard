@@ -64,6 +64,7 @@ const Plant = ({ match }) => {
         console.error(e);
       }
     })();
+    // eslint-disable-next-line
   }, [picView]);
 
   if (error.length > 0) return <Error error={error} />;

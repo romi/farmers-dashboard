@@ -47,6 +47,7 @@ const Stages = ({ scan }) => {
         console.error(e);
       }
     })();
+    // eslint-disable-next-line
   }, [scan, plant?.id]);
 
   if (!stages) return <Loading />;

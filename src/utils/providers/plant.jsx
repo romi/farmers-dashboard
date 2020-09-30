@@ -40,6 +40,7 @@ const PlantProvider = ({ children }) => {
     if (router.pathname.includes('crop')) {
       setPlant(DEFAULT);
     }
+    // eslint-disable-next-line
   }, [router.pathname]);
 
   return <PlantContext.Provider value={{ plant, setPlant }}>{children}</PlantContext.Provider>;

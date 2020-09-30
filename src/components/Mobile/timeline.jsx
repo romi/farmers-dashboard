@@ -21,6 +21,7 @@ const Timeline = ({ scans }) => {
         values: scans.filter(({ date }) => new Date(date).getMonth() === month),
       })),
     );
+    // eslint-disable-next-line
   }, []);
 
   return dates.map(({ month, values }) => (

@@ -47,6 +47,7 @@ const Crop = ({ match }) => {
       }
       setOnRequest(false);
     })();
+    // eslint-disable-next-line
   }, [match.params.id]);
 
   useEffect(() => {
