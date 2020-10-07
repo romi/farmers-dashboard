@@ -4,11 +4,21 @@ export default {
     responsive: true,
     maintainAspectRatio: false,
     spanGaps: false,
-    plugins: {
-      filler: {
-        propagate: false,
+    tooltips: {
+      filter: ({ datasetIndex }) => datasetIndex === 0,
+      callbacks: {
+        title: () => null,
+        label: ({ index }, data) => data.datasets[0].data[index]?.y,
+        titleFontSize: 16,
+        bodyFontSize: 14,
+        displayColors: false,
       },
     },
+    // plugins: {
+    //   filler: {
+    //     propagate: false,
+    //   },
+    // },
     scales: {
       xAxes: [
         {
