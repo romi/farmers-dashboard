@@ -1,4 +1,4 @@
-export default {
+export default (obsName, unitName) => ({
   type: 'line',
   options: {
     responsive: true,
@@ -14,11 +14,10 @@ export default {
         displayColors: false,
       },
     },
-    // plugins: {
-    //   filler: {
-    //     propagate: false,
-    //   },
-    // },
+    title: {
+      display: true,
+      text: `${obsName} (${unitName})`,
+    },
     scales: {
       xAxes: [
         {
@@ -26,10 +25,8 @@ export default {
           time: {
             unit: 'day',
           },
-          display: true,
           scaleLabel: {
             display: false,
-            labelString: 'Date',
           },
           ticks: {
             autoSkip: false,
@@ -40,15 +37,6 @@ export default {
           },
         },
       ],
-      yAxes: [
-        {
-          display: true,
-          scaleLabel: {
-            display: false,
-            labelString: 'value',
-          },
-        },
-      ],
     },
   },
-};
+});

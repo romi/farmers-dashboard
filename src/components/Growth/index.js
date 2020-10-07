@@ -5,7 +5,9 @@ import axios from 'axios';
 import Chart from 'chart.js';
 import { ROMI_API } from 'utils/constants';
 import { theme } from 'utils/theme';
+
 import config from './config';
+import { Container } from './style';
 
 const Growth = ({ apiID }) => {
   const chartRef = useRef();
@@ -14,15 +16,20 @@ const Growth = ({ apiID }) => {
   const createData = async () => {
     const {
       data: {
-        results: { curve },
+        results: {
+          curve,
+          unit: { name: unitName },
+          observable: { name: obsName },
+        },
       },
     } = await axios.get(`${ROMI_API}/analyses/${apiID}`);
 
     return {
+      unitName,
+      obsName,
       datasets: [
         {
-          // TODO: When unit is available in backend modify line below
-          label: 'Plant Size (px)',
+          label: 'Plant Size',
           fill: false,
           data: curve.map(({ value, date }) => ({ x: date, y: value })),
           borderColor: theme.primary,
@@ -60,11 +67,11 @@ const Growth = ({ apiID }) => {
   useEffect(() => {
     (async () => {
       try {
-        const data = await createData();
+        const { datasets, obsName, unitName } = await createData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
         chart = new Chart(chartRef.current.getContext('2d'), {
-          data,
-          ...config,
+          data: { datasets },
+          ...config(obsName, unitName),
         });
       } catch (err) {
         console.error(err);
@@ -80,7 +87,11 @@ const Growth = ({ apiID }) => {
     };
   }, [apiID]);
 
-  return <canvas id="growth-canvas" ref={chartRef} />;
+  return (
+    <Container>
+      <canvas id="growth-canvas" ref={chartRef} />
+    </Container>
+  );
 };
 
 Growth.propTypes = {
