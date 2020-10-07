@@ -22,7 +22,6 @@ export const NavbarLayout = withTheme(styled.div`
 export const Logo = withTheme(styled.div`
   cursor: pointer;
   margin: 10px;
-  background-color: ${({ theme }) => theme.accent};
   display: grid;
   place-items: center;
   border-radius: 1em;
