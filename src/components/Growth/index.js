@@ -61,7 +61,7 @@ const Growth = ({ apiID }) => {
     (async () => {
       try {
         const data = await createData();
-        // disable es-lint next line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         chart = new Chart(chartRef.current.getContext('2d'), {
           data,
           ...config,

@@ -93,6 +93,7 @@ export const AnalyticsGraph = ({ range, config }) => {
     } catch (e) {
       console.error(e);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [range]);
   if (!datastreams) return <Loading />;
   return (
