@@ -21,34 +21,37 @@ const Growth = ({ apiID }) => {
     return {
       datasets: [
         {
-          label: 'value',
+          // TODO: When unit is available in backend modify line below
+          label: 'Plant Size (px)',
           fill: false,
           data: curve.map(({ value, date }) => ({ x: date, y: value })),
           borderColor: theme.primary,
-          pointRadius: 0,
         },
         {
-          label: 'mean',
+          label: 'Mean',
           fill: false,
           data: curve.map(({ mean, date }) => ({ x: date, y: mean })),
           borderColor: theme.secondary,
           pointRadius: 0,
+          pointHoverRadius: 0,
         },
         {
-          label: 'min',
+          label: 'Stdev +',
           fill: false,
           data: curve.map(({ stdev, mean, date }) => ({ x: date, y: mean + stdev })),
           borderColor: '#ffd27f',
           backgroundColor: '#fff6e5',
           pointRadius: 0,
+          pointHoverRadius: 0,
         },
         {
-          label: 'max',
+          label: 'Stdev -',
           fill: '-1',
           data: curve.map(({ stdev, mean, date }) => ({ x: date, y: mean - stdev })),
           borderColor: '#ffd27f',
           backgroundColor: '#fff6e5',
           pointRadius: 0,
+          pointHoverRadius: 0,
         },
       ],
     };
