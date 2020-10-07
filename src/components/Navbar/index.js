@@ -33,7 +33,7 @@ const Navbar = ({ farm, zone, plant, parentIds, address }) => {
     <NavbarLayout>
       <Link to="/" id="nav-to-home">
         <Logo>
-          <img alt="logo" src="/logo_romi.png" width="100%" />
+          <img alt="logo" src={`${process.env.PUBLIC_URL}/logo_romi.png`} width="100%" />
         </Logo>
       </Link>
       <NavigationContent>

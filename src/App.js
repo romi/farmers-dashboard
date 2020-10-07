@@ -9,7 +9,7 @@ import TimelineProvider from 'utils/providers/timeline';
 import PlantProvider from 'utils/providers/plant';
 
 const App = () => (
-  <Router>
+  <Router basename={process.env.PUBLIC_URL}>
     <TimelineProvider>
       <PlantProvider>
         <Switch>

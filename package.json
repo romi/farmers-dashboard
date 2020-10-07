@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "license": "GNU AFFERO",
   "private": true,
+  "homepage": "/farmersdashboard",
   "scripts": {
     "start": "react-scripts start",
     "dev": "cross-env BROWSER=none react-scripts start",
