@@ -5,7 +5,7 @@ import axios from 'axios';
 import Error from 'components/Error';
 import Timeline from 'components/Timeline';
 import TimelineMobile from 'components/Mobile/timeline';
-import BubbleNotes from 'components/BubbleNotes';
+// import BubbleNotes from 'components/BubbleNotes';
 import Card from 'components/Card';
 import Navbar from 'components/Navbar';
 import useBreakpoint from 'utils/hooks/breakpoint';
@@ -94,7 +94,7 @@ const Crop = ({ match }) => {
                 <TimelineMobile scans={board.scans} />
               ) : (
                 <>
-                  <BubbleNotes />
+                  {/* <BubbleNotes /> */}
                   <Timeline scans={board.scans} />
                 </>
               )}
