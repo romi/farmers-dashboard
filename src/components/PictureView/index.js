@@ -26,6 +26,8 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
   const router = useRouter();
   const { plant, setPlant } = useContext(PlantContext);
 
+  const getPlantImage = () => (select === 'picture' ? plant?.image : plant?.mask);
+
   const clickEvent = evt => {
     const boardPic = document.getElementById('board-picture');
     const thumb = document.getElementById('thumbnail');
@@ -54,6 +56,7 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
       id: value.id,
       plantId: value.observation_unit,
       image: value.image,
+      mask: value.mask,
       x: value.x,
       y: value.y,
       width: value.width,
@@ -78,12 +81,12 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
       )}
       <Layout>
         <ButtonList>
-          <ThumbnailContainer id="thumbnail" show={plant?.image}>
+          <ThumbnailContainer id="thumbnail" show={getPlantImage()}>
             {plant?.image && (
               <Thumbnail
                 alt="Selected Plant"
-                show={plant.image}
-                src={`${ROMI_API}/images/${plant.image}?size=thumb&orientation=horizontal`}
+                show={getPlantImage()}
+                src={`${ROMI_API}/images/${getPlantImage()}?size=thumb`}
               />
             )}
           </ThumbnailContainer>
@@ -104,7 +107,7 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
                 y={plant?.y}
                 width={plant?.width}
                 height={plant?.height}
-                src={`${ROMI_API}/images/${plant?.image}?size=thumb&orientation=horizontal`}
+                src={`${ROMI_API}/images/${getPlantImage()}?size=thumb`}
               />
             )}
 
