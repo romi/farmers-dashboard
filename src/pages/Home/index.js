@@ -39,7 +39,7 @@ const Home = () => {
   return (
     <>
       <Logo id="homepage-logo">
-        <img alt="logo" src={`${process.env.PUBLIC_URL}/logo_romi.png`} width="300rem" />
+        <img alt="logo" src={`${process.env.PUBLIC_URL}/colored_logo_romi.png`} width="300rem" />
       </Logo>
       <Container className="Layout">
         <Flex>

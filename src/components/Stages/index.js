@@ -81,6 +81,7 @@ const Stages = ({ scan }) => {
                 setPlant({
                   ...plant,
                   image: e.image,
+                  mask: e.image,
                 });
               }}
             >
