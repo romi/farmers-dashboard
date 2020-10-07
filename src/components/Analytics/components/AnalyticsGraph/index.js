@@ -8,9 +8,10 @@ import { TimelineContext } from 'utils/providers/timeline';
 import baseConfig from './config';
 import { Container } from './style';
 
-export const AnalyticsGraph = ({ range, config }) => {
+export const AnalyticsGraph = ({ before, range, config }) => {
   const chartRef = useRef();
   const [chart, setChart] = useState(undefined);
+  const [persistPicView, setPersistPicView] = useState(undefined);
   const [datastreams, setDatastreams] = useState(undefined);
   const [timelineData, setTimelineData] = useState(undefined);
   const { picView } = useContext(TimelineContext);
@@ -28,9 +29,13 @@ export const AnalyticsGraph = ({ range, config }) => {
     return Object.fromEntries(response.map(({ data }, i) => [datas[i].id, data]));
   };
 
+  const reajust = num => (num - before >= 0 ? 0 : (num - before) * -1);
+
   useEffect(() => {
     (async () => {
       try {
+        if (picView === persistPicView) return;
+        setPersistPicView(picView);
         const apiData = await fetchData();
         const scanData = picView && (await axios.get(`${ROMI_API}/scans/${picView}`))?.data;
         setTimelineData(scanData);
@@ -40,12 +45,13 @@ export const AnalyticsGraph = ({ range, config }) => {
                 .map((val, i) => ({ ...val, i }))
                 .find(({ date }) => new Date(scanData.date).getTime() < new Date(date).getTime())?.i
             : 0;
-
+          const bias = reajust(sliced);
+          const dataSliced = apiData[id].slice(sliced - before + bias);
           return {
             label: label || '',
             borderColor: color || randColor(),
             fill: false,
-            data: apiData[id].splice(sliced, range).map(({ date, value }) => ({ x: date, y: value })),
+            data: dataSliced.slice(0, range).map(({ date, value }) => ({ x: date, y: value })),
           };
         });
 
@@ -68,7 +74,7 @@ export const AnalyticsGraph = ({ range, config }) => {
       }
     })();
     // eslint-disable-next-line
-  }, [config]);
+  }, [config, picView]);
 
   useEffect(() => {
     if (!chart || !datastreams) return;
@@ -79,9 +85,8 @@ export const AnalyticsGraph = ({ range, config }) => {
               .map((val, i) => ({ ...val, i }))
               .find(({ date }) => new Date(timelineData.date).getTime() < new Date(date).getTime())?.i
           : 0;
-
-        const dataSliced = datastreams[id].slice(sliced);
-
+        const bias = reajust(sliced);
+        const dataSliced = datastreams[id].slice(sliced - before + bias);
         return {
           label: label || '',
           borderColor: color || randColor(),
@@ -93,7 +98,9 @@ export const AnalyticsGraph = ({ range, config }) => {
     } catch (e) {
       console.error(e);
     }
+    // eslint-disable-next-line
   }, [range]);
+
   if (!datastreams) return <Loading />;
   return (
     <Container>
@@ -102,7 +109,8 @@ export const AnalyticsGraph = ({ range, config }) => {
   );
 };
 AnalyticsGraph.propTypes = {
-  range: PropTypes.number,
+  before: PropTypes.number.isRequired,
+  range: PropTypes.number.isRequired,
   config: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
@@ -111,7 +119,4 @@ AnalyticsGraph.propTypes = {
       color: PropTypes.string.isRequired,
     }),
   ).isRequired,
-};
-AnalyticsGraph.defaultProps = {
-  range: 1,
 };

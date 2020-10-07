@@ -61,6 +61,7 @@ const Growth = ({ apiID }) => {
     (async () => {
       try {
         const data = await createData();
+        // eslint-disable-next-line
         chart = new Chart(chartRef.current.getContext('2d'), {
           data,
           ...config,
