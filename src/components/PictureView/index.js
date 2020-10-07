@@ -80,11 +80,7 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
         <ButtonList>
           <ThumbnailContainer id="thumbnail" show={plant?.image}>
             {plant?.image && (
-              <Thumbnail
-                alt="Selected Plant"
-                show={plant.image}
-                src={`${ROMI_API}/images/${plant.image}?size=thumb&orientation=horizontal`}
-              />
+              <Thumbnail alt="Selected Plant" show={plant.image} src={`${ROMI_API}/images/${plant.image}?size=thumb`} />
             )}
           </ThumbnailContainer>
           <Button active={select === 'picture'} onClick={() => setSelect('picture')}>
@@ -104,7 +100,7 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
                 y={plant?.y}
                 width={plant?.width}
                 height={plant?.height}
-                src={`${ROMI_API}/images/${plant?.image}?size=thumb&orientation=horizontal`}
+                src={`${ROMI_API}/images/${plant?.image}?size=thumb`}
               />
             )}
 

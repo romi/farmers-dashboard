@@ -53,7 +53,7 @@ const PictureView = ({ imgData, plantData, scanId }) => {
           >
             <PVThumbnail
               alt={`thumbnail-${id}`}
-              src={`${ROMI_API}/images/${select === 'inspection' ? mask : image}?size=thumb&orientation=horizontal`}
+              src={`${ROMI_API}/images/${select === 'inspection' ? mask : image}?size=thumb`}
             />
           </PVThumbnailContainer>
           <PVDataContainer>
