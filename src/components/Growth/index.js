@@ -5,7 +5,9 @@ import axios from 'axios';
 import Chart from 'chart.js';
 import { ROMI_API } from 'utils/constants';
 import { theme } from 'utils/theme';
+
 import config from './config';
+import { Container } from './style';
 
 const Growth = ({ apiID }) => {
   const chartRef = useRef();
@@ -85,7 +87,11 @@ const Growth = ({ apiID }) => {
     };
   }, [apiID]);
 
-  return <canvas id="growth-canvas" ref={chartRef} />;
+  return (
+    <Container>
+      <canvas id="growth-canvas" ref={chartRef} />
+    </Container>
+  );
 };
 
 Growth.propTypes = {

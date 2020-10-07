@@ -14,6 +14,10 @@ export default (obsName, unitName) => ({
         displayColors: false,
       },
     },
+    title: {
+      display: true,
+      text: `${obsName} (${unitName})`,
+    },
     scales: {
       xAxes: [
         {
@@ -22,8 +26,7 @@ export default (obsName, unitName) => ({
             unit: 'day',
           },
           scaleLabel: {
-            display: true,
-            labelString: `${obsName} (${unitName})`,
+            display: false,
           },
           ticks: {
             autoSkip: false,
