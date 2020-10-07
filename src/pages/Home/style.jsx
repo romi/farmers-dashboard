@@ -33,6 +33,7 @@ export const Logo = styled.div`
 `;
 
 export const Card = withTheme(styled.div`
+  background-repeat: no-repeat;
   border: 1px solid ${({ theme }) => theme.accent};
   border-radius: 1rem;
   margin: 2rem;
@@ -44,3 +45,19 @@ export const PlotTitle = withTheme(styled.span`
   color: ${({ theme }) => theme.primary};
   font-weight: bold;
 `);
+
+export const CardContent = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+`;
+
+export const ImageContainer = styled.div`
+  margin-top: 1rem;
+  margin-right: 1rem;
+`;
+
+export const Image = styled.img`
+  border-radius: 0.5rem;
+`;

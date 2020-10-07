@@ -4,7 +4,7 @@ import axios from 'axios';
 import { ROMI_API } from 'utils/constants';
 import useRouter from 'utils/hooks/router';
 import Loading from 'components/Loader';
-import { Container, Flex, Title, Logo, Card, Description } from './style';
+import { Container, Flex, Title, Logo, Card, Description, CardContent, ImageContainer, Image } from './style';
 
 const Home = () => {
   const [farms, setFarms] = useState([]);
@@ -19,11 +19,12 @@ const Home = () => {
           await Promise.all(
             data.map(async ({ id }) => {
               const {
-                data: { name, description },
+                data: { name, description, photo },
               } = await axios.get(`${ROMI_API}/farms/${id}`);
 
               return {
                 name,
+                photo,
                 description,
                 farmId: id,
               };
@@ -39,12 +40,12 @@ const Home = () => {
   return (
     <>
       <Logo id="homepage-logo">
-        <img alt="logo" src={`${process.env.PUBLIC_URL}/logo_romi.png`} width="300rem" />
+        <img alt="logo" src={`${process.env.PUBLIC_URL}/colored_logo_romi.png`} width="300rem" />
       </Logo>
       <Container className="Layout">
         <Flex>
           {farms.length > 0 ? (
-            farms.map(({ name, description, farmId }) => (
+            farms.map(({ name, description, photo, farmId }) => (
               <Card
                 key={farmId}
                 onClick={() => {
@@ -52,7 +53,12 @@ const Home = () => {
                 }}
               >
                 <Title>{name}</Title>
-                <Description>{description}</Description>
+                <CardContent>
+                  <ImageContainer>
+                    <Image alt={`${name}-pic`} src={`${ROMI_API}/images/${photo}`} />
+                  </ImageContainer>
+                  <Description>{description}</Description>
+                </CardContent>
               </Card>
             ))
           ) : (
