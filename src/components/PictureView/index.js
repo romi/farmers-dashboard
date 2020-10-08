@@ -108,6 +108,7 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
                 width={plant?.width}
                 height={plant?.height}
                 src={`${ROMI_API}/images/${getPlantImage()}?size=thumb`}
+                isMaskActive={select === 'inspection'}
               />
             )}
 

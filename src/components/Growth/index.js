@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
@@ -11,7 +11,7 @@ import { Container } from './style';
 
 const Growth = ({ apiID }) => {
   const chartRef = useRef();
-  let chart = useRef();
+  const [chart, setChart] = useState(undefined);
 
   const createData = async () => {
     const {
@@ -68,23 +68,22 @@ const Growth = ({ apiID }) => {
     (async () => {
       try {
         const { datasets, obsName, unitName } = await createData();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        chart = new Chart(chartRef.current.getContext('2d'), {
-          data: { datasets },
-          ...config(obsName, unitName),
-        });
+        if (chart) {
+          chart.data.datasets = datasets;
+          chart.update();
+        } else {
+          setChart(
+            new Chart(chartRef.current.getContext('2d'), {
+              data: { datasets },
+              ...config(obsName, unitName),
+            }),
+          );
+        }
       } catch (err) {
         console.error(err);
       }
     })();
-
-    return () => {
-      try {
-        chart.destroy();
-      } catch (e) {
-        console.error(e);
-      }
-    };
+    // eslint-disable-next-line
   }, [apiID]);
 
   return (
