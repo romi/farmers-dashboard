@@ -63,5 +63,5 @@ export const ThumbnailInView = styled(Image)`
   top: ${({ y }) => y}px;
   width: ${({ width }) => width}px;
   height: ${({ height }) => height}px;
-  ${({ isMaskActive }) => isMaskActive ? 'border: 1px solid white;' : ''}
+  ${({ isMaskActive }) => (isMaskActive ? 'border: 1px solid white;' : '')}
 `;
