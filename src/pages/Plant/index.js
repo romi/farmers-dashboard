@@ -99,7 +99,7 @@ const Plant = ({ match }) => {
             </Card>
           </NotesProvider>
           {breakpoint !== 'sm' && <Card title="" />}
-          <Card title="Analytics">
+          <Card title="Growth" style={{ gridColumn: '1 / 3' }}>
             {plant?.plantId && plantGrowth ? <Growth apiID={plantGrowth} /> : <div>No plant selected</div>}
           </Card>
         </Grid>
