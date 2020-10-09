@@ -38,11 +38,11 @@ const Farm = ({ match }) => {
           <Title title={plots.short_name || ''} />
           <PlotWrapper>
             {plots.crops && plots.crops.length > 0 ? (
-              plots.crops.map(({ id, short_name: shortName }) => (
+              plots.crops.map(({ id, short_name: shortName, photo }) => (
                 <PlotItem
                   key={id}
                   onClick={() => router.push(`/crop/${id}`)}
-                  background={`${ROMI_API}/images/${plots.photo}`}
+                  background={`${ROMI_API}/images/${photo}`}
                 >
                   <ItemTitle>{shortName}</ItemTitle>
                 </PlotItem>
