@@ -8,7 +8,7 @@ export const Container = styled.div`
 
 export const PlotItem = withTheme(styled.div`
   height: 15rem;
-  width: calc(15rem * 1.77);
+  width: calc(35rem * 1.77);
   border: 1px solid transparent;
   border-radius: 0.5rem;
   margin: 2rem;
@@ -51,5 +51,6 @@ export const ItemTitle = withTheme(styled.div`
   border-radius: 1rem;
   padding: 0.3rem 1rem;
   color: ${({ theme: { primary } }) => primary};
-  background-color: #4a5369bb;
+  background-color: #eeeeee;
+  opacity: 0.7;
 `);
