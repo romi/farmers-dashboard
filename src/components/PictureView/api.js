@@ -12,7 +12,7 @@ export const useRomiAnalyses = (imgData, plantDataId) => {
       try {
         const {
           data: {
-            results: { map, mask, width, height },
+            results: { cropped_map: map, mask, 'cropped-width': width, 'cropped-height': height },
           },
         } = await axios.get(`${ROMI_API}/analyses/${imgData.id}`);
         const {
