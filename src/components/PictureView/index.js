@@ -34,10 +34,8 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
   const clickEvent = evt => {
     const boardPic = document.getElementById('board-picture');
     const thumb = document.getElementById('thumbnail');
-    const scrollLeftMax = boardPic.scrollLeftMax || 0;
-    const scrollTopMax = boardPic.scrollTopMax || 0;
-    const ratioX = viewOptions.width / (evt.target.width + scrollLeftMax);
-    const ratioY = viewOptions.height / (evt.target.height + scrollTopMax);
+    const ratioX = viewOptions.width / evt.target.width;
+    const ratioY = viewOptions.height / evt.target.height;
     const clientx = evt.clientX + boardPic.scrollLeft - boardPic.offsetLeft;
     const clienty = evt.clientY + boardPic.scrollTop - boardPic.offsetTop;
     const value = viewOptions.plants
@@ -76,10 +74,8 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
 
   const doDebug = () => {
     const boardPic = document.getElementById('board-picture');
-    const scrollLeftMax = boardPic.scrollLeftMax || 0;
-    const scrollTopMax = boardPic.scrollTopMax || 0;
-    const ratioX = viewOptions.width / (boardPic.clientWidth + scrollLeftMax);
-    const ratioY = viewOptions.height / (boardPic.clientHeight + scrollTopMax);
+    const ratioX = viewOptions.width / boardPic.clientWidth;
+    const ratioY = viewOptions.height / boardPic.clientHeight;
 
     setDebug(
       viewOptions.plants.map(({ x, y, width, height, image, id }) => ({
