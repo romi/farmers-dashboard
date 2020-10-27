@@ -8,6 +8,7 @@ import Loading from 'components/Loader';
 import { PlantContext } from 'utils/providers/plant';
 import useRouter from 'utils/hooks/router';
 
+import ReactTooltip from 'react-tooltip';
 import { useRomiAnalyses } from './api';
 import {
   Center,
@@ -20,6 +21,7 @@ import {
   Thumbnail,
   ThumbnailInView,
   ThumbnailInViewDiv,
+  ThumbnailTooltip,
 } from './style';
 
 export const PictureView = ({ imgData, plantData, scanId }) => {
@@ -100,11 +102,23 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
         <ButtonList>
           <ThumbnailContainer id="thumbnail" show={getPlantImage()}>
             {plant?.image && (
-              <Thumbnail
-                alt="Selected Plant"
-                show={getPlantImage()}
-                src={`${ROMI_API}/images/${getPlantImage()}?size=thumb`}
-              />
+              <>
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                <a data-tip data-for="thumbnail-picture-view">
+                  <Thumbnail
+                    alt="Selected Plant"
+                    show={getPlantImage()}
+                    src={`${ROMI_API}/images/${getPlantImage()}?size=thumb`}
+                  />
+                </a>
+                <ReactTooltip id="thumbnail-picture-view" place="right" type="dark" effect="solid">
+                  <ThumbnailTooltip
+                    alt="Selected Plant"
+                    show={getPlantImage()}
+                    src={`${ROMI_API}/images/${getPlantImage()}?size=thumb`}
+                  />
+                </ReactTooltip>
+              </>
             )}
           </ThumbnailContainer>
           <Button

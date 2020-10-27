@@ -50,6 +50,13 @@ export const Thumbnail = styled(Image)`
   display: ${({ show }) => (show ? 'unset' : 'hidden')};
 `;
 
+export const ThumbnailTooltip = styled(Image)`
+  border-radius: 1rem;
+  width: 160px;
+  height: 160px;
+  display: ${({ show }) => (show ? 'unset' : 'hidden')};
+`;
+
 export const ThumbnailInView = styled(Image)`
   z-index: ${({ debug }) => (debug ? '10' : '1')};
   position: absolute;
