@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactTooltip from 'react-tooltip';
+import Info from 'components/Info';
 
 import { Container, Title, TitleContainer, Underline } from './style';
-import Info from '../Info';
 
 const TitleComponent = ({ title, tooltip }) => (
   <Container>
