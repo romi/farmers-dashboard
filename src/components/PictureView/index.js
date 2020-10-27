@@ -19,6 +19,7 @@ import {
   ThumbnailContainer,
   Thumbnail,
   ThumbnailInView,
+  ThumbnailInViewDiv,
 } from './style';
 
 export const PictureView = ({ imgData, plantData, scanId }) => {
@@ -161,7 +162,7 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
                 </div>
               ))}
             {plant?.bright && (
-              <ThumbnailInView
+              <ThumbnailInViewDiv
                 alt="thumbnail-view"
                 x={plant?.x}
                 y={plant?.y}
