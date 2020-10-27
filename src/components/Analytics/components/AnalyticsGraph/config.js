@@ -3,6 +3,17 @@ export default {
   options: {
     responsive: true,
     maintainAspectRatio: false,
+    animation: {
+      duration: 0,
+    },
+    hover: {
+      animationDuration: 0,
+    },
+    responsiveAnimationDuration: 0,
+    showLines: false,
+    legend: {
+      align: 'start',
+    },
     scales: {
       xAxes: [
         {

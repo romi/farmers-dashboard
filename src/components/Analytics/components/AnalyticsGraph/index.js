@@ -6,7 +6,7 @@ import { ROMI_API } from 'utils/constants';
 import Loading from 'components/Loader';
 import { TimelineContext } from 'utils/providers/timeline';
 import baseConfig from './config';
-import { Container } from './style';
+import { CanvasArea, Container, Wrapper } from './style';
 
 export const AnalyticsGraph = ({ before, range, config }) => {
   const chartRef = useRef();
@@ -40,18 +40,14 @@ export const AnalyticsGraph = ({ before, range, config }) => {
         const scanData = picView && (await axios.get(`${ROMI_API}/scans/${picView}`))?.data;
         setTimelineData(scanData);
         const datasets = datas.map(({ label, id, color }) => {
-          const sliced = scanData
-            ? apiData[id]
-                .map((val, i) => ({ ...val, i }))
-                .find(({ date }) => new Date(scanData.date).getTime() < new Date(date).getTime())?.i
-            : 0;
-          const bias = reajust(sliced);
-          const dataSliced = apiData[id].slice(sliced - before + bias);
+          const pointColor = color || randColor();
           return {
             label: label || '',
-            borderColor: color || randColor(),
+            borderColor: pointColor,
             fill: false,
-            data: dataSliced.slice(0, range).map(({ date, value }) => ({ x: date, y: value })),
+            data: apiData[id].map(({ date, value }) => ({ x: date, y: value })),
+            pointRadius: 5,
+            pointBackgroundColor: pointColor,
           };
         });
 
@@ -80,18 +76,14 @@ export const AnalyticsGraph = ({ before, range, config }) => {
     if (!chart || !datastreams) return;
     try {
       chart.data.datasets = datas.map(({ label, id, color }) => {
-        const sliced = timelineData
-          ? datastreams[id]
-              .map((val, i) => ({ ...val, i }))
-              .find(({ date }) => new Date(timelineData.date).getTime() < new Date(date).getTime())?.i
-          : 0;
-        const bias = reajust(sliced);
-        const dataSliced = datastreams[id].slice(sliced - before + bias);
+        const pointColor = color || randColor();
         return {
           label: label || '',
-          borderColor: color || randColor(),
+          borderColor: pointColor,
           fill: false,
-          data: dataSliced.slice(0, range).map(({ date, value }) => ({ x: date, y: value })),
+          data: datastreams[id].map(({ date, value }) => ({ x: date, y: value })),
+          pointRadius: 5,
+          pointBackgroundColor: pointColor,
         };
       });
       chart.update();
@@ -104,7 +96,14 @@ export const AnalyticsGraph = ({ before, range, config }) => {
   if (!datastreams) return <Loading />;
   return (
     <Container>
-      <canvas id="my_canvas_growth" ref={chartRef} />
+      <Wrapper>
+        <CanvasArea pointNb={datastreams.soil.length}>
+          <canvas
+            id="analytics_chart"
+            ref={chartRef}
+          />
+        </CanvasArea>
+      </Wrapper>
     </Container>
   );
 };

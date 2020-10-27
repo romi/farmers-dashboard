@@ -27,16 +27,6 @@ const Analytics = ({ config }) => {
   const [select, setSelect] = useState('Day');
   return (
     <Container>
-      <Extend>
-        <Select value={select} onChange={({ target: { value } }) => setSelect(value)}>
-          <option value="Day">Day</option>
-          <option value="Week">Week</option>
-          <option value="Month">Month</option>
-          <option value="Trimester">Trimester</option>
-          <option value="Semester">Semester</option>
-          <option value="Year">Year</option>
-        </Select>
-      </Extend>
       <AnalyticsGraph before={reajust(selectBeforeMode[select])} range={reajust(selectMode[select])} config={config} />
     </Container>
   );
