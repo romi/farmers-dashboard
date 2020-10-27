@@ -34,11 +34,6 @@ export const Image = styled.img`
   position: relative;
   height: 250px;
   width: 1000px;
-  ${props =>
-    props?.brightness &&
-    `
-  filter: brightness(0.6);
-  `}
 `;
 
 export const ThumbnailContainer = styled.div`
@@ -55,6 +50,13 @@ export const Thumbnail = styled(Image)`
   display: ${({ show }) => (show ? 'unset' : 'hidden')};
 `;
 
+export const ThumbnailTooltip = styled(Image)`
+  border-radius: 1rem;
+  width: 160px;
+  height: 160px;
+  display: ${({ show }) => (show ? 'unset' : 'hidden')};
+`;
+
 export const ThumbnailInView = styled(Image)`
   z-index: ${({ debug }) => (debug ? '10' : '1')};
   position: absolute;
@@ -63,7 +65,19 @@ export const ThumbnailInView = styled(Image)`
   top: ${({ y }) => y}px;
   width: ${({ width }) => width}px;
   height: ${({ height }) => height}px;
-  ${({ isMaskActive }) => (isMaskActive ? 'border: 1px solid white;' : '')}
+  border: 2px solid #fff;
+`;
+
+export const ThumbnailInViewDiv = styled.div`
+  border: 2px solid #fff;
+  border-style: dashed;
+  z-index: ${({ debug }) => (debug ? '10' : '1')};
+  position: absolute;
+  border-radius: 0.5rem;
+  left: ${({ x }) => x}px;
+  top: ${({ y }) => y}px;
+  width: ${({ width }) => width}px;
+  height: ${({ height }) => height}px;
 `;
 
 export const DebugInputs = styled.div`

@@ -70,7 +70,7 @@ const Crop = ({ match }) => {
       <Navbar zone parentIds={{ farmId: board.farm }} address={board?.farmData?.address} />
       <Container>
         <Grid>
-          <Card title="Picture View">
+          <Card title="Picture View" tooltip="Picture View: Click on image to select a plant">
             {breakpoint === 'sm' ? (
               <PictureViewMobile
                 imgData={pic.analyses.find(({ short_name }) => short_name === 'stitching')}

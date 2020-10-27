@@ -18,6 +18,11 @@ code {
     monospace;
 }
 
+a {
+  all: inherit;
+  cursor: pointer;
+}
+
 .Layout {
   display: flex;
   align-items: stretch;

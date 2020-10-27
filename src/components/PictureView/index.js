@@ -8,6 +8,7 @@ import Loading from 'components/Loader';
 import { PlantContext } from 'utils/providers/plant';
 import useRouter from 'utils/hooks/router';
 
+import ReactTooltip from 'react-tooltip';
 import { useRomiAnalyses } from './api';
 import {
   Center,
@@ -19,6 +20,8 @@ import {
   ThumbnailContainer,
   Thumbnail,
   ThumbnailInView,
+  ThumbnailInViewDiv,
+  ThumbnailTooltip,
 } from './style';
 
 export const PictureView = ({ imgData, plantData, scanId }) => {
@@ -33,10 +36,8 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
   const clickEvent = evt => {
     const boardPic = document.getElementById('board-picture');
     const thumb = document.getElementById('thumbnail');
-    const scrollLeftMax = boardPic.scrollLeftMax || 0;
-    const scrollTopMax = boardPic.scrollTopMax || 0;
-    const ratioX = viewOptions.width / (evt.target.width + scrollLeftMax);
-    const ratioY = viewOptions.height / (evt.target.height + scrollTopMax);
+    const ratioX = viewOptions.width / evt.target.width;
+    const ratioY = viewOptions.height / evt.target.height;
     const clientx = evt.clientX + boardPic.scrollLeft - boardPic.offsetLeft;
     const clienty = evt.clientY + boardPic.scrollTop - boardPic.offsetTop;
     const value = viewOptions.plants
@@ -75,10 +76,8 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
 
   const doDebug = () => {
     const boardPic = document.getElementById('board-picture');
-    const scrollLeftMax = boardPic.scrollLeftMax || 0;
-    const scrollTopMax = boardPic.scrollTopMax || 0;
-    const ratioX = viewOptions.width / (boardPic.clientWidth + scrollLeftMax);
-    const ratioY = viewOptions.height / (boardPic.clientHeight + scrollTopMax);
+    const ratioX = viewOptions.width / boardPic.clientWidth;
+    const ratioY = viewOptions.height / boardPic.clientHeight;
 
     setDebug(
       viewOptions.plants.map(({ x, y, width, height, image, id }) => ({
@@ -103,11 +102,23 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
         <ButtonList>
           <ThumbnailContainer id="thumbnail" show={getPlantImage()}>
             {plant?.image && (
-              <Thumbnail
-                alt="Selected Plant"
-                show={getPlantImage()}
-                src={`${ROMI_API}/images/${getPlantImage()}?size=thumb`}
-              />
+              <>
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                <a data-tip data-for="thumbnail-picture-view">
+                  <Thumbnail
+                    alt="Selected Plant"
+                    show={getPlantImage()}
+                    src={`${ROMI_API}/images/${getPlantImage()}?size=thumb`}
+                  />
+                </a>
+                <ReactTooltip id="thumbnail-picture-view" place="right" type="dark" effect="solid">
+                  <ThumbnailTooltip
+                    alt="Selected Plant"
+                    show={getPlantImage()}
+                    src={`${ROMI_API}/images/${getPlantImage()}?size=thumb`}
+                  />
+                </ReactTooltip>
+              </>
             )}
           </ThumbnailContainer>
           <Button
@@ -161,7 +172,7 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
                 </div>
               ))}
             {plant?.bright && (
-              <ThumbnailInView
+              <ThumbnailInViewDiv
                 alt="thumbnail-view"
                 x={plant?.x}
                 y={plant?.y}
