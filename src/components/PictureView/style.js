@@ -57,27 +57,17 @@ export const ThumbnailTooltip = styled(Image)`
   display: ${({ show }) => (show ? 'unset' : 'hidden')};
 `;
 
-export const ThumbnailInView = styled(Image)`
-  z-index: ${({ debug }) => (debug ? '10' : '1')};
-  position: absolute;
-  border-radius: 0.5rem;
-  left: ${({ x }) => x}px;
-  top: ${({ y }) => y}px;
-  width: ${({ width }) => width}px;
-  height: ${({ height }) => height}px;
-  border: 2px solid #fff;
-`;
-
 export const ThumbnailInViewDiv = styled.div`
-  border: 2px solid #fff;
-  border-style: dashed;
-  z-index: ${({ debug }) => (debug ? '10' : '1')};
+  border: 2px solid #bdbdbd;
+  opacity: 0.8;
+  z-index: 1;
   position: absolute;
   border-radius: 0.5rem;
   left: ${({ x }) => x}px;
   top: ${({ y }) => y}px;
   width: ${({ width }) => width}px;
   height: ${({ height }) => height}px;
+  ${({ selected }) => !selected && 'border-style: dashed; '};
 `;
 
 export const DebugInputs = styled.div`

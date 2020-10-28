@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect, useCallback } from 'react';
 import { Line } from 'react-lineto';
 import PropTypes from 'prop-types';
 
@@ -19,39 +19,48 @@ import {
   ImgContainer,
   ThumbnailContainer,
   Thumbnail,
-  ThumbnailInView,
   ThumbnailInViewDiv,
   ThumbnailTooltip,
 } from './style';
 
 export const PictureView = ({ imgData, plantData, scanId }) => {
   const [select, setSelect] = useState('picture');
-  const [debug, setDebug] = useState([]);
+  const [debug, setDebug] = useState(false);
+  const [boardPicLoaded, setBoardPicLoaded] = useState(false);
+  const [plants, setPlants] = useState([]);
   const { onRequest, viewOptions } = useRomiAnalyses(imgData, plantData.id);
   const router = useRouter();
   const { plant, setPlant } = useContext(PlantContext);
 
   const getPlantImage = () => (select === 'picture' || select === 'debug' ? plant?.image : plant?.mask);
 
+  const fillPlants = useCallback(() => {
+    const boardPic = document.getElementById('board-picture');
+    const ratioX = viewOptions.width / boardPic.clientWidth;
+    const ratioY = viewOptions.height / boardPic.clientHeight;
+
+    setPlants(
+      viewOptions.plants.map(({ x, y, width, height, image, id, ...res }) => ({
+        x: (x - width / 2) / ratioX,
+        y: (y - height / 2) / ratioY,
+        width: width / ratioX,
+        height: height / ratioY,
+        image,
+        id,
+        ...res,
+      })),
+    );
+  }, [viewOptions]);
+
   const clickEvent = evt => {
     const boardPic = document.getElementById('board-picture');
     const thumb = document.getElementById('thumbnail');
-    const ratioX = viewOptions.width / evt.target.width;
-    const ratioY = viewOptions.height / evt.target.height;
     const clientx = evt.clientX + boardPic.scrollLeft - boardPic.offsetLeft;
     const clienty = evt.clientY + boardPic.scrollTop - boardPic.offsetTop;
-    const value = viewOptions.plants
-      .map(({ x: px, y: py, width, height, ...res }) => ({
-        x: px / ratioX,
-        y: py / ratioY,
-        width: width / ratioX,
-        height: height / ratioY,
-        ...res,
-      }))
-      .find(
-        ({ x: px, y: py, width, height }) =>
-          clientx >= px - width && clientx <= px + width && clienty >= py - height && clienty <= py + height,
-      );
+    const value = plants.find(
+      ({ x: px, y: py, width, height }) =>
+        clientx >= px - width && clientx <= px + width && clienty >= py - height && clienty <= py + height,
+    );
 
     if (!value) return;
     setPlant({
@@ -74,22 +83,9 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
     if (!router.pathname.includes('plant')) router.push(`/plant/${scanId}`);
   };
 
-  const doDebug = () => {
-    const boardPic = document.getElementById('board-picture');
-    const ratioX = viewOptions.width / boardPic.clientWidth;
-    const ratioY = viewOptions.height / boardPic.clientHeight;
-
-    setDebug(
-      viewOptions.plants.map(({ x, y, width, height, image, id }) => ({
-        x: x / ratioX,
-        y: y / ratioY,
-        width: width / ratioX,
-        height: height / ratioY,
-        image,
-        id,
-      })),
-    );
-  };
+  useEffect(() => {
+    if (viewOptions && boardPicLoaded) fillPlants();
+  }, [viewOptions, boardPicLoaded, fillPlants]);
 
   if (onRequest) return <Loading />;
   if (!imgData || !viewOptions) return <Center>There is no image or plant analyses of the board</Center>;
@@ -125,7 +121,7 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
             active={select === 'picture'}
             onClick={() => {
               setSelect('picture');
-              setDebug([]);
+              setDebug(false);
             }}
           >
             Picture
@@ -134,7 +130,7 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
             active={select === 'inspection'}
             onClick={() => {
               setSelect('inspection');
-              setDebug([]);
+              setDebug(false);
             }}
           >
             Inspection
@@ -144,7 +140,7 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
               active={select === 'debug'}
               onClick={() => {
                 setSelect('debug');
-                doDebug();
+                setDebug(true);
               }}
             >
               Debug
@@ -153,12 +149,17 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
         </ButtonList>
 
         {viewOptions?.options[select === 'debug' ? 'picture' : select] && (
-          <ImgContainer id="board-picture" onClick={clickEvent}>
-            {debug.length > 0 &&
-              debug.map(({ x, y, width, height, image, id }) => (
+          <ImgContainer
+            id="board-picture"
+            onClick={clickEvent}
+            onLoad={() => {
+              setBoardPicLoaded(true);
+            }}
+          >
+            {plants.length > 0 &&
+              plants.map(({ x, y, width, height, image, id }) => (
                 <div key={id}>
-                  <ThumbnailInView
-                    debug
+                  <ThumbnailInViewDiv
                     alt="thumbnail-view"
                     x={x}
                     y={y}
@@ -166,13 +167,16 @@ export const PictureView = ({ imgData, plantData, scanId }) => {
                     height={height}
                     src={`${ROMI_API}/images/${image}?size=thumb`}
                   />
-                  <DebugInputs debug x={x} y={y}>
-                    {id}
-                  </DebugInputs>
+                  {debug && (
+                    <DebugInputs debug x={x} y={y}>
+                      {id}
+                    </DebugInputs>
+                  )}
                 </div>
               ))}
             {plant?.bright && (
               <ThumbnailInViewDiv
+                selected
                 alt="thumbnail-view"
                 x={plant?.x}
                 y={plant?.y}
